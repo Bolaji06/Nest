@@ -6,6 +6,9 @@
   :root {
     --brand-primary: 240, 89%, 52%;
     --brand-text: 0, 22%, 4%;
+    --brand-text-light: 240, 8%, 95%;
+
+    --brand-secondary: 25, 86%, 51%;
 
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;

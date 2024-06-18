@@ -47,6 +47,8 @@ const config = {
         brand: {
           primary: "hsl(var(--brand-primary))",
           text: "hsl(var(--brand-text))",
+          text_light: "hsl(var(--brand-text-light))",
+          secondary: "hsl(var(--brand-secondary))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
