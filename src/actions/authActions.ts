@@ -3,7 +3,7 @@ import { ZodError } from "zod";
 
 let AUTH_ENDPOINT = "";
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
   AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_AUTH}`;
 } else if (process.env.NODE_ENV === "development") {
   AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_AUTH}`;
