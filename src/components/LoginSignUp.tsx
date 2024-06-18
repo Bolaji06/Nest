@@ -8,7 +8,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
-import { loginAction, registerAction } from "@/actions/actions";
+import { loginAction, registerAction } from "@/actions/authActions";
 import { boolean, string } from "zod";
 import clsx from "clsx";
 import { useRouter } from "next/navigation";
@@ -68,7 +68,7 @@ export default function LoginSignUp({ close, setClose }: ILoginProps) {
 
  
  useEffect(() => {
-  if (loginState.success){
+  if (loginState?.success){
     router.push('/');
     setClose(false)
   }
@@ -151,8 +151,8 @@ export default function LoginSignUp({ close, setClose }: ILoginProps) {
                   <FormButton text="Sign In"/>
                   
                 </form>
-                { !loginState.success && <div className="py-2 text-sm text-red-500 flex items-center gap-1"> 
-                 { loginState.message && <CircleAlert size={16} color="red"/>} <p className="first-letter:uppercase">{loginState.message}</p></div> }
+                { !loginState?.success && <div className="py-2 text-sm text-red-500 flex items-center gap-1"> 
+                 { loginState?.message && <CircleAlert size={16} color="red"/>} <p className="first-letter:uppercase">{loginState?.message}</p></div> }
                 <Button className="flex w-full underline my-2 items-center justify-center text-sm font-medium text-brand-primary bg-transparent hover:bg-transparent text-center">
                   <Link href={'/forgot-password'}>
                     Forgot Password?
