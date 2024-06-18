@@ -21,7 +21,7 @@ export async function loginAction(prevState: any, formData: FormData) {
       },
       body: JSON.stringify(parseSchema),
     };
-    const response = await fetch(`${AUTH_ENDPOINT}/login`, options);
+    const response = await fetch(`https://nest-server-uyon.onrender.com/api/auth/login`, options);
     const data = await response.json();
 
     return data;
