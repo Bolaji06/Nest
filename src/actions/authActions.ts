@@ -3,10 +3,10 @@ import { ZodError } from "zod";
 
 let AUTH_ENDPOINT = "";
 
-if (process.env.NEXT_PUBLIC_NODE_ENV === "production") {
-  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_AUTH}`;
-} else if (process.env.NODE_ENV === "development") {
-  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_AUTH}`;
+if (process.env.NODE_ENV === 'production'){
+  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_BASE_URL}`
+}else if (process.env.NODE_ENV === 'development'){
+  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_AUTH}`
 }
 export async function loginAction(prevState: any, formData: FormData) {
   try {
@@ -21,7 +21,7 @@ export async function loginAction(prevState: any, formData: FormData) {
       },
       body: JSON.stringify(parseSchema),
     };
-    const response = await fetch(`https://nest-server-uyon.onrender.com/api/auth/login`, options);
+    const response = await fetch(`${AUTH_ENDPOINT}/login`, options);
     const data = await response.json();
 
     return data;
