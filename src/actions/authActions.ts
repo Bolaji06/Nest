@@ -1,4 +1,7 @@
-import { loginSchema, registerSchema } from "@/utils/validation";
+"use server";
+
+import { forgotPasswordSchema, loginSchema, registerSchema } from "@/utils/validation";
+import { cookies } from "next/headers";
 import { ZodError } from "zod";
 
 let AUTH_ENDPOINT = "";
@@ -23,6 +26,10 @@ export async function loginAction(prevState: any, formData: FormData) {
     };
     const response = await fetch(`${AUTH_ENDPOINT}/login`, options);
     const data = await response.json();
+
+    const { success, message, ...userDetails } = data;
+
+    cookies().set('token', JSON.stringify(userDetails));
 
     return data;
   } catch (err) {
@@ -59,6 +66,35 @@ export async function registerAction(prevState: any, formData: FormData) {
         field: issues.path[0],
         status: issues.message,
       }));
+      return validationError[0];
+    }
+  }
+}
+
+export async function forgotPasswordAction(prevState: any, formData: FormData){
+  try{
+    const parseSchema = forgotPasswordSchema.parse({
+      email: formData.get('email')
+    });
+    const options = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(parseSchema)
+    }
+
+    const response = await fetch(`${AUTH_ENDPOINT}/forgot-password`, options);
+    const data = await response.json();
+
+    return data;
+
+  }catch(err){
+    if (err instanceof ZodError){
+     const validationError = err.errors.map((issues) => ({
+        status: issues.message,
+        field: issues.path[0]
+      }))
       return validationError[0];
     }
   }

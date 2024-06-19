@@ -6,6 +6,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { SearchIcon } from "lucide-react";
+import ForgotPassword from "@/components/ForgotPassword";
 export default function HeroSection() {
   const [searchInput, setSearchInput] = useState("");
 
@@ -16,6 +17,7 @@ export default function HeroSection() {
   return (
     <>
       <main className="py-4 rounded-lg relative top-4 h-[440px]">
+      {/* <ForgotPassword /> */}
         <Image
           src={heroImage}
           alt="hero image of new home owners of family of three standing with home agent"

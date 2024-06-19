@@ -11,16 +11,23 @@ import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 
 const DynamicSignInRegister = dynamic(() => import("@/components/LoginSignUp"), { ssr: false });
+const DynamicForgotPassword = dynamic(
+  () => import("@/components/ForgotPassword"),
+  { ssr: false }
+);
 export default function NavBar() {
-  const [toggle, setToggle] = useState(false);
+  const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [openSignInPortal, setOpenSignInPortal] = useState<boolean>(false);
 
+  const [toggleForgot, setToggleForgot] = useState<boolean>(false);
+
+
   function openMobileNav(){
-    setToggle(true);
+    setToggleMobileNav(true);
   }
 
   function closeMobileNav(){
-    setToggle(false)
+    setToggleMobileNav(false)
   }
 
   function handleSignInPortal(){
@@ -28,7 +35,7 @@ export default function NavBar() {
   }
   return (
     <>
-      <nav className="bg-white fixed w-full py-3 px-6 z-20">
+      <nav className="bg-white fixed w-full py-3 px-6 z-40">
         <div className="">
           <div className="flex justify-between items-center">
             <Image src={logo} alt="nest logo" width={100} height={100} />
@@ -55,7 +62,7 @@ export default function NavBar() {
               </div>
             </div>
           </div>
-          { toggle &&
+          { toggleMobileNav &&
             <nav className="fixed w-72 h-screen right-0 top-0 bg-brand-text py-2">
             <div className="p-3 w-full flex justify-end" onClick={closeMobileNav}>
               <X color="white" size={45} className="cursor-pointer p-2 hover:bg-slate-200/25 rounded-full"/>
@@ -88,7 +95,16 @@ export default function NavBar() {
           <DynamicSignInRegister
             close={openSignInPortal}
             setClose={setOpenSignInPortal}
+            setToggleForgot={setToggleForgot}
           />
+        </div>, document.body)
+      }
+
+      { toggleForgot &&
+        createPortal(<div>
+          <DynamicForgotPassword 
+          setToggleForgot={setToggleForgot}
+          setOpenSignInPortal={setOpenSignInPortal}/>
         </div>, document.body)
       }
     </>
