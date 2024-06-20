@@ -1,6 +1,6 @@
 "use server";
 
-import { forgotPasswordSchema, loginSchema, registerSchema } from "@/utils/validation";
+import { forgotPasswordSchema, loginSchema, registerSchema, resetPasswordSchema } from "@/utils/validation";
 import { cookies } from "next/headers";
 import { ZodError } from "zod";
 
@@ -98,4 +98,39 @@ export async function forgotPasswordAction(prevState: any, formData: FormData){
       return validationError[0];
     }
   }
+}
+
+export async function resetPasswordAction(prevState: any, formData: FormData) {
+
+  try{
+    const parseSchema = resetPasswordSchema.parse({
+      password: formData.get('password'),
+      confirm: formData.get('confirm'),
+      token: formData.get("token")
+    })
+    const { confirm, ...bodyData } = parseSchema;
+
+    const options = {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(bodyData)
+    }
+
+    const response = await fetch(`${AUTH_ENDPOINT}/reset-password`, options);
+    const data = await response.json();
+
+    return data;
+
+  }catch(err){
+    if(err instanceof ZodError){
+      const validationError = err.errors.map((issues) => ({
+        status: issues.message,
+        field: issues.path[0]
+      }))
+      return validationError[0];
+    }
+  }
+  
 }
