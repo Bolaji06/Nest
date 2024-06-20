@@ -11,9 +11,15 @@ export const registerSchema = z.object({
     username: z.string({required_error: 'username is required' }).min(4, { message: 'username must contain at least (4) character' }).max(20, { message: 'username is too long'}).trim()
 });
 
+export const resetPasswordSchema = z.object({
+    password: z.string({ required_error: 'password is required' }).min(4, { message: 'password must contain at least (4) character'}).max(15, { message: 'Password too long' }).trim(),
+    confirm: z.string({ required_error: 'password is required' }).min(4, { message: 'password must contain at least (4) character'}).max(15, { message: 'Password too long' }).trim(),
+    token: z.string()
+}).refine((data) => data.password === data.confirm, { message: 'Password must match', path: ["confirm"] });
+
 export const forgotPasswordSchema = z.object({
-    email: z.string().email({ message: 'provide a valid email address' }).trim()
-});
+    email: z.string().email({ message: 'provide a valid email' })
+})
 
 export type loginSchemaType = z.infer<typeof loginSchema>;
 export type registerSchemaType = z.infer<typeof registerSchema>;
