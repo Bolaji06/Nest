@@ -1,70 +1,33 @@
 "use client";
 
-import Link from "next/link";
-import { FormButton } from "./LoginSignUp";
-import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { AlertCircle, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
-import { forgotPasswordAction } from "@/actions/authActions";
+import { FormButton } from "./LoginSignUp";
+import { X, AlertCircle } from "lucide-react";
+import { Input } from "./ui/input";
 
-interface IForgotPasswordProps {
-  setToggleForgot: (curState: boolean) => void;
-  setOpenSignInPortal: (curState: boolean) => void;
-  setShowNotification: (curState: boolean) => void;
-}
-export default function ForgotPassword({
-  setToggleForgot,
-  setOpenSignInPortal,
-  setShowNotification,
-}: IForgotPasswordProps) {
-  const [forgotState, forgotAction] = useFormState(forgotPasswordAction, {});
-
-  function closeForgot() {
-    setToggleForgot(false);
-  }
-
-  function handleOpenSignIn() {
-    setOpenSignInPortal(true);
-    setToggleForgot(false);
-  }
-
-  useEffect(() => {
-    if (forgotState.success) {
-      setToggleForgot(false);
-      setShowNotification(true);
-    }
-  }, [forgotState]);
-
-  console.log(forgotState);
-
+export default function ResetPassword() {
   return (
     <>
-      <section className="overflow-hidden ">
+      <section>
         <div
           className="absolute z-40 inset-0 bg-black/65"
-          onClick={closeForgot}
         />
 
-        <main className="w-full sm:w-[400px] rounded-md bg-white z-50 py-3 px-6 absolute left-1/2 top-6 lg:top-10 -translate-x-1/2">
+<main className="w-full sm:w-[400px] rounded-md bg-white z-50 py-3 px-6 absolute left-1/2 top-6 lg:top-10 -translate-x-1/2">
           <div>
             <div className="flex justify-end ">
               <div
                 className="hover:bg-slate-200 cursor-pointer p-3 hover:rounded-full"
-                onClick={closeForgot}
+                
               >
                 <X size={22} />
               </div>
             </div>
             <header className="text-center">
               <h1 className="py-2 text-bg-brand-text text-3xl font-extrabold">
-                Forgot your password
+                Reset your password
               </h1>
-              <p className="py-2">
-                Enter your email address and we will send you a link to set your
-                password.
-              </p>
+              
             </header>
           </div>
 
