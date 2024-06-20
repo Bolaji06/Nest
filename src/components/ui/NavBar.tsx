@@ -9,17 +9,21 @@ import { MenuIcon, X } from "lucide-react";
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
+import NotificationBox from "../NotificationBox";
 
 const DynamicSignInRegister = dynamic(() => import("@/components/LoginSignUp"), { ssr: false });
 const DynamicForgotPassword = dynamic(
   () => import("@/components/ForgotPassword"),
   { ssr: false }
 );
+const DynamicNotificationBox = dynamic(() => import('@/components/NotificationBox'), { ssr: false });
 export default function NavBar() {
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [openSignInPortal, setOpenSignInPortal] = useState<boolean>(false);
 
   const [toggleForgot, setToggleForgot] = useState<boolean>(false);
+
+  const [showNotification, setShowNotification] = useState<boolean>(false)
 
 
   function openMobileNav(){
@@ -104,9 +108,17 @@ export default function NavBar() {
         createPortal(<div>
           <DynamicForgotPassword 
           setToggleForgot={setToggleForgot}
-          setOpenSignInPortal={setOpenSignInPortal}/>
+          setOpenSignInPortal={setOpenSignInPortal}
+          setShowNotification={setShowNotification}/>
         </div>, document.body)
       }
+
+     {showNotification &&
+      createPortal(
+      <div>
+        <DynamicNotificationBox 
+          setShowNotification={setShowNotification}/>
+      </div>, document.body)}
     </>
   );
 }
