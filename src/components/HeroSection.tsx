@@ -4,11 +4,15 @@ import Image from "next/image";
 import heroImage from "../../public/hero.jpg";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, Suspense, useState } from "react";
 import { SearchIcon } from "lucide-react";
 import ForgotPassword from "@/components/ForgotPassword";
+import { useSearchParams } from "next/navigation";
+import ResetPassword from "./ResetPassword";
+import { createPortal } from "react-dom";
 export default function HeroSection() {
   const [searchInput, setSearchInput] = useState("");
+  const resetToken = useSearchParams().get("reset");
 
   function onChange(e: ChangeEvent<HTMLInputElement>) {
     setSearchInput(e.target.value);
@@ -17,7 +21,7 @@ export default function HeroSection() {
   return (
     <>
       <main className="py-4 rounded-lg relative top-4 h-[440px]">
-      {/* <ForgotPassword /> */}
+        {/* <ForgotPassword /> */}
         <Image
           src={heroImage}
           alt="hero image of new home owners of family of three standing with home agent"
@@ -47,6 +51,12 @@ export default function HeroSection() {
           </div>
         </div>
       </main>
+
+      {resetToken && (
+        <div className="overflow-hidden">
+          <ResetPassword token={resetToken} />
+        </div>
+      )}
     </>
   );
 }

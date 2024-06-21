@@ -6,11 +6,13 @@ import { useState } from "react";
 
 interface ISetShowNotification  {
     setShowNotification: (curState: boolean) => void
+    setOpenAuthOutlet: (curState: boolean) => void,
 }
-export default function NotificationBox({ setShowNotification }: ISetShowNotification){
+export default function NotificationBox({ setShowNotification, setOpenAuthOutlet }: ISetShowNotification){
 
     function handleCloseBox(){
         setShowNotification(false);
+        setOpenAuthOutlet(false);
     }
 
     return (

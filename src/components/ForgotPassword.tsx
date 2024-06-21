@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormButton } from "./LoginSignUp";
+import { FormButton } from "@/components/FormButton";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { AlertCircle, X } from "lucide-react";
@@ -9,31 +9,34 @@ import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { forgotPasswordAction } from "@/actions/authActions";
 
-interface IForgotPasswordProps {
-  setToggleForgot: (curState: boolean) => void;
-  setOpenSignInPortal: (curState: boolean) => void;
-  setShowNotification: (curState: boolean) => void;
+interface IForgotProps {
+  setShowLoginSignUp: (curState: boolean) => void;
+  setShowForgotPortal: (curState: boolean) => void;
+  setOpenAuthOutlet: (curState: boolean) => void;
+  setEmailNotification: (curState: boolean) => void;
 }
 export default function ForgotPassword({
-  setToggleForgot,
-  setOpenSignInPortal,
-  setShowNotification,
-}: IForgotPasswordProps) {
+  setShowLoginSignUp,
+  setShowForgotPortal,
+  setOpenAuthOutlet,
+  setEmailNotification,
+}: IForgotProps) {
   const [forgotState, forgotAction] = useFormState(forgotPasswordAction, {});
 
   function closeForgot() {
-    setToggleForgot(false);
+    setShowForgotPortal(false);
+    setOpenAuthOutlet(false);
   }
 
   function handleOpenSignIn() {
-    setOpenSignInPortal(true);
-    setToggleForgot(false);
+    setShowLoginSignUp(true);
+    setShowForgotPortal(false);
   }
 
   useEffect(() => {
     if (forgotState.success) {
-      setToggleForgot(false);
-      setShowNotification(true);
+      setShowForgotPortal(false);
+      setEmailNotification(true);
     }
   }, [forgotState]);
 

@@ -1,27 +1,26 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { FormButton } from "./LoginSignUp";
+import { FormButton } from "./FormButton";
 import { X, AlertCircle } from "lucide-react";
 import { Input } from "./ui/input";
 import { useFormState } from "react-dom";
 import { resetPasswordAction } from "@/actions/authActions";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface IResetPassword {
   token: string | null,
-  closeResetPassword: (curState: string) => void
+  closeResetPassword?: (curState: string) => void
 }
-export default function ResetPassword({ token, closeResetPassword } : IResetPassword) {
+export default function ResetPassword({ token, closeResetPassword}: IResetPassword) {
 
   const [actionState, action] = useFormState(resetPasswordAction, {});
  
-  
   const router = useRouter();
   
   function handleCloseResetPassword(){
-    closeResetPassword("");
+    //closeResetPassword("");
     router.push('/')
   }
 
@@ -29,8 +28,8 @@ export default function ResetPassword({ token, closeResetPassword } : IResetPass
 
   return (
     <>
-      <section>
-        <div className="absolute z-40 inset-0 bg-black/65" />
+      {<section>
+        <div className="absolute z-50 inset-0 bg-black/65" />
 
         <main className="w-full sm:w-[400px] rounded-md bg-white z-50 py-3 px-6 absolute left-1/2 top-6 lg:top-10 -translate-x-1/2">
           <div>
@@ -105,7 +104,7 @@ export default function ResetPassword({ token, closeResetPassword } : IResetPass
             )}
           </div>
         </main>
-      </section>
+      </section>}
     </>
   );
 }

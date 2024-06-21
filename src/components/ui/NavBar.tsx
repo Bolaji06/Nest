@@ -6,44 +6,23 @@ import Link from "next/link";
 import { navLinks } from "@/utils/links";
 import { Button } from "./button";
 import { MenuIcon, X } from "lucide-react";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
-import NotificationBox from "../NotificationBox";
 import { useSearchParams } from "next/navigation";
+import ResetPassword from "@/components/ResetPassword";
 
-const DynamicSignInRegister = dynamic(
-  () => import("@/components/LoginSignUp"),
-  { ssr: false }
-);
-const DynamicForgotPassword = dynamic(
-  () => import("@/components/ForgotPassword"),
-  { ssr: false }
-);
-const DynamicNotificationBox = dynamic(
-  () => import("@/components/NotificationBox"),
-  { ssr: false }
-);
-const DynamicVerifyPassword = dynamic(
-  () => import("@/components/VerifyEmail"),
-  { ssr: false }
-);
+const DynamicAuthOutlet = dynamic(() => import("@/components/AuthOutlet"), {
+  ssr: false,
+});
+
 const DynamicResetPassword = dynamic(
   () => import("@/components/ResetPassword"),
   { ssr: false }
 );
 export default function NavBar() {
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
-  const [openSignInPortal, setOpenSignInPortal] = useState<boolean>(false);
-
-  const [toggleForgot, setToggleForgot] = useState<boolean>(false);
-
-  const [showNotification, setShowNotification] = useState<boolean>(false);
-
-  const verifyToken = useSearchParams().get("token");
-
-  const resetPasswordToken = useSearchParams().get("reset");
-  const [resetPasswordBox, setResetPasswordDialog] = useState(resetPasswordToken);
+  const [openAuthOutlet, setOpenAuthOutlet] = useState<boolean>(false);
 
   function openMobileNav() {
     setToggleMobileNav(true);
@@ -54,7 +33,7 @@ export default function NavBar() {
   }
 
   function handleSignInPortal() {
-    setOpenSignInPortal(true);
+    setOpenAuthOutlet(true);
   }
 
   return (
@@ -126,61 +105,11 @@ export default function NavBar() {
         </div>
       </nav>
 
-      {openSignInPortal &&
+      {openAuthOutlet &&
         createPortal(
-          <div className="overflow-y-hidden">
-            <DynamicSignInRegister
-              close={openSignInPortal}
-              setClose={setOpenSignInPortal}
-              setToggleForgot={setToggleForgot}
-            />
-          </div>,
+          <DynamicAuthOutlet setOpenAuthOutlet={setOpenAuthOutlet} />,
           document.body
         )}
-
-      {toggleForgot &&
-        createPortal(
-          <div>
-            <DynamicForgotPassword
-              setToggleForgot={setToggleForgot}
-              setOpenSignInPortal={setOpenSignInPortal}
-              setShowNotification={setShowNotification}
-            />
-          </div>,
-          document.body
-        )}
-
-      {showNotification &&
-        createPortal(
-          <div>
-            <DynamicNotificationBox setShowNotification={setShowNotification} />
-          </div>,
-          document.body
-        )}
-
-      {resetPasswordBox && (
-        <Suspense fallback={<p>Loading...</p>}>
-          {createPortal(
-            <DynamicResetPassword
-              token={resetPasswordToken ? resetPasswordToken : null}
-              closeResetPassword={setResetPasswordDialog}
-            />,
-
-            document.body
-          )}
-        </Suspense>
-      )}
-
-      {verifyToken && (
-        <Suspense fallback={<p>Loading...</p>}>
-          {createPortal(
-            <div>
-              <DynamicVerifyPassword />
-            </div>,
-            document.body
-          )}
-        </Suspense>
-      )}
     </>
   );
 }
