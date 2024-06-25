@@ -1,49 +1,57 @@
 "use client";
+
 import Image from "next/image";
 import logo from "../../../public/nest-logo.png";
 import footerArt from "../../../public/footer-art.svg";
 import Link from "next/link";
 import { navLinks } from "@/utils/links";
 import { Button } from "./button";
-import { MenuIcon, X } from "lucide-react";
-import { Suspense, useEffect, useState } from "react";
+import { CircleUserRound, MenuIcon, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
-import NotificationBox from "../NotificationBox";
-import { useSearchParams } from "next/navigation";
+import { useFormState } from "react-dom";
+import { loginAction } from "@/actions/authActions";
+import { getAuthState, getUserSession } from "@/lib/getSession";
+import { ISessionData } from "@/lib/definitions";
 
-const DynamicSignInRegister = dynamic(
-  () => import("@/components/LoginSignUp"),
-  { ssr: false }
-);
-const DynamicForgotPassword = dynamic(
-  () => import("@/components/ForgotPassword"),
-  { ssr: false }
-);
-const DynamicNotificationBox = dynamic(
-  () => import("@/components/NotificationBox"),
-  { ssr: false }
-);
-const DynamicVerifyPassword = dynamic(
-  () => import("@/components/VerifyEmail"),
-  { ssr: false }
-);
+import ProfileDropDown from "./profile-dropdown";
+
+
+const DynamicAuthOutlet = dynamic(() => import("@/components/AuthOutlet"), {
+  ssr: false,
+});
+
 const DynamicResetPassword = dynamic(
   () => import("@/components/ResetPassword"),
   { ssr: false }
 );
+
+
 export default function NavBar() {
+  const [loginState, signInAction] = useFormState(loginAction, {});
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
-  const [openSignInPortal, setOpenSignInPortal] = useState<boolean>(false);
+  const [openAuthOutlet, setOpenAuthOutlet] = useState<boolean>(false);
+  const [toggleProfile, setToggleProfile] = useState<boolean>(false);
+  const [sessionData, setSessionData] = useState<ISessionData | null>(null);
+  const [authState, setAuthState] = useState(false);
 
-  const [toggleForgot, setToggleForgot] = useState<boolean>(false);
+  useEffect(() => {
+    async function getSession() {
+      const data = await getUserSession();
+      setSessionData(data);
+    }
+    async function getAuthToken(){
+      const data = await getAuthState()
+      setAuthState(data)
+    }
+    getAuthToken();
 
-  const [showNotification, setShowNotification] = useState<boolean>(false);
+    getSession();
+  }, []);
 
-  const verifyToken = useSearchParams().get("token");
-
-  const resetPasswordToken = useSearchParams().get("reset");
-  const [resetPasswordBox, setResetPasswordDialog] = useState(resetPasswordToken);
+  console.log(authState)
+ 
 
   function openMobileNav() {
     setToggleMobileNav(true);
@@ -54,8 +62,16 @@ export default function NavBar() {
   }
 
   function handleSignInPortal() {
-    setOpenSignInPortal(true);
+    setOpenAuthOutlet(true);
   }
+  function toggleProfileDropdown() {
+    setToggleProfile((curState) => !curState);
+  }
+
+  //console.log(loginSession);
+
+  // @ts-ignore
+  //const { id, username, email, avatar } = profileDetails || null
 
   return (
     <>
@@ -78,13 +94,39 @@ export default function NavBar() {
                 })}
               </div>
 
-              <div className="ml-10 flex gap-6 items-center">
-                <Button
-                  className="bg-brand-primary font-medium hover:opacity-80 hover:bg-brand-primary"
-                  onClick={handleSignInPortal}
-                >
-                  Sign in
-                </Button>
+              <div className="ml-2 flex gap-6 items-center">
+                {authState ? (
+                  <div
+                    className="cursor-pointer relative"
+                    onClick={toggleProfileDropdown}
+                  >
+                    {sessionData?.avatar ? (
+                      <Image
+                        src={sessionData?.avatar}
+                        width={100}
+                        height={100}
+                        alt="user profile image"
+                        className="w-11 rounded-full aspect-square object-cover"
+                      />
+                    ) : (
+                      <CircleUserRound size={30} className="text-gray-800" />
+                    )}
+                    {toggleProfile && (
+                      <ProfileDropDown
+                        email={sessionData?.email}
+                        imageUrl={sessionData?.avatar}
+                        username={sessionData?.username}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <Button
+                    className="bg-brand-primary font-medium hover:opacity-80 hover:bg-brand-primary"
+                    onClick={handleSignInPortal}
+                  >
+                    Sign in
+                  </Button>
+                )}
 
                 <div className="block lg:hidden" onClick={openMobileNav}>
                   <MenuIcon color="black" className="cursor-pointer" />
@@ -126,61 +168,15 @@ export default function NavBar() {
         </div>
       </nav>
 
-      {openSignInPortal &&
+      {openAuthOutlet &&
         createPortal(
-          <div className="overflow-y-hidden">
-            <DynamicSignInRegister
-              close={openSignInPortal}
-              setClose={setOpenSignInPortal}
-              setToggleForgot={setToggleForgot}
-            />
-          </div>,
+          <DynamicAuthOutlet
+            setOpenAuthOutlet={setOpenAuthOutlet}
+            loginState={loginState}
+            loginAction={signInAction}
+          />,
           document.body
         )}
-
-      {toggleForgot &&
-        createPortal(
-          <div>
-            <DynamicForgotPassword
-              setToggleForgot={setToggleForgot}
-              setOpenSignInPortal={setOpenSignInPortal}
-              setShowNotification={setShowNotification}
-            />
-          </div>,
-          document.body
-        )}
-
-      {showNotification &&
-        createPortal(
-          <div>
-            <DynamicNotificationBox setShowNotification={setShowNotification} />
-          </div>,
-          document.body
-        )}
-
-      {resetPasswordBox && (
-        <Suspense fallback={<p>Loading...</p>}>
-          {createPortal(
-            <DynamicResetPassword
-              token={resetPasswordToken ? resetPasswordToken : null}
-              closeResetPassword={setResetPasswordDialog}
-            />,
-
-            document.body
-          )}
-        </Suspense>
-      )}
-
-      {verifyToken && (
-        <Suspense fallback={<p>Loading...</p>}>
-          {createPortal(
-            <div>
-              <DynamicVerifyPassword />
-            </div>,
-            document.body
-          )}
-        </Suspense>
-      )}
     </>
   );
 }

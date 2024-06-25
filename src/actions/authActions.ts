@@ -29,7 +29,10 @@ export async function loginAction(prevState: any, formData: FormData) {
 
     const { success, message, ...userDetails } = data;
 
-    cookies().set('token', JSON.stringify(userDetails));
+    cookies().set('token', data?.jwtToken, {
+      expires: new Date(Date.now() + 360000 * 10),
+      httpOnly: true, // change this when deploying
+    });
 
     return data;
   } catch (err) {
