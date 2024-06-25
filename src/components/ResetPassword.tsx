@@ -8,6 +8,7 @@ import { useFormState } from "react-dom";
 import { resetPasswordAction } from "@/actions/authActions";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import NotificationBox from "./NotificationBox";
 
 interface IResetPassword {
   token: string | null,
@@ -20,15 +21,14 @@ export default function ResetPassword({ token, closeResetPassword}: IResetPasswo
   const router = useRouter();
   
   function handleCloseResetPassword(){
-    //closeResetPassword("");
-    router.push('/')
+    router.push('/');
   }
 
   console.log(actionState)
 
   return (
     <>
-      {<section>
+      { <section>
         <div className="absolute z-50 inset-0 bg-black/65" />
 
         <main className="w-full sm:w-[400px] rounded-md bg-white z-50 py-3 px-6 absolute left-1/2 top-6 lg:top-10 -translate-x-1/2">

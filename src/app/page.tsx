@@ -7,8 +7,10 @@ import Outlet from "@/components/AuthOutlet";
 import NavBar from "@/components/ui/NavBar";
 import Image from "next/image";
 import { Suspense } from "react";
+import { getUserSession } from "@/lib/getSession";
 
-export default function Home() {
+export default async function Home() {
+
   return (
     <main className="">
       

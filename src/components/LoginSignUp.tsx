@@ -16,19 +16,26 @@ interface ILoginSignUpProps {
   setOpenAuthOutlet: (curState: boolean) => void;
   setShowForgotPortal: (curState: boolean) => void;
   setShowLoginSignUp: (curState: boolean) => void;
+  loginState: any,
+  loginAction: (payload: FormData) => void
 }
 export default function LoginSignUp({
   setOpenAuthOutlet,
   setShowLoginSignUp,
   setShowForgotPortal,
+  loginState,
+  loginAction
+  
 }: ILoginSignUpProps) {
   const [tab, setTab] = useState<string>("sign-in");
   const [togglePassword, setTogglePassword] = useState<boolean>(false);
 
-  const [loginState, signInAction] = useFormState(loginAction, {});
+  //const [loginState, signInAction] = useFormState(loginAction, {});
   const [registerState, signUpAction] = useFormState(registerAction, {});
 
   const router = useRouter();
+
+  console.log(loginState)
 
   function handlePasswordToggle() {
     setTogglePassword(!togglePassword);
@@ -54,9 +61,11 @@ export default function LoginSignUp({
   useEffect(() => {
     if (loginState?.success) {
       router.push("/");
-      //setClose(false);
+      setOpenAuthOutlet(false);
     }
   }, [loginState]);
+
+  console.log(loginState)
 
   return (
     <>
@@ -101,7 +110,7 @@ export default function LoginSignUp({
           <div className="flex items-center gap-8 px-6">
             {tab === "sign-in" && (
               <section className="w-full">
-                <form action={signInAction} noValidate className="space-y-3">
+                <form action={loginAction} noValidate className="space-y-3">
                   <div className="">
                     <label htmlFor="email" className="text-sm">
                       Email

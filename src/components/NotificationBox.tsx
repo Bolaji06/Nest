@@ -7,8 +7,9 @@ import { useState } from "react";
 interface ISetShowNotification  {
     setShowNotification: (curState: boolean) => void
     setOpenAuthOutlet: (curState: boolean) => void,
+    noteText?: String
 }
-export default function NotificationBox({ setShowNotification, setOpenAuthOutlet }: ISetShowNotification){
+export default function NotificationBox({ setShowNotification, setOpenAuthOutlet, noteText }: ISetShowNotification){
 
     function handleCloseBox(){
         setShowNotification(false);
@@ -26,7 +27,7 @@ export default function NotificationBox({ setShowNotification, setOpenAuthOutlet
                     </div>
 
                     <div>
-                        <h1 className="font-light text-center text-2xl">A reset email has been sent.</h1>
+                        <h1 className="font-light text-center text-2xl">{noteText}</h1>
                     </div>
                     <div className="flex justify-end">
                         <Button onClick={handleCloseBox}>OK</Button>

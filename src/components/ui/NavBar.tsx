@@ -1,16 +1,22 @@
 "use client";
+
 import Image from "next/image";
 import logo from "../../../public/nest-logo.png";
 import footerArt from "../../../public/footer-art.svg";
 import Link from "next/link";
 import { navLinks } from "@/utils/links";
 import { Button } from "./button";
-import { MenuIcon, X } from "lucide-react";
-import { Suspense, useState } from "react";
+import { CircleUserRound, MenuIcon, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
-import { useSearchParams } from "next/navigation";
-import ResetPassword from "@/components/ResetPassword";
+import { useFormState } from "react-dom";
+import { loginAction } from "@/actions/authActions";
+import { getAuthState, getUserSession } from "@/lib/getSession";
+import { ISessionData } from "@/lib/definitions";
+
+import ProfileDropDown from "./profile-dropdown";
+
 
 const DynamicAuthOutlet = dynamic(() => import("@/components/AuthOutlet"), {
   ssr: false,
@@ -20,9 +26,32 @@ const DynamicResetPassword = dynamic(
   () => import("@/components/ResetPassword"),
   { ssr: false }
 );
+
+
 export default function NavBar() {
+  const [loginState, signInAction] = useFormState(loginAction, {});
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [openAuthOutlet, setOpenAuthOutlet] = useState<boolean>(false);
+  const [toggleProfile, setToggleProfile] = useState<boolean>(false);
+  const [sessionData, setSessionData] = useState<ISessionData | null>(null);
+  const [authState, setAuthState] = useState(false);
+
+  useEffect(() => {
+    async function getSession() {
+      const data = await getUserSession();
+      setSessionData(data);
+    }
+    async function getAuthToken(){
+      const data = await getAuthState()
+      setAuthState(data)
+    }
+    getAuthToken();
+
+    getSession();
+  }, []);
+
+  console.log(authState)
+ 
 
   function openMobileNav() {
     setToggleMobileNav(true);
@@ -35,6 +64,14 @@ export default function NavBar() {
   function handleSignInPortal() {
     setOpenAuthOutlet(true);
   }
+  function toggleProfileDropdown() {
+    setToggleProfile((curState) => !curState);
+  }
+
+  //console.log(loginSession);
+
+  // @ts-ignore
+  //const { id, username, email, avatar } = profileDetails || null
 
   return (
     <>
@@ -57,13 +94,39 @@ export default function NavBar() {
                 })}
               </div>
 
-              <div className="ml-10 flex gap-6 items-center">
-                <Button
-                  className="bg-brand-primary font-medium hover:opacity-80 hover:bg-brand-primary"
-                  onClick={handleSignInPortal}
-                >
-                  Sign in
-                </Button>
+              <div className="ml-2 flex gap-6 items-center">
+                {authState ? (
+                  <div
+                    className="cursor-pointer relative"
+                    onClick={toggleProfileDropdown}
+                  >
+                    {sessionData?.avatar ? (
+                      <Image
+                        src={sessionData?.avatar}
+                        width={100}
+                        height={100}
+                        alt="user profile image"
+                        className="w-11 rounded-full aspect-square object-cover"
+                      />
+                    ) : (
+                      <CircleUserRound size={30} className="text-gray-800" />
+                    )}
+                    {toggleProfile && (
+                      <ProfileDropDown
+                        email={sessionData?.email}
+                        imageUrl={sessionData?.avatar}
+                        username={sessionData?.username}
+                      />
+                    )}
+                  </div>
+                ) : (
+                  <Button
+                    className="bg-brand-primary font-medium hover:opacity-80 hover:bg-brand-primary"
+                    onClick={handleSignInPortal}
+                  >
+                    Sign in
+                  </Button>
+                )}
 
                 <div className="block lg:hidden" onClick={openMobileNav}>
                   <MenuIcon color="black" className="cursor-pointer" />
@@ -107,7 +170,11 @@ export default function NavBar() {
 
       {openAuthOutlet &&
         createPortal(
-          <DynamicAuthOutlet setOpenAuthOutlet={setOpenAuthOutlet} />,
+          <DynamicAuthOutlet
+            setOpenAuthOutlet={setOpenAuthOutlet}
+            loginState={loginState}
+            loginAction={signInAction}
+          />,
           document.body
         )}
     </>
