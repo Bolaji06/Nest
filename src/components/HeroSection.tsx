@@ -10,13 +10,10 @@ import ForgotPassword from "@/components/ForgotPassword";
 import { useSearchParams } from "next/navigation";
 import ResetPassword from "./ResetPassword";
 import { createPortal } from "react-dom";
+import SearchBox from "./ui/SearchBox";
 export default function HeroSection() {
-  const [searchInput, setSearchInput] = useState("");
+ 
   const resetToken = useSearchParams().get("reset");
-
-  function onChange(e: ChangeEvent<HTMLInputElement>) {
-    setSearchInput(e.target.value);
-  }
 
   return (
     <>
@@ -37,18 +34,13 @@ export default function HeroSection() {
             </h1>
           </div>
 
-          <div className="mt-4 relative">
-            <Input
-              className="py-8 pr-16 text-lg rounded-md"
-              onChange={onChange}
-              placeholder="Search city, state, country"
-              name="search"
-              value={searchInput}
-            />
-            <Button className="absolute right-0 top-0 h-full bg-transparent hover:bg-blue-500/15 rounded-l-none rounded-r-md">
-              <SearchIcon color="blue" />
-            </Button>
-          </div>
+        <div className="mt-4 relative">
+          <SearchBox
+            searchFilter={true}
+            placeholder="Search title"
+            className="pr-12 py-8 text-lg"/>
+        </div>
+          
         </div>
       </main>
 

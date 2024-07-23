@@ -2,16 +2,21 @@ import { ArrowRight, CircleUserRound, MoveRight } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./button";
 import Link from "next/link";
+import { logOut } from "@/lib/getSession";
+import { logOutAction } from "@/actions/authActions";
 
 interface IProfileDropDown {
+  id?: string | undefined
   username: string | undefined;
   email: string | undefined;
   imageUrl: string | undefined;
+  logOut: () => void
 }
 export default function ProfileDropDown({
   username,
   email,
   imageUrl,
+  logOut
 }: IProfileDropDown) {
   
   return (
@@ -41,16 +46,17 @@ export default function ProfileDropDown({
 
         <footer className="py-2">
             <div className="flex justify-between items-center">
-                <Button asChild className="group-hover:bg-blue-500 bg-transparent hover:bg-transparent flex items-center gap-2">
-                    <Link href={'/profile'}
-                    className="text-blue-700 hover:underline text-lg">
+                <Button asChild className="hover:bg-transparent text-brand-primary bg-transparent flex items-center gap-2">
+                    <Link href={`/account`}
+                    className="hover:underline text-lg">
                         Profile
                         <MoveRight />
                     </Link>
                     
                 </Button>
 
-                <Button className="bg-brand-secondary hover:bg-opacity-25 hover:bg-brand-secondary">
+                <Button className="bg-brand-secondary hover:bg-opacity-25 hover:bg-brand-secondary"
+                onClick={logOut}>
                     Logout
                 </Button>
             </div>

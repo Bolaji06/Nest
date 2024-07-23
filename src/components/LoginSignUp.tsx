@@ -8,9 +8,9 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { useFormState } from "react-dom";
-import { loginAction, registerAction } from "@/actions/authActions";
+import { registerAction } from "@/actions/authActions";
 import { FormButton } from "./FormButton";
-import { useRouter } from "next/navigation";
+
 
 interface ILoginSignUpProps {
   setOpenAuthOutlet: (curState: boolean) => void;
@@ -30,12 +30,7 @@ export default function LoginSignUp({
   const [tab, setTab] = useState<string>("sign-in");
   const [togglePassword, setTogglePassword] = useState<boolean>(false);
 
-  //const [loginState, signInAction] = useFormState(loginAction, {});
   const [registerState, signUpAction] = useFormState(registerAction, {});
-
-  const router = useRouter();
-
-  console.log(loginState)
 
   function handlePasswordToggle() {
     setTogglePassword(!togglePassword);
@@ -60,12 +55,10 @@ export default function LoginSignUp({
 
   useEffect(() => {
     if (loginState?.success) {
-      router.push("/");
       setOpenAuthOutlet(false);
+      window.location.reload()
     }
   }, [loginState]);
-
-  console.log(loginState)
 
   return (
     <>

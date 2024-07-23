@@ -12,11 +12,11 @@ import dynamic from "next/dynamic";
 import { createPortal } from "react-dom";
 import { useFormState } from "react-dom";
 import { loginAction } from "@/actions/authActions";
-import { getAuthState, getUserSession } from "@/lib/getSession";
+import { getAuthState, getUserSession, logOut } from "@/lib/getSession";
 import { ISessionData } from "@/lib/definitions";
 
 import ProfileDropDown from "./profile-dropdown";
-
+import { useRouter } from "next/navigation";
 
 const DynamicAuthOutlet = dynamic(() => import("@/components/AuthOutlet"), {
   ssr: false,
@@ -27,7 +27,6 @@ const DynamicResetPassword = dynamic(
   { ssr: false }
 );
 
-
 export default function NavBar() {
   const [loginState, signInAction] = useFormState(loginAction, {});
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
@@ -37,21 +36,19 @@ export default function NavBar() {
   const [authState, setAuthState] = useState(false);
 
   useEffect(() => {
+    async function getAuthToken() {
+      const data = await getAuthState();
+      setAuthState(data);
+    }
     async function getSession() {
       const data = await getUserSession();
       setSessionData(data);
     }
-    async function getAuthToken(){
-      const data = await getAuthState()
-      setAuthState(data)
-    }
+
     getAuthToken();
 
     getSession();
-  }, []);
-
-  console.log(authState)
- 
+  }, [authState]);
 
   function openMobileNav() {
     setToggleMobileNav(true);
@@ -68,10 +65,10 @@ export default function NavBar() {
     setToggleProfile((curState) => !curState);
   }
 
-  //console.log(loginSession);
-
-  // @ts-ignore
-  //const { id, username, email, avatar } = profileDetails || null
+  function handleLogOut() {
+    logOut();
+    window.location.reload();
+  }
 
   return (
     <>
@@ -113,9 +110,11 @@ export default function NavBar() {
                     )}
                     {toggleProfile && (
                       <ProfileDropDown
+                        id={sessionData?.id}
                         email={sessionData?.email}
                         imageUrl={sessionData?.avatar}
                         username={sessionData?.username}
+                        logOut={handleLogOut}
                       />
                     )}
                   </div>
