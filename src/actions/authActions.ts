@@ -1,6 +1,7 @@
 "use server";
 
 import { forgotPasswordSchema, loginSchema, registerSchema, resetPasswordSchema } from "@/utils/validation";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ZodError } from "zod";
 
@@ -135,5 +136,17 @@ export async function resetPasswordAction(prevState: any, formData: FormData) {
       return validationError[0];
     }
   }
-  
 }
+
+export async function logOutAction(){
+  try{
+    const response = await fetch(`${AUTH_ENDPOINT}/logout`);
+    await response.json();
+  }catch(err){
+    if (err instanceof Error){
+      console.log(err);
+    }
+  }
+  redirect('/');
+}
+
