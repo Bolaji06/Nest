@@ -15,6 +15,7 @@ import { useToast } from "./ui/use-toast";
 import { redirect } from "next/navigation";
 import UploadFiles, { UploadFilesHandle } from "./UploadFiles";
 import { uploadPostImage } from "@/lib/firebaseStorage";
+import Select from "./ui/select";
 
 type TCookie = {
   cookieData: string | undefined;
@@ -46,7 +47,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
     message: "",
     path: [],
   });
- 
 
   const [postData, setPostData] = useState<IPostData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -194,44 +194,26 @@ export default function FormPostClient({ cookieData }: TCookie) {
 
           <div className="grid grid-cols-2 gap-3 space-y-2">
             <div className="pt-2 space-y-2">
-              <label htmlFor="type" className="">
-                Select Type
-              </label>
-              <select
-                onChange={handleFormChange}
-                value={listingForm.type}
-                name="type"
+              <label htmlFor="type">Select Type</label>
+              <Select
+                list={["buy", "sell"]}
                 id="type"
-                className="w-full border capitalize focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
-              >
-                <option value="buy">Sell</option>
-                <option value="rent">Rent</option>
-              </select>
+                name="type"
+                value={listingForm.type}
+                onChange={handleFormChange}
+              />
               {!true && <p>Error msg</p>}
             </div>
+
             <div className="space-y-2">
-              <label htmlFor="property" className="py-1">
-                Select Property Type
-              </label>
-              <select
-                onChange={handleFormChange}
+              <label htmlFor="property">Property Type</label>
+              <Select
                 name="property"
-                value={listingForm.property}
                 id="property"
-                className="w-full border capitalize focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
-              >
-                {propertyType.map((property) => {
-                  return (
-                    <option
-                      key={property}
-                      value={property}
-                      className="capitalize"
-                    >
-                      {property}
-                    </option>
-                  );
-                })}
-              </select>
+                onChange={handleFormChange}
+                value={listingForm.property}
+                list={propertyType}
+              />
               {!true && <p>Error msg</p>}
             </div>
           </div>
@@ -333,7 +315,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
             </div>
           </div>
 
-              {/* using the ref here: */}
+          {/* using the ref here: */}
           <UploadFiles
             ref={uploadFilesRef}
             setPostImageUrls={setPostImageUrls}
@@ -355,11 +337,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
           <div className="w-full lg:max-w-28">
             <Button
               type="submit"
-              disabled={loading}
-              aria-disabled={loading}
-              className={`font-medium ${clsx({
-                "bg-slate-500 cursor-not-allowed": loading,
-                "bg-slate-200 cursor-not-allowed": loading,
+              disabled={loading || isFormFilled}
+              aria-disabled={loading || isFormFilled}
+              className={`font-medium cursor-pointer ${clsx({
+                "bg-slate-500 cursor-not-allowed": loading || isFormFilled,
+                "bg-slate-200 cursor-not-allowed": loading || isFormFilled,
               })} bg-brand-primary w-full
            text-white hover:bg-blue-700 flex justify-center items-center gap-3`}
             >

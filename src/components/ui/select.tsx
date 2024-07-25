@@ -1,28 +1,33 @@
-import { ChangeEvent, SelectHTMLAttributes } from "react";
+import { ChangeEvent, forwardRef, SelectHTMLAttributes } from "react";
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement>{
-    name: string;
-    list: string[];
-    className?: string;
-    value: string
-    onChange: (e: ChangeEvent<HTMLSelectElement>) => void
-    onFocus?: () => void
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  list: string[];
+  
+  isLabel?: boolean,
 }
-export default function SelectBox({ name, value, list, className, onChange, onFocus }: SelectProps){
-
-    return (
-        <>
-            <select name={name} id="" value={value} onChange={onChange} onFocus={onFocus}
-            className={`h-10 capitalize text-sm placeholder:text-muted-foreground rounded-md focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 ${className}`}>
-                <option disabled>Select {name}</option>
-                {
-                    list.map((item) => {
-                        return(
-                            <option value={item} key={item} className="capitalize">{item}</option>
-                        )
-                    })
-                }
-            </select>
-        </>
-    )
-}
+export default forwardRef<HTMLSelectElement, SelectProps>(function SelectBox(
+  { list, name, className, onChange, ...props },
+  ref
+) {
+  return (
+    <>
+    
+      <select
+        name={name}
+        onChange={onChange}
+        ref={ref}
+        {...props}
+        className="w-full border capitalize focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
+      >
+        <option disabled>Select {name}</option>
+        {list.map((item) => {
+          return (
+            <option value={item} key={item} className="capitalize">
+              {item}
+            </option>
+          );
+        })}
+      </select>
+    </>
+  );
+});

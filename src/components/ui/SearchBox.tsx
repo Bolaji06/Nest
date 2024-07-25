@@ -86,24 +86,23 @@ export default function SearchBox({ className, searchFilter, placeholder }: Sear
 
        { searchFilter && <div className="grid grid-cols-2  gap-2 mt-2">
           {/* search by: city, type, property, price (min, max), title */}
-          <SelectBox onFocus={() => setInputError("")} value={searchForm.city} name="city" onChange={handleSearchChange}  list={["Lagos Abuja Runway", "Abuja"]}/>
-          <SelectBox onFocus={() => setInputError("")} value={searchForm.type} name="type" onChange={handleSearchChange} list={["buy", "rent"]} />
-          <SelectBox onFocus={() => setInputError("")} value={searchForm.property} name="property" onChange={handleSearchChange} list={propertyType} />
+          <SelectBox isLabel={false} onFocus={() => setInputError("")} value={searchForm.city} name="city" onChange={handleSearchChange}  list={["Lagos Abuja Runway", "Abuja"]}/>
+          <SelectBox isLabel={false} onFocus={() => setInputError("")} value={searchForm.type} name="type" onChange={handleSearchChange} list={["buy", "rent"]} />
+          <SelectBox className="py-1" isLabel={false} onFocus={() => setInputError("")} value={searchForm.property} name="property" onChange={handleSearchChange} list={propertyType} />
           
           <div className="grid sm:grid-cols-2 gap-2">
             <div className="relative">
               <Input value={searchForm.minPrice} placeholder="Min. price" onFocus={() => setInputError("")} onChange={handleSearchChange}
-              className="pl-6" type="number" name="minPrice"/>
-              <p className="absolute left-0 top-0.5 text-center p-2 text-sm text-slate-500">$</p>
+              className="pl-6 py-6" type="number" name="minPrice"/>
+              <p className="absolute left-0 top-[7px] text-center p-2 text-sm text-slate-500">$</p>
             </div>
            
             <div className="relative">
               <Input value={searchForm.maxPrice} placeholder="Max. price" onFocus={() => setInputError("")} onChange={handleSearchChange}
-              className="pl-6" type="number" name="maxPrice"/>
-              <p className="absolute left-0 top-0.5 text-center p-2 text-sm text-slate-500">$</p>
+              className="pl-6 py-6" type="number" name="maxPrice"/>
+              <p className="absolute left-0 top-[7px] text-center p-2 text-sm text-slate-500">$</p>
             </div>
           </div>
-
           <div className="">
             <p className="text-sm text-center text-orange-200">{inputError}</p>
           </div>
