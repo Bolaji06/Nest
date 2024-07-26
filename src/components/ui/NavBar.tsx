@@ -37,8 +37,8 @@ export default function NavBar() {
 
   useEffect(() => {
     async function getAuthToken() {
-      const data = await getAuthState();
-      setAuthState(data);
+      const isAuthToken = await getAuthState();
+      setAuthState(isAuthToken);
     }
     async function getSession() {
       const data = await getUserSession();

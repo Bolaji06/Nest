@@ -35,3 +35,22 @@ export type TSearchForm = {
   type: "buy" | "rent" | ""
   property: "apartment" | "condo" | "land" | "house" | "",
 }
+
+export type TPost = {
+  id: string,
+  title: string,
+  price: number
+  images: string[],
+  address: string,
+  city: string,
+  bedroom: number,
+  bathroom: number,
+  longitude: string,
+  latitude: string,
+  type: 'buy' | 'sell',
+  property: "apartment" | "condo" | "land" | "house" | "",
+  createdAt: string,
+  userId: string,
+  description: string,
+
+}

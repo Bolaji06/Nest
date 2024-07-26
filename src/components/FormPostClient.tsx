@@ -141,7 +141,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
 
   console.log(postData);
 
-  //console.log(postImageUrls);
+  console.log(postImageUrls);
 
   return (
     <>
@@ -337,11 +337,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
           <div className="w-full lg:max-w-28">
             <Button
               type="submit"
-              disabled={loading || isFormFilled}
-              aria-disabled={loading || isFormFilled}
+              disabled={loading }
+              aria-disabled={loading }
               className={`font-medium cursor-pointer ${clsx({
-                "bg-slate-500 cursor-not-allowed": loading || isFormFilled,
-                "bg-slate-200 cursor-not-allowed": loading || isFormFilled,
+                "bg-slate-500 cursor-not-allowed": loading,
+                "bg-slate-200 cursor-not-allowed": loading,
               })} bg-brand-primary w-full
            text-white hover:bg-blue-700 flex justify-center items-center gap-3`}
             >

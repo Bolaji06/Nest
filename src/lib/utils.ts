@@ -20,7 +20,7 @@ export function fileSizeConversion(size: number): string{
 }
 
 export function convertToCurrency(amount: number){
-  const options = { style: "currency", currency: "USD" };
+  const options: Intl.NumberFormatOptions = { style: "currency", currency: "USD" };
   const numberFormat = new Intl.NumberFormat("en-US", options)
   return numberFormat.format(amount);
 }
