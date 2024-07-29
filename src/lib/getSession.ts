@@ -10,7 +10,7 @@ export async function getUserSession(){
   if (!token){
     return null;
   }
-  const decode: ISessionData = jwtDecode(token)
+  const decode: ISessionData = await jwtDecode(token)
   return  decode
 }
 

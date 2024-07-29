@@ -32,7 +32,10 @@ export default function NavBar2() {
       <nav className="bg-white w-full py-4 px-6 z-40 border-b border-slate-300 fixed">
         <div className="">
           <div className="flex justify-between items-center">
-            <Image src={logo} alt="nest logo" width={100} height={100} />
+            <Link href={'/'}>
+              <Image src={logo} alt="nest logo" width={100} height={100} />
+            </Link>
+            
 
             <div className="relative w-full lg:w-[60%]">
               <SearchBox

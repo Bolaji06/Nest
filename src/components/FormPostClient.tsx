@@ -4,7 +4,14 @@ import Link from "next/link";
 import { Input } from "./ui/input";
 import { propertyType } from "@/utils/links";
 import { postSchema, postSchemaType } from "@/utils/validation";
-import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from "react";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { ZodError } from "zod";
@@ -16,6 +23,8 @@ import { redirect } from "next/navigation";
 import UploadFiles, { UploadFilesHandle } from "./UploadFiles";
 import { uploadPostImage } from "@/lib/firebaseStorage";
 import Select from "./ui/select";
+import dynamic from "next/dynamic";
+import TextEditor from "@/components/TextEditor";
 
 type TCookie = {
   cookieData: string | undefined;
@@ -36,7 +45,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
     bathroom: 0,
     bedroom: 0,
     city: "",
-    description: "",
+    description: "some description",
     longitude: "",
     latitude: "",
     property: "house",
@@ -47,6 +56,10 @@ export default function FormPostClient({ cookieData }: TCookie) {
     message: "",
     path: [],
   });
+
+  //  const ReactQuill = useMemo(() => {
+  //   return dynamic(import("@/components/TextEditor"), { ssr: false })
+  //  }, [])
 
   const [postData, setPostData] = useState<IPostData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -88,6 +101,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
 
     try {
       setLoading(true);
+      console.log("Loading...");
       const parseSchema = postSchema.parse(listingForm);
       if (!cookieData) {
         return;
@@ -122,7 +136,12 @@ export default function FormPostClient({ cookieData }: TCookie) {
         });
         //@ts-ignore
         setInputError(inputError[0]);
+        console.log(inputError);
+        console.log("zod error here...");
         return inputError[0];
+      } else if (err instanceof Error) {
+        console.log("server error...");
+        console.log(err);
       }
     } finally {
       setLoading(false);
@@ -138,10 +157,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
       redirect("/account/all_post");
     }
   }, [postData?.success]);
-
-  console.log(postData);
-
-  //console.log(postImageUrls);
 
   return (
     <>
@@ -160,9 +175,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
         </header>
 
         <form onSubmit={handleOnSubmit} className="py-4 pr-6 text-sm space-y-2">
-          {/* <div>
-            <input defaultValue={postImageUrls} readOnly name="images" hidden />
-          </div> */}
           <div className="space-y-1">
             <label htmlFor="title">Title</label>
             <Input
@@ -196,13 +208,15 @@ export default function FormPostClient({ cookieData }: TCookie) {
             <div className="pt-2 space-y-2">
               <label htmlFor="type">Select Type</label>
               <Select
-                list={["buy", "sell"]}
+                list={["buy", "rent"]}
                 id="type"
                 name="type"
                 value={listingForm.type}
                 onChange={handleFormChange}
               />
-              {!true && <p>Error msg</p>}
+              {inputError.path?.[0] === "type" && (
+                <p className="text-sm text-red-500">{inputError.message}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -214,7 +228,9 @@ export default function FormPostClient({ cookieData }: TCookie) {
                 value={listingForm.property}
                 list={propertyType}
               />
-              {!true && <p>Error msg</p>}
+              {inputError.path?.[0] === "property" && (
+                <p className="text-sm text-red-500">{inputError.message}</p>
+              )}
             </div>
           </div>
 
@@ -329,6 +345,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
               onChange={handleQuillChange}
               className="rounded-md text-base"
             />
+
             {inputError.path?.[0] === "description" && (
               <p className="text-sm text-red-500">{inputError.message}</p>
             )}
@@ -337,11 +354,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
           <div className="w-full lg:max-w-28">
             <Button
               type="submit"
-              disabled={loading || isFormFilled}
-              aria-disabled={loading || isFormFilled}
+              // disabled={loading}
+              // aria-disabled={loading}
               className={`font-medium cursor-pointer ${clsx({
-                "bg-slate-500 cursor-not-allowed": loading || isFormFilled,
-                "bg-slate-200 cursor-not-allowed": loading || isFormFilled,
+                "bg-slate-500 cursor-not-allowed": loading,
+                "bg-slate-200 cursor-not-allowed": loading,
               })} bg-brand-primary w-full
            text-white hover:bg-blue-700 flex justify-center items-center gap-3`}
             >

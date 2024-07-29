@@ -9,11 +9,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <main className="">
         <NavBar2 />
 
-        <div className="flex gap-10">
+        <div className="flex gap-8 lg:gap-2">
           <div className="basis-[400px] hidden md:block">
             <ProfileSideBar />
           </div>
-          <div className="relative basis-full top-24 ">{children}</div>
+          <div className="relative basis-full top-20 px-6 pb-10">{children}</div>
         </div>
         <div className="fixed z-40 bottom-6 right-8">
           <Button

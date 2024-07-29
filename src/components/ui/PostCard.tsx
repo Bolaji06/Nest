@@ -1,38 +1,57 @@
+import { Bath, Bed, Ruler } from "lucide-react";
+import avatar from "../../../public/hero.jpg";
+import Image from "next/image";
+import { convertToCurrency } from "@/lib/utils";
 
-import { Bed } from 'lucide-react'
-import avatar from '../../../public/hero.jpg'
-import Image from 'next/image'
+interface IPostCardProps  {
+    id?: string;
+    image: string;
+    price: number;
+    title: string;
+    bathroom: number;
+    bedroom: number;
+}
+export default function PostCard({ image, price, title, bathroom, bedroom }: IPostCardProps) {
+  return (
+    <>
+      <section
+        className="rounded-xl border shadow-sm group cursor-pointer
+            hover:shadow-lg transition-shadow duration-400 ease-in-out md:max-w-[300px]"
+      >
+        <header className="">
+          <Image
+            src={image}
+            width={1000}
+            height={1000}
+            alt="post image"
+            className="w-full aspect-video max-h-40 object-cover rounded-t-xl "
+          />
+        </header>
 
-export default function PostCard(){
-
-    return (
-        <>
-            <section className='rounded-xl border shadow-sm group cursor-pointer
-            hover:shadow-lg transition-shadow duration-400 ease-in-out'>
-                <header className=''>
-                    <Image 
-                    src={avatar}
-                    width={500}
-                    height={500}
-                    alt='post image'
-                    className='w-full rounded-t-xl '/>
-                </header>
-
-                <section className='space-y-1 px-3 py-2'>
-                    <div>
-                        <p className='text-base text-slate-900'>Beach House with Bath</p>
-                    </div>
-                    <div className='flex items-center gap-2'>
-                        <div className='inline-flex text-base items-center'>
-                          <Bed className='text-slate-400'/> 
-                          <p>12</p> 
-                        </div>
-                        
-                    </div>
-                </section>
-            </section>
-
-            
-        </>
-    )
+        <section className="px-3 py-2 space-y-1">
+          <div>
+            <p className="font-extrabold text-lg">{convertToCurrency(price)}</p>
+          </div>
+          <div className="flex items-center gap-3 text-sm font-medium">
+            <div className="inline-flex items-center">
+              <Bed className="text-slate-400" size={20} />
+              <p>{bedroom}</p>
+            </div>
+            <div className="inline-flex items-center">
+              <Bath className="text-slate-400" size={20} />
+              <p>{bathroom}</p>
+            </div>
+            <div className="inline-flex items-center">
+              <Ruler className="text-slate-400" size={20} />
+              <p>1,232 <span>sqft</span></p>
+            </div>
+          </div>
+          <div className="">
+            <p className="text-sm text-slate-800 truncate">{title}</p>
+          </div>
+          
+        </section>
+      </section>
+    </>
+  );
 }
