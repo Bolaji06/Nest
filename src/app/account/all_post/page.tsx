@@ -4,11 +4,9 @@ import { TPost } from "@/lib/definitions";
 import { getAllPosts } from "@/utils/data";
 import { Suspense } from "react";
 import { unstable_noStore as noStore } from "next/cache";
+import Link from "next/link";
 export default async function AllPost() {
- noStore()
   const response = await getAllPosts();
-
- // await new Promise(resolve => setTimeout(resolve, 4000));
 
   return (
     <>
@@ -19,13 +17,17 @@ export default async function AllPost() {
           {response?.message.map((post: TPost) => {
             return (
               <Suspense key={post.id} fallback={<PostCardSkeleton />}>
-                <PostCard
-                  image={post.images[0]}
-                  title={post.title}
-                  bathroom={post.bathroom}
-                  bedroom={post.bedroom}
-                  price={post.price}
-                />
+                <Link
+                href={'/home-details'}>
+                  <PostCard
+                    image={post.images[0]}
+                    title={post.title}
+                    bathroom={post.bathroom}
+                    bedroom={post.bedroom}
+                    price={post.price}
+                  />
+                </Link>
+                
               </Suspense>
             );
           })}

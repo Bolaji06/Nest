@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 
 const API_GET_POST = `http://localhost:7000/api/post`
 
@@ -23,11 +24,12 @@ export async function getSearch(query: {}) {
 }
 
 export async function getAllPosts(){
-  const options = {
+  const options: RequestInit = {
     method: "GET",
     headers: {
       'Content-Type': 'application/json'
-    }
+    },
+    cache: 'no-store', 
   }
   try{
     const response = await fetch(API_GET_POST, options);
@@ -39,4 +41,5 @@ export async function getAllPosts(){
       console.log(error.message)
     }
   }
+  //revalidateTag("posts");
 }
