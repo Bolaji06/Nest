@@ -41,5 +41,20 @@ export async function getAllPosts(){
       console.log(error.message)
     }
   }
-  //revalidateTag("posts");
+}
+
+export async function getPost(id: string){
+  try {
+    const response = await fetch(`${API_GET_POST}/${id}`);
+    if (!response.ok){
+      console.log(response.statusText);
+    }
+    const data = await response.json();   
+    return data;
+
+  }catch(error){
+    if (error instanceof Error){
+      console.log(error);
+    }
+  }
 }

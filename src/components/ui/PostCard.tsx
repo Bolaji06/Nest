@@ -1,7 +1,11 @@
+"use client";
+
 import { Bath, Bed, Ruler } from "lucide-react";
 import avatar from "../../../public/hero.jpg";
 import Image from "next/image";
 import { convertToCurrency } from "@/lib/utils";
+
+import { motion } from "framer-motion"
 
 interface IPostCardProps  {
     id?: string;
@@ -14,6 +18,10 @@ interface IPostCardProps  {
 export default function PostCard({ image, price, title, bathroom, bedroom }: IPostCardProps) {
   return (
     <>
+     <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: .3 }}>
       <section
         className="rounded-xl border shadow-sm group cursor-pointer
             hover:shadow-lg transition-shadow duration-400 ease-in-out md:max-w-[300px]"
@@ -52,6 +60,7 @@ export default function PostCard({ image, price, title, bathroom, bedroom }: IPo
           
         </section>
       </section>
+      </motion.div>
     </>
   );
 }

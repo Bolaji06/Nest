@@ -51,6 +51,14 @@ export type TPost = {
   property: "apartment" | "condo" | "land" | "house" | "",
   createdAt: string,
   userId: string,
-  description: string,
+  description: string;
+}
 
+export type TPostResult = {
+  success: boolean;
+  message: TPost
+  user: {
+    username: string;
+    avatar: string;
+  }
 }
