@@ -52,13 +52,14 @@ export type TPost = {
   createdAt: string,
   userId: string,
   description: string;
+  user: {
+    username: string;
+    avatar: string;
+  }
+  isSaved: boolean
 }
 
 export type TPostResult = {
   success: boolean;
   message: TPost
-  user: {
-    username: string;
-    avatar: string;
-  }
 }

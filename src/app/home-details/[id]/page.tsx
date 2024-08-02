@@ -2,11 +2,16 @@ import { getPost } from "@/utils/data";
 import NavBar2 from "@/components/NavBar2";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { ArrowLeft, Bath, Bed, Ruler } from "lucide-react";
+import { ArrowLeft, Bath, Bed, Heart, Ruler } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { TPost, TPostResult } from "@/lib/definitions";
 import { convertToCurrency } from "@/lib/utils";
+import { getUserSession } from "@/lib/getSession";
+import LoginSignUp from "@/components/LoginSignUp";
+import NavBar from "@/components/ui/NavBar";
+import { Modal, SavedButton } from "@/components/Utilities";
+import { cookies } from "next/headers";
 
 export default async function HomeDetailsPage({
   params,
@@ -15,18 +20,23 @@ export default async function HomeDetailsPage({
 }) {
   const data: TPostResult = await getPost(params.id);
 
-  console.log(data);
+  const session = await getUserSession()
+
+  const token = cookies().get("token")?.value;
+  //const edit = await editPost(params.id, )
 
   return (
     <>
-      <section>
+      <section className="relative">
         <div>
-          <NavBar2 />
+          <NavBar />
         </div>
 
         <div className="flex justify-center items-center relative top-16 px-4">
           <div>
-            <section>
+            <section className="">
+              
+           
               <header className="pt-2">
                 <Button
                   asChild
@@ -84,7 +94,7 @@ export default async function HomeDetailsPage({
                     alt="image"
                     width={1000}
                     height={1000}
-                    className="object-cover w-full aspect-square rounded-tr-3xl rounded-br-3xl"
+                    className="object-cover w-full aspect-square rounded-br-3xl"
                   />
                 </div>
               </div>
@@ -116,17 +126,29 @@ export default async function HomeDetailsPage({
                   <h2 className="font-semibold text-3xl">
                     {convertToCurrency(data.message.price)}
                   </h2>
+                  <div>
+                    <SavedButton 
+                    id={data.message?.id}
+                    isSaved={data.message?.isSaved}
+                    session={session}
+                    token={token}/>
+                  </div>
+                  
                 </div>
               </header>
 
-              <div>
-                <p>Posted By:</p>
-                <div className="flex gap-2">
-                  <Image src={data.user.avatar}
-                  width={100}
-                  height={100}
-                  alt="user"
-                  className=""/>
+              <div className="mt-6">
+                <p className="text-sm text-slate-500 py-2">Posted By:</p>
+                <div className="flex gap-2 items-center">
+                  <Image src={data.message.user.avatar}
+                    width={100}
+                    height={100}
+                    alt="user"
+                    className="w-12 aspect-square rounded-full"/>
+                  <div>
+                    <p className="font-semibold">{data.message.user.username}</p>
+                  </div>
+                
 
                 </div>
               </div>
