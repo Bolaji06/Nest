@@ -8,6 +8,7 @@ import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
 import { editSave } from "../actions/postActions";
 import { editPost } from "@/lib/post";
+import { boolean } from "zod";
 
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
@@ -43,9 +44,17 @@ interface SavedButtonProps {
   session: ISessionData | null;
   token: string | undefined;
 }
+
+interface SavePostStatus {
+  success: boolean;
+  message: string;
+}
 export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
   const [savePost, setSavePost] = useState<boolean>(false);
-  const [state, action] = useFormState(editSave, {});
+  const [savePostStatus, setSavePostStatus] = useState<SavePostStatus>({
+    success: false,
+    message: "",
+  });
   const { toast } = useToast();
 
   function handleClick() {
@@ -56,6 +65,7 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
       });
       return;
     }
+
     setSavePost((prevState) => !prevState);
 
     const handleSubmit = async () => {
@@ -63,8 +73,18 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
         if (!token) {
           return;
         }
-        const res = await editPost(id, token);
-        console.log(res);
+        const bindAction = editPost.bind(null, id, token);
+        //const res = await editPost(id, token);
+        const res = await bindAction();
+        setSavePostStatus(res);
+
+        if (!savePostStatus.success) {
+          if (savePostStatus.message) {
+            toast({
+              title: savePostStatus?.message,
+            });
+          }
+        }
       } catch (err) {
         console.log(err);
       }
@@ -73,51 +93,9 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
     handleSubmit();
   }
 
-  function handleSaveChange(e: ChangeEvent<HTMLInputElement>) {
-    setSavePost(e.target.checked);
-  }
-
-  // const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   if (!session) {
-  //     toast({
-  //       title: "Can't save Post!",
-  //       description: "You need to login",
-  //     });
-  //     return;
-  //   }
-  //   setSavePost((prev) => !prev);
-  // };
-
-  //console.log(token)
-
-  // async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-  //   e.preventDefault();
-  //   if (!token) {
-  //     return;
-  //   }
-  //   console.log(token);
-  //   try {
-  //     const response = await editPost(id,  token);
-  //     console.log(response);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
-
   return (
     <>
       <div className="mt-2">
-        {/* <form onSubmit={handleSubmit}>
-          <label htmlFor="save">
-            <input
-              name="savePost"
-              onChange={handleSaveChange}
-              id="save"
-              type="checkbox"
-              checked={savePost}
-              className="invisible"
-            /> */}
         <Button
           onClick={handleClick}
           className="flex items-center gap-3 bg-slate-50 shadow-lg hover:bg-transparent text-base text-slate-600"
@@ -129,8 +107,6 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
           />
           {isSaved ? "Saved" : "Save"}
         </Button>
-        {/* </label>
-        </form> */}
       </div>
     </>
   );

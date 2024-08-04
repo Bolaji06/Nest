@@ -23,7 +23,7 @@ export default async function HomeDetailsPage({
   const session = await getUserSession()
 
   const token = cookies().get("token")?.value;
-  //const edit = await editPost(params.id, )
+  //console.log(data)
 
   return (
     <>
