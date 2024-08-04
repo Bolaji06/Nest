@@ -1,3 +1,4 @@
+import next from "next";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
@@ -31,6 +32,7 @@ export async function getAllPosts() {
       "Content-Type": "application/json",
     },
     cache: "no-store",
+    next: { tags: ["get_posts"] }
   };
   try {
     const response = await fetch(API_GET_POST, options);
@@ -53,6 +55,7 @@ export async function getPost(id: string) {
     headers: {
       Authorization: "Bearer " + token,
     },
+    next: { tags: ["get_post"] }
   };
   try {
     const response = await fetch(`${API_GET_POST}/${id}`, options);

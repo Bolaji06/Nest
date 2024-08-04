@@ -6,8 +6,7 @@ import { ISessionData, TPostResult } from "@/lib/definitions";
 import { Heart } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
-import { editSave } from "../actions/postActions";
-import { editPost } from "@/lib/post";
+import { addSavePost, removeSavedPost } from "@/lib/post";
 import { boolean } from "zod";
 
 export function Modal() {
@@ -73,10 +72,19 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
         if (!token) {
           return;
         }
-        const bindAction = editPost.bind(null, id, token);
-        //const res = await editPost(id, token);
-        const res = await bindAction();
-        setSavePostStatus(res);
+        if (isSaved) {
+          const removeAction = removeSavedPost.bind(null, id, token);
+          const res = await removeAction();
+          setSavePostStatus(res);
+          //console.log(res)
+        } else {
+          const bindAction = addSavePost.bind(null, id, token);
+          const res = await bindAction();
+          setSavePostStatus(res);
+          //console.log(res);
+        }
+
+        //console.log(isSaved)
 
         if (!savePostStatus.success) {
           if (savePostStatus.message) {
