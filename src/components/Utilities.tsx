@@ -1,6 +1,12 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useEffect,
+  useOptimistic,
+  useState,
+} from "react";
 import { Button } from "./ui/button";
 import { ISessionData, TPostResult } from "@/lib/definitions";
 import { Heart } from "lucide-react";
@@ -49,12 +55,13 @@ interface SavePostStatus {
   message: string;
 }
 export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
-  const [savePost, setSavePost] = useState<boolean>(false);
-  const [savePostStatus, setSavePostStatus] = useState<SavePostStatus>({
-    success: false,
-    message: "",
-  });
   const { toast } = useToast();
+
+  // optimistically updating the saved post
+  const [optimisticState, addOptimistic] = useOptimistic<boolean, boolean>(
+    isSaved,
+    (_, optimisticValue) => optimisticValue
+  );
 
   function handleClick() {
     if (!session) {
@@ -62,44 +69,39 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
         title: "Can't save Post!",
         description: "You need to login",
       });
+      isSaved = false;
       return;
     }
 
-    setSavePost((prevState) => !prevState);
+    const newSavedState = !optimisticState;
+    addOptimistic(newSavedState);
 
     const handleSubmit = async () => {
       try {
         if (!token) {
           return;
         }
-        if (isSaved) {
-          const removeAction = removeSavedPost.bind(null, id, token);
-          const res = await removeAction();
-          setSavePostStatus(res);
-          //console.log(res)
-        } else {
+        if (newSavedState) {
           const bindAction = addSavePost.bind(null, id, token);
-          const res = await bindAction();
-          setSavePostStatus(res);
-          //console.log(res);
-        }
-
-        //console.log(isSaved)
-
-        if (!savePostStatus.success) {
-          if (savePostStatus.message) {
-            toast({
-              title: savePostStatus?.message,
-            });
-          }
+          await bindAction();
+        } else {
+          const removeAction = removeSavedPost.bind(null, id, token);
+          await removeAction();
         }
       } catch (err) {
         console.log(err);
+        addOptimistic(!optimisticState);
+        toast({
+          title: "Failed to save",
+          description: "Failed to save post. Try again.",
+        });
       }
     };
 
     handleSubmit();
   }
+
+  console.log(optimisticState);
 
   return (
     <>
@@ -110,10 +112,10 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
         >
           <Heart
             size={28}
-            fill={isSaved ? "orange" : "transparent"}
+            fill={optimisticState ? "orange" : "transparent"}
             stroke="orange"
           />
-          {isSaved ? "Saved" : "Save"}
+          {optimisticState ? "Saved" : "Save"}
         </Button>
       </div>
     </>
