@@ -9,6 +9,7 @@ import {
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { ZodError } from "zod";
+import { revalidateTag } from "next/cache";
 
 let AUTH_ENDPOINT = "";
 
@@ -146,6 +147,7 @@ export async function logOutAction() {
   try {
     const response = await fetch(`${AUTH_ENDPOINT}/logout`);
     await response.json();
+    revalidateTag("get_post");
   } catch (err) {
     if (err instanceof Error) {
       console.log(err);
