@@ -69,7 +69,6 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
         title: "Can't save Post!",
         description: "You need to login",
       });
-      isSaved = false;
       return;
     }
 
@@ -89,7 +88,6 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
           await removeAction();
         }
       } catch (err) {
-        console.log(err);
         addOptimistic(!optimisticState);
         toast({
           title: "Failed to save",
@@ -100,8 +98,6 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
 
     handleSubmit();
   }
-
-  console.log(optimisticState);
 
   return (
     <>
