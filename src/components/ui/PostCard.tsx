@@ -14,7 +14,7 @@ interface IPostCardProps  {
     title: string;
     bathroom: number;
     bedroom: number;
-    unitArea: number;
+    unitArea: number | string;
 }
 export default function PostCard({ image, price, title, bathroom, bedroom, unitArea }: IPostCardProps) {
   return (
