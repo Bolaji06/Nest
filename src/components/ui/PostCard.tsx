@@ -14,8 +14,9 @@ interface IPostCardProps  {
     title: string;
     bathroom: number;
     bedroom: number;
+    unitArea: number;
 }
-export default function PostCard({ image, price, title, bathroom, bedroom }: IPostCardProps) {
+export default function PostCard({ image, price, title, bathroom, bedroom, unitArea }: IPostCardProps) {
   return (
     <>
      <motion.div
@@ -51,7 +52,7 @@ export default function PostCard({ image, price, title, bathroom, bedroom }: IPo
             </div>
             <div className="inline-flex items-center">
               <Ruler className="text-slate-400" size={20} />
-              <p>1,232 <span>sqft</span></p>
+              <p>{unitArea} <span>sqft</span></p>
             </div>
           </div>
           <div className="">

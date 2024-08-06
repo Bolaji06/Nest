@@ -2,8 +2,7 @@ import { ChangeEvent, forwardRef, SelectHTMLAttributes } from "react";
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   list: string[];
-  
-  isLabel?: boolean,
+  //isLabel?: boolean,
 }
 export default forwardRef<HTMLSelectElement, SelectProps>(function SelectBox(
   { list, name, className, onChange, ...props },
