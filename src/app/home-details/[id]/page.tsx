@@ -23,7 +23,7 @@ export default async function HomeDetailsPage({
   const session = await getUserSession()
 
   const token = cookies().get("token")?.value;
-  //console.log(data)
+  //console.log(data.message.description)
 
   return (
     <>
@@ -48,9 +48,9 @@ export default async function HomeDetailsPage({
                   </Link>
                 </Button>
               </header>
-              <div className="grid grid-cols-4 gap-1">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1">
                 <div
-                  className="w-full h-full col-span-2 row-span-3 
+                  className=" w-[200px] md:w-[400px] aspect-square md:col-span-2 md:row-span-3 
                 rounded-tl-3xl rounded-bl-3xl"
                 >
                   <Image
@@ -61,7 +61,7 @@ export default async function HomeDetailsPage({
                     className="object-cover w-full aspect-square rounded-tl-3xl rounded-bl-3xl"
                   />
                 </div>
-                <div className="w-[200px] aspect-square">
+                <div className="w-[200px] aspect-square block md:hidden lg:block">
                   <Image
                     src={data.message.images[1]}
                     alt="image"
@@ -79,7 +79,7 @@ export default async function HomeDetailsPage({
                     className="object-cover w-full aspect-square rounded-tr-3xl"
                   />
                 </div>
-                <div className="w-[200px] aspect-square">
+                <div className="w-[200px] aspect-square hidden lg:block">
                   <Image
                     src={data.message.images[3]}
                     alt="image"
@@ -102,16 +102,16 @@ export default async function HomeDetailsPage({
           </div>
         </div>
 
-        <div className="px-4 lg:px-14 mt-20 py-10 relative">
+        <div className="lg:px-14 mt-20 py-10 relative">
           <div className="flex justify-between gap-10">
-            <div className="basis-[70%]">
-              <header className="flex justify-between">
+            <div className="px-6 basis-full lg:basis-[70%]">
+              <header className=" flex flex-col md:flex-row justify-between">
                 <div>
-                  <h2 className="text-3xl font-semibold max-w-md">
+                  <h2 className="text-xl lg:text-3xl font-semibold max-w-md">
                     {data.message.title}
                   </h2>
                   <p className="text-lg py-2">{data.message.address}</p>
-                  <div className="flex gap-3 items-center">
+                  <div className="flex gap-1 md:gap-3 items-center">
                     <div className="inline-flex items-center gap-1 py-3">
                       <Bed className="text-slate-500"/>
                       <p className="px-1">{data.message.bedroom} Bed</p>
@@ -123,7 +123,7 @@ export default async function HomeDetailsPage({
                   </div>
                 </div>
                 <div>
-                  <h2 className="font-semibold text-3xl">
+                  <h2 className="font-semibold text-xl lg:text-3xl">
                     {convertToCurrency(data.message.price)}
                   </h2>
                   <div>
@@ -157,68 +157,24 @@ export default async function HomeDetailsPage({
                 <h2 className="text-2xl font-semibold py-3">Description</h2>
 
                 <div
-                  className="w-full"
+                  className="w-full desc"
                   dangerouslySetInnerHTML={{ __html: data.message.description }}
                 ></div>
               </div>
             </div>
 
-            <div className="sticky w-full basis-[30%]">
-              <div className="p-4 border w-full space-y-2 flex flex-col rounded-lg bg-white shadow-xl">
-                <form action="" className="space-y-3">
-                  <div>
-                    <label htmlFor="phone" className="text-sm">
-                      Phone number
-                    </label>
-                    <Input />
-                  </div>
-                  <div>
-                    <label htmlFor="phone" className="text-sm">
-                      Phone number
-                    </label>
-                    <Input />
-                  </div>
-                  <div className="flex flex-col">
-                    <label htmlFor="phone" className="text-sm">
-                      Message
-                    </label>
-                    <textarea
-                      cols={3}
-                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    />
-                  </div>
+            <div className="lg:sticky fixed bottom-0  w-full basis-[30%] bg-white lg:shadow-none shadow-2xl">
+              <div className="lg:border border-slate-200 rounded-md p-5 gap-4 w-full flex lg:flex-col">
+                <Button className="bg-brand-secondary w-full font-semibold hover:bg-transparent hover:text-brand-secondary border border-brand-secondary">
+                  Book a Tour
+                </Button>
 
-                  <Button
-                    type="submit"
-                    className="w-full bg-brand-secondary
-                   hover:bg-transparent hover:text-brand-secondary hover:border border-brand-secondary"
-                  >
-                    Submit
-                  </Button>
+                <Button className="bg-transparent border w-full font-semibold text-blue-950 hover:text-white border-blue-950">
+                  Schedule Info
+                </Button>
 
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="checkbox"
-                      className="w-3 h-3 checked:bg-brand-secondary"
-                    />
-                    <label htmlFor="approve" className="text-xs text-slate-500">
-                      I approve an email been sent to my inbox and receive any
-                      other notification
-                    </label>
-                  </div>
-                </form>
-                <div>
-                  <p className="text-xs text-slate-500">
-                    By pressing Request Info, you agree that Nest and real
-                    estate professionals may contact you via phone/text about
-                    your inquiry, which may involve the use of automated means.
-                    You are not required to consent as a condition of purchasing
-                    any property, goods or services. Message/data rates may
-                    apply. You also agree to our Terms of Use Nest does not
-                    endorse any real estate professionals
-                  </p>
-                </div>
               </div>
+
             </div>
           </div>
         </div>

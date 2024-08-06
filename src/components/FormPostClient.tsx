@@ -25,6 +25,7 @@ import { uploadPostImage } from "@/lib/firebaseStorage";
 import Select from "./ui/select";
 import dynamic from "next/dynamic";
 import TextEditor from "@/components/TextEditor";
+import { revalidateTag } from "next/cache";
 
 type TCookie = {
   cookieData: string | undefined;
@@ -37,6 +38,15 @@ interface IPostData {
   success: boolean;
 }
 
+const toolbarOptions = [
+  [{ 'header': '1'}, {'header': '2'}, {'header': '3'}, { 'font': [] }],
+  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+  [{ 'indent': '-1'}, { 'indent': '+1' }],
+  [{ 'align': [] }],
+  ['bold', 'italic', 'underline', 'strike'],
+  ['clean']
+];
+
 export default function FormPostClient({ cookieData }: TCookie) {
   const [listingForm, setListingForm] = useState<postSchemaType>({
     title: "",
@@ -45,7 +55,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
     bathroom: 0,
     bedroom: 0,
     city: "",
-    description: "some description",
+    description: "",
     longitude: "",
     latitude: "",
     property: "house",
@@ -56,6 +66,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
     message: "",
     path: [],
   });
+
+  const modules = {
+    toolbar: toolbarOptions,
+  };
+
 
   //  const ReactQuill = useMemo(() => {
   //   return dynamic(import("@/components/TextEditor"), { ssr: false })
@@ -126,6 +141,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
       const response = await fetch(API_ENDPOINT, options);
       const data = await response.json();
       setPostData(data);
+      revalidateTag("get_posts")
     } catch (err) {
       if (err instanceof ZodError) {
         const inputError = err.errors.map((issues) => {
@@ -344,6 +360,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
               value={listingForm.description}
               onChange={handleQuillChange}
               className="rounded-md text-base"
+              modules={modules}
             />
 
             {inputError.path?.[0] === "description" && (

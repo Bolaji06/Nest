@@ -98,3 +98,8 @@ input[type=number] {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
+
+.desc h1 {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
