@@ -117,8 +117,9 @@ export default async function HomeDetailsPage({
                       <p className="px-1">{data.message.bedroom} Bed</p>
                       <Bath className="text-slate-500"/>
                       <p className="px-1">{data.message.bathroom} Bath</p>
+
                       <Ruler className="text-slate-500"/>
-                      <p className="px-1">5000 sqft</p>
+                      <p className="px-1">{data.message.unitArea || 2500} sqft</p>
                     </div>
                   </div>
                 </div>

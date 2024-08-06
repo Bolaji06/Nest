@@ -39,12 +39,12 @@ interface IPostData {
 }
 
 const toolbarOptions = [
-  [{ 'header': '1'}, {'header': '2'}, {'header': '3'}, { 'font': [] }],
-  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-  [{ 'indent': '-1'}, { 'indent': '+1' }],
-  [{ 'align': [] }],
-  ['bold', 'italic', 'underline', 'strike'],
-  ['clean']
+  [{ header: "1" }, { header: "2" }, { header: "3" }, { font: [] }],
+  [{ list: "ordered" }, { list: "bullet" }],
+  [{ indent: "-1" }, { indent: "+1" }],
+  [{ align: [] }],
+  ["bold", "italic", "underline", "strike"],
+  ["clean"],
 ];
 
 export default function FormPostClient({ cookieData }: TCookie) {
@@ -60,6 +60,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
     latitude: "",
     property: "house",
     type: "buy",
+    unitArea: 0,
     //images: [""],
   });
   const [inputError, setInputError] = useState<TInputError>({
@@ -70,7 +71,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
   const modules = {
     toolbar: toolbarOptions,
   };
-
 
   //  const ReactQuill = useMemo(() => {
   //   return dynamic(import("@/components/TextEditor"), { ssr: false })
@@ -141,7 +141,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
       const response = await fetch(API_ENDPOINT, options);
       const data = await response.json();
       setPostData(data);
-      revalidateTag("get_posts")
+      revalidateTag("get_posts");
     } catch (err) {
       if (err instanceof ZodError) {
         const inputError = err.errors.map((issues) => {
@@ -250,21 +250,42 @@ export default function FormPostClient({ cookieData }: TCookie) {
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label htmlFor="price">
-              {listingForm.type === "rent" ? "Monthly Rent" : "Price"}
-            </label>
-            <Input
-              onChange={handleFormChange}
-              value={listingForm.price}
-              className="text-base"
-              type="number"
-              name="price"
-              placeholder="Enter amount"
-            />
-            {inputError.path?.[0] === "price" && (
-              <p className="text-sm text-red-500">{inputError.message}</p>
-            )}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <label htmlFor="price">
+                {listingForm.type === "rent" ? "Monthly Rent" : "Price"}
+              </label>
+              <Input
+                onChange={handleFormChange}
+                value={listingForm.price}
+                className="text-base"
+                type="number"
+                name="price"
+                id="price"
+                placeholder="Enter amount"
+              />
+              {inputError.path?.[0] === "price" && (
+                <p className="text-sm text-red-500">{inputError.message}</p>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <label htmlFor="size">
+                Property Size
+              </label>
+              <Input
+                onChange={handleFormChange}
+                value={listingForm.unitArea}
+                className="text-base"
+                type="number"
+                name="unitArea"
+                id="size"
+                placeholder="Enter amount"
+              />
+              {inputError.path?.[0] === "unitArea" && (
+                <p className="text-sm text-red-500">{inputError.message}</p>
+              )}
+            </div>
           </div>
           <div className="space-y-1">
             <label htmlFor="city">City</label>

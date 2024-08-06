@@ -39,7 +39,8 @@ export type TSearchForm = {
 export type TPost = {
   id: string,
   title: string,
-  price: number
+  price: number,
+  unitArea: number,
   images: string[],
   address: string,
   city: string,

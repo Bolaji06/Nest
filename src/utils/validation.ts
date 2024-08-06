@@ -3,6 +3,8 @@ import { userType } from "./links";
 
 const USER_TYPE = ["renter", "rentee", "home_buyer", "home_seller", "other"] as const;
 
+const numberSchema = z.coerce.number({ required_error: 'This field is required' }).min(3, { message: 'Value is too short'})
+
 export const loginSchema = z.object({
     email: z.string().min(0, { message: 'Email cannot be empty' }).email({ message: 'enter a valid email address'}).trim(),
     password: z.string({ required_error: 'password is required' }).min(4, { message: 'password must contain at least (4) character'}).max(15, { message: 'Password too long' }).trim(),
@@ -51,8 +53,9 @@ export const postSchema = z.object({
     latitude: z.string().min(0, { message: 'Latitude is too short' }),
 
     // basic utils
-    bedroom: z.coerce.number(),
-    bathroom: z.coerce.number(),
+    bedroom: numberSchema,
+    bathroom: numberSchema,
+    unitArea: numberSchema,
 
     //images: z.array(z.string().url()).nonempty(),
 
