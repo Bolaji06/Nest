@@ -25,6 +25,7 @@ export default async function AllPost() {
                     bathroom={post.bathroom}
                     bedroom={post.bedroom}
                     price={post.price}
+                    unitArea={post.unitArea ? post.unitArea.toLocaleString() : 1232}
                   />
                 </Link>
               </Suspense>

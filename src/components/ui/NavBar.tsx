@@ -75,7 +75,10 @@ export default function NavBar() {
       <nav className="bg-white fixed w-full py-3 px-6 z-40">
         <div className="">
           <div className="flex justify-between items-center">
-            <Image src={logo} alt="nest logo" width={100} height={100} />
+            <Link href={"/"}>
+              <Image src={logo} alt="nest logo" width={100} height={100} />
+            </Link>
+
             <div className="flex justify-between items-center">
               <div className="hidden lg:block">
                 {navLinks.map((link) => {
