@@ -13,6 +13,19 @@ import NavBar from "@/components/ui/NavBar";
 import { Modal, SavedButton } from "@/components/Utilities";
 import { cookies } from "next/headers";
 import QRCodeGenerator from "@/components/ui/qrcode";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
+  const data: TPostResult = await getPost(params.id);
+
+  return {
+    title: data.message.title
+  };
+}
 
 export default async function HomeDetailsPage({
   params,
@@ -127,7 +140,7 @@ export default async function HomeDetailsPage({
 
                       <Ruler className="text-slate-500" />
                       <p className="px-1 text-sm">
-                        {data.message.unitArea.toLocaleString() || 2500} sqft
+                        {data.message.unitArea || 2500} sqft
                       </p>
                     </div>
                   </div>
@@ -145,9 +158,8 @@ export default async function HomeDetailsPage({
                     />
                   </div>
                   <div className="block lg:hidden">
-                <QRCodeGenerator 
-                imageName={data.message.title}/>
-              </div>
+                    <QRCodeGenerator imageName={data.message.title} />
+                  </div>
                 </div>
               </header>
 
@@ -193,8 +205,7 @@ export default async function HomeDetailsPage({
               </div>
 
               <div className="hidden lg:block">
-                <QRCodeGenerator 
-                imageName={data.message.title}/>
+                <QRCodeGenerator imageName={data.message.title} />
               </div>
             </div>
           </div>

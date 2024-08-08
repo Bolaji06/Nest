@@ -3,7 +3,12 @@ import ProfileComponent from "@/components/ProfileComponent";
 import { Button } from "@/components/ui/button";
 import { getUserSession } from "@/lib/getSession";
 import Link from "next/link";
+import { Metadata } from "next";
 
+
+export const metadata: Metadata = {
+  title: "User account | Nest.com"
+}
 export default async function ProfilePage() {
   const session = await getUserSession();
 
