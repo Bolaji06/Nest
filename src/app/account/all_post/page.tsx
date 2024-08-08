@@ -5,7 +5,13 @@ import { getAllPosts } from "@/utils/data";
 import { Suspense } from "react";
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
+import { Metadata } from "next";
 
+export const metadata: Metadata = {
+  title: "User Posts | Nest.com",
+  description: "List of all user posts listing on Next Homes"
+
+}
 export default async function AllPost() {
   const response = await getAllPosts();
 

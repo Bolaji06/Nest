@@ -11,7 +11,24 @@ import not_found from "../../../public/not_found.gif";
 import NavBar2 from "@/components/NavBar2";
 import { Button } from "@/components/ui/button";
 import FilterChips from "@/components/FilterChips";
+import { Metadata, ResolvingMetadata } from "next";
 
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+ 
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata>{
+
+  const data = await getSearch(searchParams);
+
+  return {
+    title: data.message[0]?.title + " | Next Homes"
+  }
+}
 
 export default async function SearchPage({
   searchParams,
@@ -21,7 +38,6 @@ export default async function SearchPage({
   //console.log(searchParams)
   const data = await getSearch(searchParams);
 
-  //console.log(data);
 
   return (
     <>
