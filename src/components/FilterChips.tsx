@@ -6,8 +6,11 @@ export default function FilterChips() {
       <div>
         <div className="flex gap-2">
           <div>
-            <Button className="bg-transparent border border-slate-400 hover:bg-slate-100 text-slate-600">
+            <Button popoverTarget="type" className="relative bg-transparent border border-slate-400 hover:bg-slate-100 text-slate-600">
               By Type
+              <div popover="auto" id="type" className="absolute left-0">
+                Filter By type
+              </div>
             </Button>
           </div>
           <div>

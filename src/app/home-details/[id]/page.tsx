@@ -12,6 +12,7 @@ import LoginSignUp from "@/components/LoginSignUp";
 import NavBar from "@/components/ui/NavBar";
 import { Modal, SavedButton } from "@/components/Utilities";
 import { cookies } from "next/headers";
+import QRCodeGenerator from "@/components/ui/qrcode";
 
 export default async function HomeDetailsPage({
   params,
@@ -52,8 +53,10 @@ export default async function HomeDetailsPage({
                 md:rounded-tl-3xl md:rounded-bl-3xl relative"
                 >
                   <Button className="absolute top-2 right-2 rounded-sm hover:bg-slate-200 bg-white/50 text-gray-900">
-                    <Images size={14}/>
-                    <p className="px-2">All Photos ({data.message.images.length})</p>
+                    <Images size={14} />
+                    <p className="px-2">
+                      All Photos ({data.message.images.length})
+                    </p>
                   </Button>
                   <Image
                     src={data.message.images[0]}
@@ -104,7 +107,7 @@ export default async function HomeDetailsPage({
           </div>
         </div>
 
-        <div className="lg:px-14 mt-12 md:mt-20 py-10 relative">
+        <div className="lg:px-14 mt-12 md:mt-20 py-10">
           <div className="flex justify-between gap-10">
             <div className="px-6 basis-full lg:basis-[70%]">
               <header className=" flex flex-col md:flex-row justify-between">
@@ -129,7 +132,7 @@ export default async function HomeDetailsPage({
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="space-y-4">
                   <h2 className="font-semibold text-xl lg:text-3xl">
                     {convertToCurrency(data.message.price)}
                   </h2>
@@ -141,6 +144,9 @@ export default async function HomeDetailsPage({
                       token={token}
                     />
                   </div>
+                  <div className="block lg:hidden">
+                <QRCodeGenerator />
+              </div>
                 </div>
               </header>
 
@@ -172,15 +178,21 @@ export default async function HomeDetailsPage({
               </div>
             </div>
 
-            <div className="lg:sticky fixed bottom-0  w-full basis-[30%] bg-white lg:shadow-none shadow-2xl">
-              <div className="lg:border border-slate-200 rounded-md p-5 gap-4 w-full flex lg:flex-col">
-                <Button className="bg-brand-secondary w-full font-semibold hover:bg-transparent hover:text-brand-secondary border border-brand-secondary">
-                  Book a Tour
-                </Button>
+            <div className="basis-[30%] lg:sticky top-44 w-full space-y-5">
+              <div className="  bg-white lg:shadow-none shadow-2xl">
+                <div className="lg:border border-slate-200 rounded-md p-5 gap-4 w-full flex lg:flex-col">
+                  <Button className="bg-brand-secondary w-full font-semibold hover:bg-transparent hover:text-brand-secondary border border-brand-secondary">
+                    Book a Tour
+                  </Button>
 
-                <Button className="bg-transparent border w-full font-semibold text-blue-950 hover:text-white border-blue-950">
-                  Schedule Info
-                </Button>
+                  <Button className="bg-transparent border w-full font-semibold text-blue-950 hover:text-white border-blue-950">
+                    Schedule Info
+                  </Button>
+                </div>
+              </div>
+
+              <div className="hidden lg:block">
+                <QRCodeGenerator />
               </div>
             </div>
           </div>

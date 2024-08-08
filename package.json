@@ -22,6 +22,7 @@
     "lucide-react": "^0.394.0",
     "next": "14.2.3",
     "next-cloudinary": "^6.6.2",
+    "qrcode.react": "^3.1.0",
     "react": "^18",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
