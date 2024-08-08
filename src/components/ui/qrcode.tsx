@@ -6,7 +6,7 @@ import QRCode from "qrcode.react";
 import { Download } from "lucide-react";
 import { Button } from "./button";
 
-export default function QRCodeGenerator() {
+export default function QRCodeGenerator({ imageName }: {imageName: string}) {
   const [listingLink, setListingLink] = useState("");
 
   const qrCodeRef = useRef<HTMLDivElement>(null);
@@ -27,7 +27,7 @@ export default function QRCodeGenerator() {
       const dataURL = canvasRef.current.toDataURL("image/png");
       const link = document.createElement("a");
       link.href = dataURL;
-      link.download = "qrcode.png";
+      link.download = `${imageName}.png`;
       link.click();
     }
   };
