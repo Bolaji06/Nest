@@ -145,7 +145,8 @@ export default async function HomeDetailsPage({
                     />
                   </div>
                   <div className="block lg:hidden">
-                <QRCodeGenerator />
+                <QRCodeGenerator 
+                imageName={data.message.title}/>
               </div>
                 </div>
               </header>
@@ -192,7 +193,8 @@ export default async function HomeDetailsPage({
               </div>
 
               <div className="hidden lg:block">
-                <QRCodeGenerator />
+                <QRCodeGenerator 
+                imageName={data.message.title}/>
               </div>
             </div>
           </div>

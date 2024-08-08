@@ -30,10 +30,10 @@ export default async function SearchPage({
 
       </div>
       <section className="px-8">
-      <div className="pt-20">
+      <div className="pt-20 fixed bg-white w-full pb-3">
           <FilterChips />
         </div>
-        <header className="py-1">
+        <header className=" pt-36">
           <div className="pb-3">
             {data.message.length ? (
               <h1 className="text-lg text-black">Search Result for: </h1>

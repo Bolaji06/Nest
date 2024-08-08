@@ -103,3 +103,13 @@ input[type=number] {
   font-size: 1.2rem;
   font-weight: 400;
 }
+
+:popover-open {
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  inset: unset;
+  top: 0px;
+  left: 0px;
+}
+
