@@ -60,6 +60,25 @@ export type TPost = {
   isSaved: boolean
 }
 
+export interface Post {
+  id: string,
+  title: string,
+  price: number,
+  unitArea: number,
+  images: string[],
+  address: string,
+  city: string,
+  bedroom: number,
+  bathroom: number,
+  longitude: string,
+  latitude: string,
+  type: 'buy' | 'sell',
+  property: "apartment" | "condo" | "land" | "house" | "",
+  createdAt: string,
+  userId: string,
+  description: string;
+}
+
 export type TPostResult = {
   success: boolean;
   message: TPost

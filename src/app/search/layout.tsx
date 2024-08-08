@@ -5,11 +5,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <main>
-        <div className="border">
-          <NavBar />  
-        </div>
-        
-        <section className="pt-20">{children}</section>
+        <section className="">{children}</section>
       </main>
     </>
   );

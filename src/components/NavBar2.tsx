@@ -10,7 +10,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import SearchBox from "./ui/SearchBox";
 import { Button } from "./ui/button";
-export default function NavBar2() {
+export default function NavBar2({ className }: { className?: string}) {
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [toggleProfileDetails, setToggleProfileDetails] = useState(false);
 
@@ -29,7 +29,7 @@ export default function NavBar2() {
 
   return (
     <>
-      <nav className="bg-white w-full py-4 px-6 z-40 border-b border-slate-300 fixed">
+      <nav className={`bg-white w-full py-4 px-6 z-40 border-b border-slate-300 fixed ${className}`}>
         <div className="">
           <div className="flex justify-between items-center">
             <Link href={'/'}>

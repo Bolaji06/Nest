@@ -13,6 +13,7 @@ export async function getSearch(query: {}) {
   };
 
   const params = new URLSearchParams(query).toString();
+  
   const API_ENDPOINT = `${API_GET_POST}?${params}`;
   try {
     const response = await fetch(API_ENDPOINT, options);

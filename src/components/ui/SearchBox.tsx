@@ -86,9 +86,9 @@ export default function SearchBox({ className, searchFilter, placeholder }: Sear
 
        { searchFilter && <div className="grid grid-cols-2  gap-2 mt-2">
           {/* search by: city, type, property, price (min, max), title */}
-          <SelectBox isLabel={false} onFocus={() => setInputError("")} value={searchForm.city} name="city" onChange={handleSearchChange}  list={["Lagos Abuja Runway", "Abuja"]}/>
-          <SelectBox isLabel={false} onFocus={() => setInputError("")} value={searchForm.type} name="type" onChange={handleSearchChange} list={["buy", "rent"]} />
-          <SelectBox className="py-1" isLabel={false} onFocus={() => setInputError("")} value={searchForm.property} name="property" onChange={handleSearchChange} list={propertyType} />
+          <SelectBox onFocus={() => setInputError("")} value={searchForm.city} name="city" onChange={handleSearchChange}  list={["Lagos Abuja Runway", "Abuja"]}/>
+          <SelectBox onFocus={() => setInputError("")} value={searchForm.type} name="type" onChange={handleSearchChange} list={["buy", "rent"]} />
+          <SelectBox className="py-1" onFocus={() => setInputError("")} value={searchForm.property} name="property" onChange={handleSearchChange} list={propertyType} />
           
           <div className="grid sm:grid-cols-2 gap-2">
             <div className="relative">
