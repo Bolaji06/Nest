@@ -8,38 +8,71 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Input } from "./ui/input";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 type TFilter = {
-  minPrice: string;
-  maxPrice: string;
-  types: "rent" | "buy";
+  min_price: string;
+  max_price: string;
+  types: "rent" | "buy" | "";
   bed: string;
   bath: string;
-  property: "condo" | "apartment" | "land" | "house";
-}
+  property: "condo" | "apartment" | "land" | "house" | "";
+};
 export default function FilterChips() {
   const types = ["rent", "buy"];
   const [filter, setFilter] = useState<TFilter>({
-    minPrice: "",
-    maxPrice: "",
-    types: "buy",
+    min_price: "",
+    max_price: "",
+    types: "",
     bath: "",
     bed: "",
-    property: "apartment"
+    property: "",
   });
+  const [selectedTerms, setSelectedTerms] = useState<string[] | null>(null)
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>){
-   const { value, name } = e.target; 
+  const [currentUrl, setCurrentUrl] = useState("");
+  const router = useRouter();
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const { value, name } = e.target;
     setFilter((curState: TFilter) => {
       return {
-       ...curState,
-       [name]: value
-      }
+        ...curState,
+        [name]: value,
+      };
     });
   }
 
+  useEffect(() => {
+    const filterValues = Object.values(filter);
+    if (!filterValues.length){
+      return;
+    }
+    const items = filterValues.filter((item) => item !== "")
+    setSelectedTerms(items)
 
+  }, [filter]);
+
+  //console.log(selectedTerms);
+
+  useEffect(() => {
+    setCurrentUrl(globalThis.location.href);
+  }, [currentUrl]);
+
+
+
+  function handleFilter() {
+    const newUrl = new URL("/search", currentUrl);
+
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== "") {
+        newUrl.searchParams.append(key, value);
+      }
+    });
+    router.push(newUrl.toString());
+  }
 
   return (
     <>
@@ -53,11 +86,22 @@ export default function FilterChips() {
               <PopoverContent>
                 <div>
                   <p className="text-slate-400 pb-3">Price range</p>
-                  <form action="" className="grid gap-4">
-                    <Input onChange={handleChange} type="number" name="minPrice" value={filter.minPrice} placeholder="Min. price" />
-                    <Input onChange={handleChange} type="number" name="maxPrice" value={filter.maxPrice} placeholder="Max. price" />
-                    <Button type="submit" className="w-full bg-brand-primary hover:bg-blue-600">Apply</Button>
-                  </form>
+                  <div className="grid gap-4">
+                    <Input
+                      onChange={handleChange}
+                      type="number"
+                      name="min_price"
+                      value={filter.min_price}
+                      placeholder="Min. price"
+                    />
+                    <Input
+                      onChange={handleChange}
+                      type="number"
+                      name="max_price"
+                      value={filter.max_price}
+                      placeholder="Max. price"
+                    />
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>
@@ -76,11 +120,15 @@ export default function FilterChips() {
                         key={property}
                         className="flex gap-3 items-center mb-2 cursor-pointer"
                       >
-                        <Input onChange={handleChange} value={property} 
-                        name="property" id={property}
-                        type="radio" 
-                        checked={filter.property === property}
-                        className="w-3 h-3" />
+                        <Input
+                          onChange={handleChange}
+                          value={property}
+                          name="property"
+                          id={property}
+                          type="radio"
+                          checked={filter.property === property}
+                          className="w-3 h-3"
+                        />
                         <label
                           htmlFor={property}
                           className="capitalize text-sm cursor-pointer"
@@ -90,7 +138,6 @@ export default function FilterChips() {
                       </div>
                     );
                   })}
-                  <Button type="submit" className="w-full bg-brand-primary hover:bg-blue-600">Apply</Button>
                 </div>
               </PopoverContent>
             </Popover>
@@ -102,28 +149,31 @@ export default function FilterChips() {
               </PopoverTrigger>
               <PopoverContent>
                 <form action="" className="w-full">
-                <p className="text-slate-400 pb-3">Type mode</p>
-                {types.map((type) => {
-                  return (
-                    <div
-                      key={type}
-                      className="flex gap-3 items-center mb-2 cursor-pointer"
-                    >
-                      <Input onChange={handleChange} id={type} type="radio"
-                      checked={filter.types === type}
-                      value={type}
-                      name="types"
-                       className="w-3 h-3" />
-                      <label
-                        htmlFor={type}
-                        className="capitalize text-sm cursor-pointer"
+                  <p className="text-slate-400 pb-3">Type mode</p>
+                  {types.map((type) => {
+                    return (
+                      <div
+                        key={type}
+                        className="flex gap-3 items-center mb-2 cursor-pointer"
                       >
-                        {type}
-                      </label>
-                    </div>
-                  );
-                })}
-                <Button type="submit" className="w-full bg-brand-primary hover:bg-blue-600">Apply</Button>
+                        <Input
+                          onChange={handleChange}
+                          id={type}
+                          type="radio"
+                          checked={filter.types === type}
+                          value={type}
+                          name="types"
+                          className="w-3 h-3"
+                        />
+                        <label
+                          htmlFor={type}
+                          className="capitalize text-sm cursor-pointer"
+                        >
+                          {type}
+                        </label>
+                      </div>
+                    );
+                  })}
                 </form>
               </PopoverContent>
             </Popover>
@@ -139,13 +189,43 @@ export default function FilterChips() {
                     Number Bathroom / Bedroom
                   </p>
                   <form action="" className="grid gap-4">
-                    <Input onChange={handleChange} value={filter.bed} name="bed" placeholder="Num. bed" />
-                    <Input onChange={handleChange} value={filter.bath} name="bath" placeholder="Num. bath" />
-                    <Button type="submit" className="bg-brand-primary hover:bg-blue-600">Apply</Button>
+                    <Input
+                      onChange={handleChange}
+                      value={filter.bed}
+                      name="bed"
+                      placeholder="Num. bed"
+                    />
+                    <Input
+                      onChange={handleChange}
+                      value={filter.bath}
+                      name="bath"
+                      placeholder="Num. bath"
+                    />
                   </form>
                 </div>
               </PopoverContent>
             </Popover>
+          </div>
+
+          <div className="relative inline-block">
+
+          
+          <Button
+            onClick={handleFilter}
+            className="bg-brand-primary group h-9 flex gap-2  hover:bg-blue-600"
+          >
+            {selectedTerms?.length ? <div className="h-2 w-2 rounded-full bg-white"></div> : ""}
+            Apply all
+          </Button>
+
+          <div className="group-hover:block z-40 hidden absolute top-3 w-48 shadow-lg text-black bg-slate-300">
+            <ul>
+              <li>Option1</li>
+              <li>Option1</li>
+              <li>Option1</li>
+              <li>Option1</li>
+            </ul>
+          </div>
           </div>
         </div>
       </div>
