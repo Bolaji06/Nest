@@ -71,3 +71,16 @@ export async function getPost(id: string) {
     }
   }
 }
+
+async function getPostsByPrice(min: number, max: number){
+  try{
+    const response = await fetch(`${API_GET_POST}?min_price=${min}&max_price=${max}`);
+    const data = response.json();
+    return data;
+
+  }catch(err){
+    if (err instanceof Error){
+      console.log(err);
+    }
+  }
+}
