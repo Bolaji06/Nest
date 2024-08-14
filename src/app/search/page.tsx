@@ -14,20 +14,19 @@ import FilterChips from "@/components/FilterChips";
 import { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
- 
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
-): Promise<Metadata>{
-
+): Promise<Metadata> {
   const data = await getSearch(searchParams);
 
   return {
-    title: data.message[0]?.title + " | Next Homes"
-  }
+    title: data.message[0]?.title + " | Next Homes",
+  };
 }
 
 export default async function SearchPage({
@@ -38,18 +37,16 @@ export default async function SearchPage({
   //console.log(searchParams)
   const data = await getSearch(searchParams);
 
-
   return (
     <>
       <div className="">
         <NavBar2 />
-
       </div>
-      <section className="px-8">
-      <div className="pt-20 fixed bg-white w-full pb-3">
+      <section className="overflow-y-hidden">
+        <div className="pt-20 fixed bg-white w-full pb-3 px-8">
           <FilterChips />
         </div>
-        <header className=" pt-36">
+        {/* <header className="px-4 pt-36">
           <div className="pb-3">
             {data.message.length ? (
               <h1 className="text-lg text-black">Search Result for: </h1>
@@ -57,11 +54,15 @@ export default async function SearchPage({
               ""
             )}
           </div>
-        </header>
-        <section className="grid-container gap-3 ">
+        </header> */}
+        <section className="flex gap-1 overflow-hidden pt-32">
+        <section className="grid-container gap-3 basis-[60%] py-4 px-6 shadow-md">
           {!data.message.length ? (
             <div className="flex justify-center items-center align-middle">
               <div className="space-y-2">
+                <h1 className="text-3xl font-bold">
+                  {"We couldn't find your search term."}
+                </h1>
                 <Image
                   src={not_found}
                   alt="not found gif"
@@ -69,10 +70,6 @@ export default async function SearchPage({
                   height={1000}
                   className="w-full"
                 />
-
-                <h1 className="text-3xl font-bold">
-                  {"We couldn't find your search term."}
-                </h1>
               </div>
             </div>
           ) : (
@@ -95,6 +92,11 @@ export default async function SearchPage({
               );
             })
           )}
+        </section>
+
+        <section className="map basis-[40%]">
+          Map
+        </section>
         </section>
       </section>
       <FooterHero />
