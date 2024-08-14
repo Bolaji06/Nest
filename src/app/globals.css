@@ -113,3 +113,10 @@ input[type=number] {
   left: 0px;
 }
 
+
+@import url("~leaflet/dist/leaflet.css");
+
+.leaflet-container {
+  width: 100%;
+  height: 100vh;
+}

@@ -15,8 +15,9 @@ interface IPostCardProps  {
     bathroom: number;
     bedroom: number;
     unitArea: number | string;
+    className?: string
 }
-export default function PostCard({ image, price, title, bathroom, bedroom, unitArea }: IPostCardProps) {
+export default function PostCard({ image, price, title, bathroom, bedroom, unitArea, className }: IPostCardProps) {
   return (
     <>
      <motion.div
@@ -24,8 +25,8 @@ export default function PostCard({ image, price, title, bathroom, bedroom, unitA
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: .3 }}>
       <section
-        className="rounded-xl border shadow-sm group cursor-pointer
-            hover:shadow-lg transition-shadow duration-400 ease-in-out md:max-w-[300px]"
+        className={`rounded-xl border shadow-sm group cursor-pointer
+            hover:shadow-lg transition-shadow duration-400 ease-in-out md:max-w-[300px]} ${className}`}
       >
         <header className="">
           <Image

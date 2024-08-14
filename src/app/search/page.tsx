@@ -12,6 +12,7 @@ import NavBar2 from "@/components/NavBar2";
 import { Button } from "@/components/ui/button";
 import FilterChips from "@/components/FilterChips";
 import { Metadata, ResolvingMetadata } from "next";
+import MapComponent from "@/components/MapComponent";
 
 type Props = {
   params: { id: string };
@@ -37,12 +38,14 @@ export default async function SearchPage({
   //console.log(searchParams)
   const data = await getSearch(searchParams);
 
+  console.log(data);
+
   return (
     <>
       <div className="">
         <NavBar2 />
       </div>
-      <section className="overflow-y-hidden">
+      <section className="">
         <div className="pt-20 fixed bg-white w-full pb-3 px-8">
           <FilterChips />
         </div>
@@ -55,7 +58,7 @@ export default async function SearchPage({
             )}
           </div>
         </header> */}
-        <section className="flex gap-1 overflow-hidden pt-32">
+        <section className="flex overflow-hidden h-screen gap-1 pt-32">
         <section className="grid-container gap-3 basis-[60%] py-4 px-6 shadow-md">
           {!data.message.length ? (
             <div className="flex justify-center items-center align-middle">
@@ -73,8 +76,11 @@ export default async function SearchPage({
               </div>
             </div>
           ) : (
-            data?.message.map((post: TPost) => {
+          <div className="min-h-full grid-container gap-3 overflow-y-auto">
+            
+            {data?.message.map((post: TPost) => {
               return (
+                
                 <Suspense key={post.id} fallback={<PostCardSkeleton />}>
                   <Link href={`/home-details/${post.id}`}>
                     <PostCard
@@ -89,17 +95,21 @@ export default async function SearchPage({
                     />
                   </Link>
                 </Suspense>
+                
+                
               );
             })
-          )}
+          }</div>)}
         </section>
 
-        <section className="map basis-[40%]">
-          Map
-        </section>
+        {data.message.length && <section className="map basis-[40%] ">
+          <Suspense fallback={<p>Loading...</p>}>
+            <MapComponent data={data.message}/>
+          </Suspense>
+          
+        </section>}
         </section>
       </section>
-      <FooterHero />
     </>
   );
 }
