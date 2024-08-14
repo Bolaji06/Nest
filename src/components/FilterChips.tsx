@@ -30,7 +30,7 @@ export default function FilterChips() {
     bed: "",
     property: "",
   });
-  const [selectedTerms, setSelectedTerms] = useState<string[] | null>(null)
+  const [selectedTerms, setSelectedTerms] = useState<string[][] | null>(null)
 
   const [currentUrl, setCurrentUrl] = useState("");
   const router = useRouter();
@@ -46,16 +46,23 @@ export default function FilterChips() {
   }
 
   useEffect(() => {
-    const filterValues = Object.values(filter);
+    const filterValues = Object.entries(filter);
     if (!filterValues.length){
       return;
     }
-    const items = filterValues.filter((item) => item !== "")
+    //const items = filterValues.filter((item) => item !== "")
+    const items = filterValues.filter((item) => item)
     setSelectedTerms(items)
+
+    const val = Object.fromEntries(Object.entries(filter));
+
+    //console.log(val);
 
   }, [filter]);
 
-  //console.log(selectedTerms);
+  console.log(selectedTerms)
+
+  
 
   useEffect(() => {
     setCurrentUrl(globalThis.location.href);
@@ -207,23 +214,27 @@ export default function FilterChips() {
             </Popover>
           </div>
 
-          <div className="relative inline-block">
+          <div className="relative inline-block group">
 
           
           <Button
             onClick={handleFilter}
-            className="bg-brand-primary group h-9 flex gap-2  hover:bg-blue-600"
+            className="bg-brand-primary h-9 flex gap-2  hover:bg-blue-600"
           >
-            {selectedTerms?.length ? <div className="h-2 w-2 rounded-full bg-white"></div> : ""}
+            
             Apply all
           </Button>
 
-          <div className="group-hover:block z-40 hidden absolute top-3 w-48 shadow-lg text-black bg-slate-300">
-            <ul>
-              <li>Option1</li>
-              <li>Option1</li>
-              <li>Option1</li>
-              <li>Option1</li>
+          <div className="hidden group-hover:block transition-all rounded-md px-3 py-1 ease-in-out duration-500 z-40  absolute top-10 w-48 shadow-lg text-black bg-white">
+            <ul className="">
+              {
+                selectedTerms ? selectedTerms?.map(([key, value]) => {
+                    return <li key={key} className="flex justify-between capitalize">
+                      {value && <p className="text-slate-400 py-1">{key}</p>}
+                      {value &&<p className="py-1">{value}</p>}
+                    </li>
+                }) : ""
+              }
             </ul>
           </div>
           </div>
