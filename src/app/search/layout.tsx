@@ -4,8 +4,8 @@ import { ReactNode } from "react";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <main className="overflow-y-hidden">
-        <section className="overflow-y-hidden">{children}</section>
+      <main className="">
+        <section className="">{children}</section>
       </main>
     </>
   );

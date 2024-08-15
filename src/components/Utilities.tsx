@@ -14,6 +14,8 @@ import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
 import { addSavePost, removeSavedPost } from "@/lib/post";
 import { boolean } from "zod";
+import { formatNumber } from "@/lib/utils";
+import clsx from "clsx";
 
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
@@ -116,4 +118,15 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
       </div>
     </>
   );
+}
+
+export function MarkerIcon({ price }: { price: number }){
+  return(
+    <>
+      <div className={`${clsx({'bg-green-200': price > 1000000})}
+       text-black font-semibold bg-white p-1 rounded-md shadow-md`}>
+        { formatNumber(price) }
+      </div>
+    </>
+  )
 }
