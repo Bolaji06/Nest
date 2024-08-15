@@ -34,7 +34,7 @@ export default function PostCard({ image, price, title, bathroom, bedroom, unitA
             width={1000}
             height={1000}
             alt="post image"
-            className="w-full aspect-video max-h-40 object-cover rounded-t-xl "
+            className="w-full aspect-video max-h-40 object-cover rounded-t-xl"
           />
         </header>
 

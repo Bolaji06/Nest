@@ -59,8 +59,6 @@ export default function FilterChips() {
     //console.log(val);
   }, [filter]);
 
-  console.log(selectedTerms);
-
   useEffect(() => {
     setCurrentUrl(globalThis.location.href);
   }, [currentUrl]);
@@ -144,6 +142,7 @@ export default function FilterChips() {
               </PopoverContent>
             </Popover>
           </div>
+
           <div>
             <Popover>
               <PopoverTrigger className="border hover:bg-slate-200 border-slate-300 px-3 py-2 rounded-md text-sm">

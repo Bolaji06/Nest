@@ -1,27 +1,27 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer,  Popup } from "react-leaflet";
+
+import {Marker} from "@adamscybot/react-leaflet-component-marker";
 
 import "leaflet/dist/leaflet.css";
 import { Post } from "@/lib/definitions";
 import PostCard from "./ui/PostCard";
+import Link from "next/link";
+import { divIcon } from "leaflet";
+import { MarkerIcon } from "./Utilities";
 
 type TMapProps = {
-  data: Post;
+  data: Post[];
 };
 export default function MapComponent({ data }: TMapProps) {
-  const position = [
-    [51.505, -0.09],
-    [23.434, -0.32],
-    [45.433, -3.43],
-  ];
 
   return (
     <>
-      <div className="w-full max-h-[420px] overflow-hidden">
+      <div className="rounded-md w-full max-h-[420px] overflow-hidden">
         <MapContainer
           center={[51.505, -0.09]}
-          zoom={13}
+          zoom={2}
           scrollWheelZoom={false}
           className=""
         >
@@ -29,25 +29,27 @@ export default function MapComponent({ data }: TMapProps) {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {position.map((marker: any, index) => {
+          {data.map((listing: Post, index) => {
             return (
-              <Marker key={index} position={marker}>
+              <Marker key={index} position={[parseInt(listing.latitude), parseInt(listing.longitude)]} icon={<MarkerIcon price={listing.price}/>}>
                 {/* <Popup>
               A pretty CSS3 popup. <br /> Easily customizable.
             </Popup> */}
 
-                <Popup>
-                  <PostCard
-                    image={data?.images?.[0]}
-                    title={data?.title}
-                    bathroom={data?.bathroom}
-                    bedroom={data?.bedroom}
-                    price={data?.price}
-                    className="w-full"
-                    unitArea={
-                      data?.unitArea ? data?.unitArea.toLocaleString() : 1232
-                    }
-                  />
+                <Popup className="p-0 bg-transparent">
+                  <Link href={`/home-details/${listing.id}`}>
+                    <PostCard
+                      image={listing?.images?.[0]}
+                      title={listing?.title}
+                      bathroom={listing?.bathroom}
+                      bedroom={listing?.bedroom}
+                      price={listing?.price}
+                      className="max-w-full"
+                      unitArea={
+                        listing?.unitArea ? listing?.unitArea.toLocaleString() : 1232
+                      }
+                    />
+                  </Link>
                 </Popup>
               </Marker>
             );

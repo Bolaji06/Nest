@@ -24,3 +24,13 @@ export function convertToCurrency(amount: number){
   const numberFormat = new Intl.NumberFormat("en-US", options)
   return numberFormat.format(amount);
 }
+
+export function formatNumber(price: number){
+  if (price >= 1000000){
+    return (price / 1000000).toFixed(1) + 'M'
+  }else if (price >= 1000){
+    return (price / 1000).toFixed(1) + 'K';
+  }else {
+    return price
+  }
+}
