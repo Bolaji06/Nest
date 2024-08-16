@@ -54,9 +54,6 @@ export default function FilterChips() {
     const items = filterValues.filter((item) => item);
     setSelectedTerms(items);
 
-    const val = Object.fromEntries(Object.entries(filter));
-
-    //console.log(val);
   }, [filter]);
 
   useEffect(() => {
