@@ -3,7 +3,7 @@ import FooterHero from "@/components/FooterHero";
 import { getSearch } from "@/utils/data";
 import { Suspense } from "react";
 import { PostCardSkeleton } from "@/components/AppSkeleton";
-import { TPost } from "@/lib/definitions";
+import { TPost, TPostResult } from "@/lib/definitions";
 //import { Link } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -26,6 +26,7 @@ type Props = {
 const DynamicMap = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,
 });
+
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
@@ -55,9 +56,9 @@ export default async function SearchPage({
           <FilterChips />
         </div>
 
-        <MapFilterSmallComponent />
+        <MapFilterSmallComponent data={data.message}/>
 
-        <section className="flex overflow-hidden h-screen gap-1 pt-16 md:pt-32">
+        <section className="flex overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32">
           <section
             className={`${clsx({
               "basis-full shadow-none": !data?.message?.length,
@@ -80,7 +81,7 @@ export default async function SearchPage({
               </div>
             ) : (
               <div className="min-h-full grid-container gap-3 overflow-y-auto">
-                {data?.message.map((post: TPost) => {
+                {data?.message?.map((post: TPost) => {
                   return (
                     <Suspense key={post.id} fallback={<PostCardSkeleton />}>
                       <Link href={`/home-details/${post.id}`}>
@@ -107,7 +108,7 @@ export default async function SearchPage({
           {data.message.length ? (
             <section className="hidden lg:block map basis-[40%] ">
               <Suspense fallback={<p>Loading...</p>}>
-                <DynamicMap data={data.message} />
+                <DynamicMap data={data?.message} />
               </Suspense>
             </section>
           ) : (

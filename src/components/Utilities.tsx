@@ -23,6 +23,12 @@ import { Input } from "./ui/input";
 import { propertyType } from "@/utils/links";
 import { useRouter } from "next/navigation";
 
+import { motion } from "framer-motion";
+import MapComponent from "./MapComponent";
+
+import { Post } from "@/lib/definitions";
+import dynamic from "next/dynamic";
+
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
 
@@ -148,10 +154,12 @@ type TFilter = {
   property: "condo" | "apartment" | "land" | "house" | "";
 };
 
-export function MapFilterSmallComponent() {
-  const [toggleFilter, setToggleFilter] = useState<boolean>(false);
-  const [toggleMap, setToggleMap] = useState(false);
+type TFilterSMProps = {
+  setToggleFilter: (curState: boolean) => void;
+  handleToggleFilter: () => void;
+};
 
+function FilterSM({ setToggleFilter, handleToggleFilter }: TFilterSMProps) {
   const types = ["rent", "buy"];
   const [filter, setFilter] = useState<TFilter>({
     min_price: "",
@@ -204,48 +212,34 @@ export function MapFilterSmallComponent() {
 
   //console.log(filter);
 
-  function handleToggleFilter() {
-    setToggleFilter((curState) => !curState);
-  }
-
-  function handleToggleMap() {
-    setToggleMap((curState) => !curState);
-  }
-
   return (
     <>
-      <div className=" flex gap-3 rounded-md items-center justify-between h-11 shadow-lg bg-orange-500/90 fixed bottom-6 left-1/2 -translate-x-1/2 py-2 px-3">
-        <div>
-          <Map color="white" />
-        </div>
-        <div className="block md:hidden w-[1px] h-full bg-slate-200" />
+      <section>
+        <motion.div
+          initial={{ opacity: 1, scale: 1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.1 }}
+        >
+          <div className="block md:hidden z-50 filter-box absolute bg-white inset-0">
+            <div className="">
+              <nav className="fixed  bg-white w-full z-40 p-3 flex justify-between border-b border-slate-200">
+                <h2 className="font-semibold p-2 text-slate-800">
+                  Filter Search
+                </h2>
+                <div
+                  className="hover:bg-slate-200 text-center cursor-pointer p-2 rounded-full"
+                  onClick={handleToggleFilter}
+                >
+                  <X className="" />
+                </div>
+              </nav>
 
-        <div className="block md:hidden" onClick={handleToggleFilter}>
-          <Filter color="white" />
-        </div>
-      </div>
+              <section className="relative top-16 p-3 pb-20">
+                <div>
+                  <h2 className="text-slate-500">Price range</h2>
 
-      {toggleFilter && (
-        <div className="block md:hidden z-50 filter-box absolute bg-white inset-0">
-          <div className="">
-            <nav className="fixed  bg-white w-full z-40 p-3 flex justify-between border-b border-slate-200">
-              <h2 className="font-semibold p-2 text-slate-800">
-                Filter Search
-              </h2>
-              <div
-                className="hover:bg-slate-200 text-center cursor-pointer p-2 rounded-full"
-                onClick={handleToggleFilter}
-              >
-                <X className="" />
-              </div>
-            </nav>
-
-            <section className="relative top-16 p-3 pb-20">
-              <div>
-                <h2 className="text-slate-500">Price range</h2>
-
-                <div className="grid grid-cols-2 gap-2">
-                <Input
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
                       onChange={handleChange}
                       type="number"
                       name="min_price"
@@ -259,43 +253,43 @@ export function MapFilterSmallComponent() {
                       value={filter.max_price}
                       placeholder="Max. price"
                     />
+                  </div>
                 </div>
-              </div>
 
-              <div className="py-3">
-                <h2 className="py-2 text-slate-400">Property Type</h2>
-                <div className="w-full grid grid-cols-2">
-                  {propertyType.map((property) => {
-                    return (
-                      <div
-                        key={property}
-                        className="flex gap-3 items-center mb-2 cursor-pointer"
-                      >
-                        <Input
-                          onChange={handleChange}
-                          value={property}
-                          name="property"
-                          id={property}
-                          type="radio"
-                          checked={filter.property === property}
-                          className="w-3 h-3"
-                        />
-                        <label
-                          htmlFor={property}
-                          className="capitalize text-sm cursor-pointer"
+                <div className="py-3">
+                  <h2 className="py-2 text-slate-400">Property Type</h2>
+                  <div className="w-full grid grid-cols-2">
+                    {propertyType.map((property) => {
+                      return (
+                        <div
+                          key={property}
+                          className="flex gap-3 items-center mb-2 cursor-pointer"
                         >
-                          {property}
-                        </label>
-                      </div>
-                    );
-                  })}
+                          <Input
+                            onChange={handleChange}
+                            value={property}
+                            name="property"
+                            id={property}
+                            type="radio"
+                            checked={filter.property === property}
+                            className="w-3 h-3"
+                          />
+                          <label
+                            htmlFor={property}
+                            className="capitalize text-sm cursor-pointer"
+                          >
+                            {property}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <form action="" className="w-full">
-                  <p className="text-slate-400 pb-3">Type mode</p>
-                  
+                <div>
+                  <form action="" className="w-full">
+                    <p className="text-slate-400 pb-3">Type mode</p>
+
                     {types.map((type) => {
                       return (
                         <div
@@ -320,13 +314,11 @@ export function MapFilterSmallComponent() {
                         </div>
                       );
                     })}
-                </form>
-              </div>
+                  </form>
+                </div>
 
-              <div className="mt-5">
-                  <p className="text-slate-400">
-                    Number Bathroom / Bedroom
-                  </p>
+                <div className="mt-5">
+                  <p className="text-slate-400">Number Bathroom / Bedroom</p>
                   <form action="" className="grid grid-cols-2 gap-2">
                     <Input
                       onChange={handleChange}
@@ -342,17 +334,80 @@ export function MapFilterSmallComponent() {
                     />
                   </form>
                 </div>
-            </section>
+              </section>
 
-            <div className="fixed w-full px-6 bg-white border-t border-slate-300 bottom-0 py-3">
-              <Button className="bg-brand-primary hover:bg-blue-600 w-full"
-              onClick={handleFilter}>
-                Apply All
-              </Button>
+              <div className="fixed w-full px-6 bg-white border-t border-slate-300 bottom-0 py-3">
+                <Button
+                  className="bg-brand-primary hover:bg-blue-600 w-full"
+                  onClick={handleFilter}
+                >
+                  Apply All
+                </Button>
+              </div>
             </div>
           </div>
+        </motion.div>
+      </section>
+    </>
+  );
+}
+
+type TMapProps = {
+  data: Post[];
+  className?: string;
+};
+
+const DynamicMapSM = dynamic(() => import("@/components/MapComponent"), {
+  ssr: false,
+});
+export function MapFilterSmallComponent({ data, className }: TMapProps) {
+  const [toggleFilter, setToggleFilter] = useState<boolean>(false);
+  const [toggleMap, setToggleMap] = useState(false);
+
+  function handleToggleFilter() {
+    setToggleFilter((curState) => !curState);
+  }
+
+  function handleToggleMap() {
+    setToggleMap((curState) => !curState);
+  }
+
+  return (
+    <>
+      <section className="lg:hidden">
+        <div className="flex gap-3 z-50 rounded-md items-center justify-between h-11 shadow-lg bg-orange-500/90 fixed bottom-6 left-1/2 -translate-x-1/2 py-2 px-3">
+          <div className="" onClick={handleToggleMap}>
+            <Map color="white" />
+          </div>
+          <div className="block md:hidden w-[1px] h-full bg-slate-200" />
+
+          <div className="block md:hidden" onClick={handleToggleFilter}>
+            <Filter color="white" />
+          </div>
         </div>
-      )}
+
+        {toggleFilter && (
+          <FilterSM
+            setToggleFilter={setToggleFilter}
+            handleToggleFilter={handleToggleFilter}
+          />
+        )}
+
+        {toggleMap && (
+          <>
+            <div className="fixed top-20 right-2 z-50 p-2 bg-slate-100 rounded-full"
+            onClick={handleToggleMap}>
+              <X size={16}/>
+            </div>
+            <div className="absolute z-20 w-full">
+              <DynamicMapSM
+                data={data}
+                className="rounded-none h-full max-h-full"
+              />
+            </div>
+          </>
+        )}
+      </section>
     </>
   );
 }

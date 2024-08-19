@@ -8,17 +8,18 @@ import "leaflet/dist/leaflet.css";
 import { Post } from "@/lib/definitions";
 import PostCard from "./ui/PostCard";
 import Link from "next/link";
-import { divIcon } from "leaflet";
+import { divIcon, Map } from "leaflet";
 import { MarkerIcon } from "./Utilities";
 
 type TMapProps = {
   data: Post[];
+  className?: string;
 };
-export default function MapComponent({ data }: TMapProps) {
+export default function MapComponent({ data, className }: TMapProps) {
 
   return (
     <>
-      <div className="rounded-md w-full max-h-[420px] overflow-hidden">
+      <div className={`rounded-md w-full max-h-[420px] overflow-hidden ${className}`}>
         <MapContainer
           center={[51.505, -0.09]}
           zoom={2}
