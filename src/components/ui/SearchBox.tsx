@@ -12,13 +12,17 @@ import { TSearchForm } from "@/lib/definitions";
 import { propertyType } from "@/utils/links";
 
 interface SearchBoxProps {
-  className: string,
-  searchFilter: boolean,
-  placeholder?: string
+  className: string;
+  searchFilter: boolean;
+  placeholder?: string;
 }
 
-export default function SearchBox({ className, searchFilter, placeholder }: SearchBoxProps) {
-  const [currentUrl, setCurrentUrl] = useState<string>("")
+export default function SearchBox({
+  className,
+  searchFilter,
+  placeholder,
+}: SearchBoxProps) {
+  const [currentUrl, setCurrentUrl] = useState<string>("");
   const [inputError, setInputError] = useState<string>("");
   const [searchForm, setSearchForm] = useState<TSearchForm>({
     title: "",
@@ -26,41 +30,53 @@ export default function SearchBox({ className, searchFilter, placeholder }: Sear
     minPrice: "",
     maxPrice: "",
     type: "",
-    property: ""
-  })
+    property: "",
+  });
   const router = useRouter();
 
   useEffect(() => {
-    if (!currentUrl){
-      setCurrentUrl(window.location.href)
+    if (!currentUrl) {
+      setCurrentUrl(window.location.href);
     }
-  }, [currentUrl])
+  }, [currentUrl]);
 
-  function handleSearchChange(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>){
-    const { name, value, } = e.target;
+  function handleSearchChange(
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    const { name, value } = e.target;
     setSearchForm((prevState) => {
       return {
         ...prevState,
-        [name]: value
-      }
-    })
+        [name]: value,
+      };
+    });
   }
 
   function handleRedirect() {
-    const newUrl = new URL('/search', currentUrl);
-    
-    const isSearch = Object.values(searchForm).some((input) => input !== "")
-    if (!isSearch) {
-      setInputError('Kindly search for at least one field');
-      return;
-    }
-    Object.entries(searchForm).forEach(([key, value]) => {
-      if (value !== ""){
-        newUrl.searchParams.append(key, value);
+    if (currentUrl) {
+      const newUrl = new URL("/search", currentUrl);
+
+      const isSearch = Object.values(searchForm).some((input) => input !== "");
+      if (!isSearch) {
+        setInputError("Kindly search for at least one field");
+        return;
       }
-    })
-    setInputError("");
-    router.push(newUrl.toString())
+      Object.entries(searchForm).forEach(([key, value]) => {
+        if (value !== "") {
+          newUrl.searchParams.append(key, value);
+        }
+      });
+      setInputError("");
+      router.push(newUrl.toString());
+    }
+  }
+
+  if (window !== undefined) {
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        handleRedirect();
+      }
+    });
   }
 
   return (
@@ -84,31 +100,70 @@ export default function SearchBox({ className, searchFilter, placeholder }: Sear
           </Button>
         </div>
 
-       { searchFilter && <div className="grid grid-cols-2  gap-2 mt-2">
-          {/* search by: city, type, property, price (min, max), title */}
-          <SelectBox onFocus={() => setInputError("")} value={searchForm.city} name="city" onChange={handleSearchChange}  list={["Lagos Abuja Runway", "Abuja"]}/>
-          <SelectBox onFocus={() => setInputError("")} value={searchForm.type} name="type" onChange={handleSearchChange} list={["buy", "rent"]} />
-          <SelectBox className="py-1" onFocus={() => setInputError("")} value={searchForm.property} name="property" onChange={handleSearchChange} list={propertyType} />
-          
-          <div className="grid sm:grid-cols-2 gap-2">
-            <div className="relative">
-              <Input value={searchForm.minPrice} placeholder="Min. price" onFocus={() => setInputError("")} onChange={handleSearchChange}
-              className="pl-6 py-6" type="number" name="minPrice"/>
-              <p className="absolute left-0 top-[7px] text-center p-2 text-sm text-slate-500">$</p>
+        {searchFilter && (
+          <div className="grid grid-cols-2  gap-2 mt-2">
+            {/* search by: city, type, property, price (min, max), title */}
+            <SelectBox
+              onFocus={() => setInputError("")}
+              value={searchForm.city}
+              name="city"
+              onChange={handleSearchChange}
+              list={["Lagos Abuja Runway", "Abuja"]}
+            />
+            <SelectBox
+              onFocus={() => setInputError("")}
+              value={searchForm.type}
+              name="type"
+              onChange={handleSearchChange}
+              list={["buy", "rent"]}
+            />
+            <SelectBox
+              className="py-1"
+              onFocus={() => setInputError("")}
+              value={searchForm.property}
+              name="property"
+              onChange={handleSearchChange}
+              list={propertyType}
+            />
+
+            <div className="grid sm:grid-cols-2 gap-2">
+              <div className="relative">
+                <Input
+                  value={searchForm.minPrice}
+                  placeholder="Min. price"
+                  onFocus={() => setInputError("")}
+                  onChange={handleSearchChange}
+                  className="pl-6 py-6"
+                  type="number"
+                  name="minPrice"
+                />
+                <p className="absolute left-0 top-[7px] text-center p-2 text-sm text-slate-500">
+                  $
+                </p>
+              </div>
+
+              <div className="relative">
+                <Input
+                  value={searchForm.maxPrice}
+                  placeholder="Max. price"
+                  onFocus={() => setInputError("")}
+                  onChange={handleSearchChange}
+                  className="pl-6 py-6"
+                  type="number"
+                  name="maxPrice"
+                />
+                <p className="absolute left-0 top-[7px] text-center p-2 text-sm text-slate-500">
+                  $
+                </p>
+              </div>
             </div>
-           
-            <div className="relative">
-              <Input value={searchForm.maxPrice} placeholder="Max. price" onFocus={() => setInputError("")} onChange={handleSearchChange}
-              className="pl-6 py-6" type="number" name="maxPrice"/>
-              <p className="absolute left-0 top-[7px] text-center p-2 text-sm text-slate-500">$</p>
+            <div className="">
+              <p className="text-sm text-center text-orange-200">
+                {inputError}
+              </p>
             </div>
           </div>
-          <div className="">
-            <p className="text-sm text-center text-orange-200">{inputError}</p>
-          </div>
-          
-         
-        </div>}
+        )}
       </section>
     </>
   );

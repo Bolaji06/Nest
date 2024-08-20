@@ -10,7 +10,15 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import SearchBox from "./ui/SearchBox";
 import { Button } from "./ui/button";
-export default function NavBar2({ className }: { className?: string}) {
+
+import dynamic from "next/dynamic";
+
+import { Suspense } from "react";
+
+const DynamicSearchBar = dynamic(() => import("./ui/SearchBox"), {
+  ssr: false,
+});
+export default function NavBar2({ className }: { className?: string }) {
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [toggleProfileDetails, setToggleProfileDetails] = useState(false);
 
@@ -29,19 +37,21 @@ export default function NavBar2({ className }: { className?: string}) {
 
   return (
     <>
-      <nav className={`bg-white w-full py-4 px-6 z-40 border-b border-slate-300 fixed ${className}`}>
+      <nav
+        className={`bg-white w-full py-4 px-6 z-40 border-b border-slate-300 fixed ${className}`}
+      >
         <div className="">
           <div className="flex justify-between items-center">
-            <Link href={'/'}>
+            <Link href={"/"}>
               <Image src={logo} alt="nest logo" width={100} height={100} />
             </Link>
-            
 
             <div className="relative w-full lg:w-[60%]">
-              <SearchBox
-              placeholder="Enter property title, type, city etc"
-              searchFilter={false} 
-              className="py-4 pr-16 w-full" />
+              <DynamicSearchBar
+                placeholder="Enter property title, type, city etc"
+                searchFilter={false}
+                className="py-4 pr-16 w-full"
+              />
             </div>
 
             <div className="flex justify-between items-center">
@@ -93,19 +103,23 @@ export default function NavBar2({ className }: { className?: string}) {
 
                   {toggleProfileDetails && (
                     <section className="text-brand-text_light">
-                     <ul className="border-b border-slate-800 pb-3">
-                      {
-                        profileSideLink.map((link) => {
-                          return <li key={link.name} className="py-3 hover:underline">
-                            <Link href={link.link}
-                            className="text-brand-text_light px-3 rounded-lg">
-                              {link.name}
-                            </Link>
-
-                          </li>
-                        })
-                      }
-                     </ul>
+                      <ul className="border-b border-slate-800 pb-3">
+                        {profileSideLink.map((link) => {
+                          return (
+                            <li
+                              key={link.name}
+                              className="py-3 hover:underline"
+                            >
+                              <Link
+                                href={link.link}
+                                className="text-brand-text_light px-3 rounded-lg"
+                              >
+                                {link.name}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </section>
                   )}
                 </div>

@@ -11,6 +11,11 @@ import { useSearchParams } from "next/navigation";
 import ResetPassword from "./ResetPassword";
 import { createPortal } from "react-dom";
 import SearchBox from "./ui/SearchBox";
+import dynamic from "next/dynamic";
+
+const DynamicSearchBar = dynamic(() => import("./ui/SearchBox"), {
+  ssr: false,
+});
 export default function HeroSection() {
  
   const resetToken = useSearchParams().get("reset");
@@ -35,8 +40,8 @@ export default function HeroSection() {
           </div>
 
         <div className="mt-4 relative">
-          <SearchBox
-            searchFilter={true}
+          <DynamicSearchBar
+            searchFilter={false}
             placeholder="Search title"
             className="pr-12 py-8 text-lg"/>
         </div>

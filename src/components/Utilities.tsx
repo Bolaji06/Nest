@@ -214,13 +214,13 @@ function FilterSM({ setToggleFilter, handleToggleFilter }: TFilterSMProps) {
 
   return (
     <>
-      <section>
+      <section className="block md:hidden">
         <motion.div
           initial={{ opacity: 1, scale: 1 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.1 }}
         >
-          <div className="block md:hidden z-50 filter-box absolute bg-white inset-0">
+          <div className="z-50 filter-box absolute bg-white inset-0">
             <div className="">
               <nav className="fixed  bg-white w-full z-40 p-3 flex justify-between border-b border-slate-200">
                 <h2 className="font-semibold p-2 text-slate-800">
@@ -375,7 +375,7 @@ export function MapFilterSmallComponent({ data, className }: TMapProps) {
   return (
     <>
       <section className="lg:hidden">
-        <div className="flex gap-3 z-50 rounded-md items-center justify-between h-11 shadow-lg bg-orange-500/90 fixed bottom-6 left-1/2 -translate-x-1/2 py-2 px-3">
+        <div className="flex gap-3 z-10 rounded-md items-center justify-between h-11 shadow-lg bg-orange-500/90 fixed bottom-6 left-1/2 -translate-x-1/2 py-2 px-3">
           <div className="" onClick={handleToggleMap}>
             <Map color="white" />
           </div>
@@ -402,7 +402,7 @@ export function MapFilterSmallComponent({ data, className }: TMapProps) {
             <div className="absolute z-20 w-full">
               <DynamicMapSM
                 data={data}
-                className="rounded-none h-full max-h-full"
+                className="rounded-none h-full max-h-full z-50"
               />
             </div>
           </>

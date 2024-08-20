@@ -2,7 +2,7 @@ import PostCard from "@/components/ui/PostCard";
 import FooterHero from "@/components/FooterHero";
 import { getSearch } from "@/utils/data";
 import { Suspense } from "react";
-import { PostCardSkeleton } from "@/components/AppSkeleton";
+import { MapSkeleton, PostCardSkeleton } from "@/components/AppSkeleton";
 import { TPost, TPostResult } from "@/lib/definitions";
 //import { Link } from "lucide-react";
 import Link from "next/link";
@@ -47,7 +47,12 @@ export default async function SearchPage({
 
   return (
     <>
-    <section>
+    <section className="relative">
+
+    <div className="">
+      <MapFilterSmallComponent data={data.message}  className="absolute bg-white inset-0"/>
+    </div>
+    
       <div className="">
         <NavBar2 className=""/>
       </div>
@@ -55,9 +60,7 @@ export default async function SearchPage({
         <div className="hidden md:block pt-20 fixed bg-white w-full pb-3 px-8">
           <FilterChips />
         </div>
-
-        <MapFilterSmallComponent data={data.message}/>
-
+      
         <section className="flex overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32">
           <section
             className={`${clsx({
@@ -107,7 +110,7 @@ export default async function SearchPage({
 
           {data.message.length ? (
             <section className="hidden lg:block map basis-[40%] ">
-              <Suspense fallback={<p>Loading...</p>}>
+              <Suspense fallback={<MapSkeleton />}>
                 <DynamicMap data={data?.message} />
               </Suspense>
             </section>
