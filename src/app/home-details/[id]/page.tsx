@@ -42,8 +42,8 @@ export default async function HomeDetailsPage({
   return (
     <>
       <section className="relative">
-        <div>
-          <NavBar />
+        <div className="">
+          <NavBar className="bg-white/70 backdrop-blur-sm"/>
         </div>
 
         <div className="flex justify-center items-center relative top-16 px-4">
@@ -120,6 +120,8 @@ export default async function HomeDetailsPage({
           </div>
         </div>
 
+        {/* Start the re-work here */}
+
         <div className="lg:px-14 mt-12 md:mt-20 py-10">
           <div className="flex justify-between gap-10">
             <div className="px-6 basis-full lg:basis-[70%]">
@@ -146,7 +148,7 @@ export default async function HomeDetailsPage({
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <h2 className="font-semibold text-xl lg:text-3xl">
+                  <h2 className="font-semibold text-2xl lg:text-3xl">
                     {convertToCurrency(data.message.price)}
                   </h2>
                   <div>
@@ -192,8 +194,8 @@ export default async function HomeDetailsPage({
             </div>
 
             <div className="basis-[30%] lg:sticky top-44 w-full space-y-5">
-              <div className="  bg-white lg:shadow-none shadow-2xl">
-                <div className="lg:border border-slate-200 rounded-md p-5 gap-4 w-full flex lg:flex-col">
+              <div className="bg-white lg:shadow-none shadow-2xl">
+                <div className="hidden lg:border border-slate-200 rounded-md p-5 gap-4 lg:w-full lg:flex lg:flex-col">
                   <Button className="bg-brand-secondary w-full font-semibold hover:bg-transparent hover:text-brand-secondary border border-brand-secondary">
                     Book a Tour
                   </Button>

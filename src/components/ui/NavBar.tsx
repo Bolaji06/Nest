@@ -27,7 +27,7 @@ const DynamicResetPassword = dynamic(
   { ssr: false }
 );
 
-export default function NavBar() {
+export default function NavBar({ className }: { className?: string }) {
   const [loginState, signInAction] = useFormState(loginAction, {});
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [openAuthOutlet, setOpenAuthOutlet] = useState<boolean>(false);
@@ -72,7 +72,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="bg-white fixed w-full py-3 px-6 z-40">
+      <nav className={`bg-white fixed w-full py-3 px-6 z-40 ${className}`}>
         <div className="">
           <div className="flex justify-between items-center">
             <Link href={"/"}>

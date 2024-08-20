@@ -2,8 +2,8 @@ import PostCard from "@/components/ui/PostCard";
 import FooterHero from "@/components/FooterHero";
 import { getSearch } from "@/utils/data";
 import { Suspense } from "react";
-import { PostCardSkeleton } from "@/components/AppSkeleton";
-import { TPost } from "@/lib/definitions";
+import { MapSkeleton, PostCardSkeleton } from "@/components/AppSkeleton";
+import { TPost, TPostResult } from "@/lib/definitions";
 //import { Link } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,6 +16,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import MapComponent from "@/components/MapComponent";
 import dynamic from "next/dynamic";
 import clsx from "clsx";
+import { MapFilterSmallComponent } from "@/components/Utilities";
 
 type Props = {
   params: { id: string };
@@ -25,6 +26,7 @@ type Props = {
 const DynamicMap = dynamic(() => import("@/components/MapComponent"), {
   ssr: false,
 });
+
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
@@ -45,26 +47,24 @@ export default async function SearchPage({
 
   return (
     <>
+    <section className="relative">
+
+    <div className="">
+      <MapFilterSmallComponent data={data.message}  className="absolute bg-white inset-0"/>
+    </div>
+    
       <div className="">
-        <NavBar2 />
+        <NavBar2 className=""/>
       </div>
       <section className="">
-        <div className="pt-20 fixed bg-white w-full pb-3 px-8">
+        <div className="hidden md:block pt-20 fixed bg-white w-full pb-3 px-8">
           <FilterChips />
         </div>
-        {/* <header className="px-4 pt-36">
-          <div className="pb-3">
-            {data.message.length ? (
-              <h1 className="text-lg text-black">Search Result for: </h1>
-            ) : (
-              ""
-            )}
-          </div>
-        </header> */}
-        <section className="flex overflow-hidden h-screen gap-1 pt-32">
+      
+        <section className="flex overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32">
           <section
             className={`${clsx({
-              "basis-full shadow-none": !data.message.length,
+              "basis-full shadow-none": !data?.message?.length,
             })} grid-container gap-3 basis-full lg:basis-[60%] py-4 px-6 shadow-md`}
           >
             {!data.message.length ? (
@@ -84,7 +84,7 @@ export default async function SearchPage({
               </div>
             ) : (
               <div className="min-h-full grid-container gap-3 overflow-y-auto">
-                {data?.message.map((post: TPost) => {
+                {data?.message?.map((post: TPost) => {
                   return (
                     <Suspense key={post.id} fallback={<PostCardSkeleton />}>
                       <Link href={`/home-details/${post.id}`}>
@@ -110,14 +110,15 @@ export default async function SearchPage({
 
           {data.message.length ? (
             <section className="hidden lg:block map basis-[40%] ">
-              <Suspense fallback={<p>Loading...</p>}>
-                <DynamicMap data={data.message} />
+              <Suspense fallback={<MapSkeleton />}>
+                <DynamicMap data={data?.message} />
               </Suspense>
             </section>
           ) : (
             ""
           )}
         </section>
+      </section>
       </section>
     </>
   );
