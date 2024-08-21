@@ -115,17 +115,18 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
 
   return (
     <>
-      <div className="mt-2">
+      <div>
         <Button
           onClick={handleClick}
-          className="flex items-center gap-3 bg-slate-50 shadow-lg hover:bg-transparent text-base text-slate-600"
+           className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
+                  cursor-pointer"
         >
           <Heart
-            size={28}
+            size={18}
             fill={optimisticState ? "orange" : "transparent"}
             stroke="orange"
           />
-          {optimisticState ? "Saved" : "Save"}
+         <p className="text-gray-800 text-sm font-normal">{optimisticState ? "Saved" : "Save"}</p> 
         </Button>
       </div>
     </>
