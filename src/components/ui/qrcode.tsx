@@ -35,16 +35,19 @@ export default function QRCodeGenerator({ imageName }: {imageName: string}) {
   return (
     <>
       <main>
-        <div className="flex gap-2">
-          <div ref={qrCodeRef}>
+        <div className="flex gap-2 w-full">
+          <div ref={qrCodeRef} className="w-full">
             <QRCode
               value={listingLink}
               renderAs="canvas"
-              title="Share Listing"
+              title="QR Code"
+              className="w-[300px]"
+              width={"300px"}
             />
           </div>
           <Button
             onClick={downloadQRCode}
+            title="Download QR Code"
             className="p-0 rounded-full aspect-square bg-transparent hover:bg-slate-100 border border-slate-300"
           >
             <Download className="text-slate-500 hover:text-slate-900" />
