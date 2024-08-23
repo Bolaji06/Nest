@@ -4,8 +4,10 @@ import { Post } from "@/lib/definitions";
 import { X, Bed, Ruler, Bath, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
+import clsx from "clsx";
+import { Smokum } from "next/font/google";
 
 type TPreviewProps = {
   data: Post;
@@ -16,6 +18,30 @@ export default function PhotoPreview({
   handleTogglePreview,
 }: TPreviewProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const previousIndexRef = useRef(currentIndex);
+
+  useEffect(() => {
+    if (!sliderRef.current) return;
+
+    const slider = sliderRef.current;
+    const isScrollingUp = currentIndex < previousIndexRef.current;
+    previousIndexRef.current = currentIndex;
+
+    const scrollPosition = Math.max(0, (currentIndex - 1) * 100);
+
+    slider.scrollTo({
+      top: scrollPosition,
+      behavior: "smooth",
+    });
+
+    if (isScrollingUp && currentIndex === 0) {
+      slider.scrollTo({
+        top: 100,
+        behavior: "smooth"
+      })
+    }
+  }, [currentIndex]);
 
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0;
@@ -28,6 +54,10 @@ export default function PhotoPreview({
     const newIndex = isLastSlide ? 0 : currentIndex + 1;
     setCurrentIndex(newIndex);
   };
+
+  function goToPhoto(index: number) {
+    setCurrentIndex(index);
+  }
 
   return (
     <>
@@ -42,9 +72,15 @@ export default function PhotoPreview({
                 <X className="text-base text-white cursor-pointer hover:text-brand-primary" />
               </Button>
 
-              <div className="text-gray-50">
-                <p>{data.title}</p>
+              <div className="text-gray-50 px-3">
+                <p className="font-semibold">{data.title}</p>
               </div>
+            </div>
+
+            <div>
+              <h2 className="text-gray-50 font-bold">
+                {currentIndex + 1} / {data.images.length}
+              </h2>
             </div>
 
             <div className="flex gap-3 md:gap-10 items-center justify-center md:justify-normal">
@@ -72,7 +108,7 @@ export default function PhotoPreview({
             </div>
           </nav>
 
-          <div className="flex gap-4 items-center my-3 ml-10">
+          <div className="flex gap-4 items-center my-3 ml-8">
             <Button
               onClick={goToPrevious}
               className="w-10 p-0 text-gray-950 hover:text-gray-100 hover:bg-transparent hover:border hover:border-slate-200 aspect-square rounded-full bg-gray-300"
@@ -100,6 +136,35 @@ export default function PhotoPreview({
               </div>
             </section>
           </main>
+        </div>
+
+        <div className="absolute top-28 overflow-hidden w-20 max-h-[400px] z-50 right-14">
+          {/* <div className="absolute blur bg-black/90 w-full h-10 rounded-t-xl -top-2"/> */}
+          <div
+            className="overflow-y-auto max-h-[400px] space-y-2 w-full hide-scroll"
+            ref={sliderRef}
+          >
+            {data.images.map((photo, index) => {
+              return (
+                <div
+                  key={photo}
+                  className={`w-full aspect-square rounded-xl gap-3 h-full cursor-pointer 
+                    ${clsx({
+                      "border-2 border-slate-100": index === currentIndex,
+                    })}`}
+                  onClick={() => goToPhoto(index)}
+                >
+                  <Image
+                    src={photo}
+                    alt="photo"
+                    width={500}
+                    height={500}
+                    className="w-full rounded-xl aspect-square"
+                  />
+                </div>
+              );
+            })}
+          </div>
         </div>
       </main>
     </>

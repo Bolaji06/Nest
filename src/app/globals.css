@@ -120,3 +120,12 @@ input[type=number] {
   width: 100%;
   height: 100vh;
 }
+
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll {  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
