@@ -12,10 +12,10 @@ import { ZodError } from "zod";
 let USER_ENDPOINT = "";
 
 if (process.env.NODE_ENV === 'development'){
-    USER_ENDPOINT = `${process.env.NEXT_PUBLIC_LOCAL_API_USER}`
+    USER_ENDPOINT = `${process.env.NEXT_PUBLIC_API_DEV_USER}`
 }
 else if (process.env.NODE_ENV === 'production'){
-    USER_ENDPOINT = `${process.env.NEXT_PUBLIC_URL_USER}`
+    USER_ENDPOINT = `${process.env.NEXT_PUBLIC_API_PROD_USER}`
 }
  export async function getUsers(){
 

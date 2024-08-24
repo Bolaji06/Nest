@@ -2,7 +2,13 @@ import next from "next";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
-const API_GET_POST = `http://localhost:7000/api/post`;
+let API_GET_POST = "";
+
+if (process.env.NODE_ENV === 'production'){
+  API_GET_POST = `${process.env.NEXT_PUBLIC_API_PROD_POST}`;
+}else if (process.env.NODE_ENV === 'development'){
+  API_GET_POST = `${process.env.NEXT_PUBLIC_API_DEV_POST}`;
+}
 
 export async function getSearch(query: {}) {
   const options = {
@@ -67,20 +73,9 @@ export async function getPost(id: string) {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      //console.log(error);
+      console.log(error)
+      return 'Failed to get post';
     }
   }
 }
 
-async function getPostsByPrice(min: number, max: number){
-  try{
-    const response = await fetch(`${API_GET_POST}?min_price=${min}&max_price=${max}`);
-    const data = response.json();
-    return data;
-
-  }catch(err){
-    if (err instanceof Error){
-      console.log(err);
-    }
-  }
-}

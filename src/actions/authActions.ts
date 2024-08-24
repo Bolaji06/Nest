@@ -14,9 +14,9 @@ import { revalidateTag } from "next/cache";
 let AUTH_ENDPOINT = "";
 
 if (process.env.NODE_ENV === "production") {
-  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_PROD_AUTH}`;
 } else if (process.env.NODE_ENV === "development") {
-  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_AUTH}`;
+  AUTH_ENDPOINT = `${process.env.NEXT_PUBLIC_API_DEV_AUTH}`;
 }
 export async function loginAction(prevState: any, formData: FormData) {
   try {
