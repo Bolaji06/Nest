@@ -21,7 +21,7 @@ export default function ProfileDropDown({
   
   return (
     <>
-      <main className="absolute shadow-md rounded-md top-12 -right-3 bg-white w-64 p-3">
+      <main className="absolute shadow-md z-[70] rounded-md top-12 -right-3 bg-white w-64 p-3">
         <div className="flex items-center gap-3 py-2">
           <div>
             { imageUrl ?
@@ -42,7 +42,7 @@ export default function ProfileDropDown({
             <p className="text-sm sm:text-base">{email}</p>
         </div>
 
-        <div className="bg-slate-200 w-full h-[2px]"/>
+        <div className="bg-slate-200 w-full h-[1px]"/>
 
         <footer className="py-2">
             <div className="flex justify-between items-center">

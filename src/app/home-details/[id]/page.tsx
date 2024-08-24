@@ -56,9 +56,9 @@ export default async function HomeDetailsPage({
   const session = await getUserSession();
 
   const token = cookies().get("token")?.value;
-  //console.log(data.message.description)
 
   const post: Post = data?.message
+
 
   return (
     <>
@@ -81,7 +81,7 @@ export default async function HomeDetailsPage({
                   </Link>
                 </Button>
               </header>
-              <div className="overflow-hidden max-h-screen relative z-50">
+              <div className="overflow-hidden max-h-screen relative z-30">
                 <PhotoGrid data={post}/>
               </div>
              
@@ -102,7 +102,7 @@ export default async function HomeDetailsPage({
                   inline-flex items-center justify-center"
                     >
                       <p className="text-sm capitalize">
-                        {data.message.property}
+                        {data?.message?.property}
                       </p>
                     </div>
 
@@ -116,7 +116,7 @@ export default async function HomeDetailsPage({
                       </div>
                       <SavedButton
                         id={data.message?.id}
-                        isSaved={data.message?.isSaved}
+                        isSaved={data?.message?.isSaved}
                         session={session}
                         token={token}
                       />
@@ -128,12 +128,12 @@ export default async function HomeDetailsPage({
                   <div className="flex justify-between flex-col md:flex-row space-y-3 md:space-y-0">
                     <div>
                       <p className="text-3xl lg:text-4xl max-w-lg font-semibold">
-                        {data.message.title}
+                        {data?.message?.title}
                       </p>
                     </div>
                     <div className="inline-flex gap-3">
                       <p className="text-3xl font-semibold">
-                        {convertToCurrency(data.message.price)}
+                        {convertToCurrency(data?.message?.price)}
                       </p>
                     </div>
                   </div>
@@ -143,17 +143,17 @@ export default async function HomeDetailsPage({
                       <BadgeDollarSign
                         size={16}
                         className={`${clsx({
-                          "text-green-500": data.message.type === "buy",
+                          "text-green-500": data?.message?.type === "buy",
                         })} text-orange-500 `}
                       />
                       <p className="capitalize text-sm px-1">
-                        {data.message.type}
+                        {data?.message?.type}
                       </p>
                     </div>
                     <div className="h-1 w-1 bg-gray-500 rounded-full" />
                     <div className="flex gap-1 items-center">
                       <MapPin size={16} />
-                      <p className="text-sm px-1">{data.message.city}</p>
+                      <p className="text-sm px-1">{data?.message?.city}</p>
                     </div>
                   </div>
 
@@ -161,7 +161,7 @@ export default async function HomeDetailsPage({
                     <div className="flex gap-2 items-center">
                       <div>
                         <Image
-                          src={data.message.user.avatar}
+                          src={data?.message?.user?.avatar}
                           alt="host user profile picture"
                           height={500}
                           width={500}
@@ -172,7 +172,7 @@ export default async function HomeDetailsPage({
                         <p className="text-gray-500">
                           Posted By{" "}
                           <span className="text-black font-semibold hover:underline cursor-pointer">
-                            {data.message.user.username}
+                            {data?.message?.user?.username}
                           </span>
                         </p>
                       </div>
@@ -186,14 +186,14 @@ export default async function HomeDetailsPage({
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
                         <Bed size={20} className="text-gray-600" />
                         <p className="">
-                          {data.message.bedroom} <span className="">Bed</span>
+                          {data?.message?.bedroom} <span className="">Bed</span>
                         </p>
                       </div>
 
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
                         <Bath size={20} className="text-gray-600" />
                         <p className="">
-                          {data.message.bathroom}{" "}
+                          {data?.message?.bathroom}{" "}
                           <span className="">Bathroom</span>
                         </p>
                       </div>
@@ -201,8 +201,8 @@ export default async function HomeDetailsPage({
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
                         <Ruler size={20} className="text-gray-600" />
                         <p className="">
-                          {data.message.unitArea
-                            ? data.message.unitArea.toLocaleString()
+                          {data?.message?.unitArea
+                            ? data?.message?.unitArea.toLocaleString()
                             : "1,243"}{" "}
                           <span className="">Sqft.</span>
                         </p>
@@ -213,7 +213,7 @@ export default async function HomeDetailsPage({
                   <div className="w-full h-[1px] bg-slate-200" />
 
                   <div className="py-3 rounded-md w-full">
-                    <QRCodeGenerator imageName={data.message.title} />
+                    <QRCodeGenerator imageName={data?.message?.title} />
                   </div>
                 </main>
               </div>
@@ -225,21 +225,21 @@ export default async function HomeDetailsPage({
                 <div className="w-20 h-[1px] bg-slate-100 mt-5" />
 
                 <div className="mt-8">
-                  <p className="py-4">{data.message.description}</p>
+                  <p className="py-4">{data?.message?.description}</p>
                 </div>
               </div>
 
               <div className="border border-slate-200 bg-white rounded-2xl p-7">
                 <header className="py-2">
                   <h2 className="text-3xl font-semibold">Location</h2>
-                  <p className="py-3 text-slate-500">{data.message.city}</p>
+                  <p className="py-3 text-slate-500">{data?.message?.city}</p>
                 </header>
                 <div className="w-20 h-[1px] bg-slate-100 mt-4" />
 
                 <div className="rounded-2xl overflow-hidden relative z-10 max-h-[400px] inset-0 mt-10">
                   <DynamicLocationMap
-                    lat={data.message.latitude}
-                    lng={data.message.longitude}
+                    lat={data?.message.latitude}
+                    lng={data?.message.longitude}
                   />
                 </div>
               </div>
@@ -257,7 +257,7 @@ export default async function HomeDetailsPage({
                 <div className="w-full">
                   <Button className="w-full rounded-2xl text-left inline-flex gap-3 bg-white lg:bg-transparent text-brand-primary border border-blue-700 hover:bg-blue-100">
                     <MessageCircle size={16} />
-                    Chat {data.message.user && data.message.user.username}
+                    Chat {data?.message?.user && data?.message?.user?.username}
                   </Button>
                 </div>
               </div>

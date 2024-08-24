@@ -62,7 +62,7 @@ export default function PhotoPreview({
   return (
     <>
       <main className="overflow-y-hidden max-h-screen">
-        <div className="absolute inset-0 bg-black/90 z-50 ">
+        <div className="absolute inset-0 bg-black/90 z-50 backdrop-blur-md">
           <nav className="border-b border-slate-800 px-4 py-2 flex justify-between items-center">
             <div className="inline-flex justify-center items-center gap-4">
               <Button

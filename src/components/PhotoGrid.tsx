@@ -21,7 +21,7 @@ export default function PhotoGrid({ data }: TPhotoGridProps) {
 
   return (
     <>
-      <section>
+      <section className="relative">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <div
             className="w-full md:w-[400px] md:aspect-square  md:col-span-2 md:row-span-3
@@ -32,7 +32,7 @@ export default function PhotoGrid({ data }: TPhotoGridProps) {
               onClick={handleTogglePreview}
             >
               <Images size={14} />
-              <p className="px-2">All Photos ({data.images.length})</p>
+              <p className="px-2">All Photos ({data.images?.length})</p>
             </Button>
             <Image
               src={data.images?.[0]}
