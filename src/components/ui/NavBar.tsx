@@ -27,7 +27,11 @@ const DynamicResetPassword = dynamic(
   { ssr: false }
 );
 
-export default function NavBar({ className }: { className?: string }) {
+interface NavBarProps {
+  className?: string,
+  isMobileNav?: boolean,
+}
+export default function NavBar({ className, isMobileNav }: NavBarProps) {
   const [loginState, signInAction] = useFormState(loginAction, {});
   const [toggleMobileNav, setToggleMobileNav] = useState(false);
   const [openAuthOutlet, setOpenAuthOutlet] = useState<boolean>(false);
@@ -130,9 +134,9 @@ export default function NavBar({ className }: { className?: string }) {
                   </Button>
                 )}
 
-                <div className="block lg:hidden" onClick={openMobileNav}>
+               {isMobileNav && <div className="block lg:hidden" onClick={openMobileNav}>
                   <MenuIcon color="black" className="cursor-pointer" />
-                </div>
+                </div> }
               </div>
             </div>
           </div>
