@@ -61,14 +61,14 @@ export default async function SearchPage({
           <FilterChips />
         </div>
       
-        <section className="flex overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32">
+        <section className={`flex ${clsx({"justify-center items-center bg-slate-200": !data?.message?.length})} overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32`}>
           <section
             className={`${clsx({
               "basis-full shadow-none": !data?.message?.length,
             })} grid-container gap-3 basis-full lg:basis-[60%] py-4 px-6 shadow-md`}
           >
             {!data.message.length ? (
-              <div className="flex justify-center basis-full w-full items-center align-middle">
+              <div className="flex mt-6 justify-center basis-full w-full items-center align-middle">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold">
                     {"We couldn't find your search term."}

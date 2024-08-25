@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { Post, TPost, TPostResult } from "@/lib/definitions";
+import { Post, TPost, TPostAmenities, TPostResult } from "@/lib/definitions";
 import { convertToCurrency } from "@/lib/utils";
 import { getUserSession } from "@/lib/getSession";
 import LoginSignUp from "@/components/LoginSignUp";
@@ -51,13 +51,11 @@ export default async function HomeDetailsPage({
 }: {
   params: { id: string };
 }) {
-  const data: TPostResult = await getPost(params.id);
+  const data: TPostAmenities = await getPost(params.id);
 
   const session = await getUserSession();
-
   const token = cookies().get("token")?.value;
-
-  const post: Post = data?.message
+  const post = data.message
 
 
   return (
@@ -82,7 +80,7 @@ export default async function HomeDetailsPage({
                 </Button>
               </header>
               <div className="overflow-hidden max-h-screen relative z-30">
-                <PhotoGrid data={post}/>
+                <PhotoGrid data={post.post}/>
               </div>
              
             </section>
@@ -96,17 +94,17 @@ export default async function HomeDetailsPage({
             <div className="basis-full lg:basis-[70%] space-y-10">
               <div className="border border-slate-200 bg-white rounded-2xl p-7">
                 <header>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center flex-row xs:flex-col">
                     <div
                       className="rounded-2xl px-8 h-6 class-name bg-blue-100 text-center
                   inline-flex items-center justify-center"
                     >
                       <p className="text-sm capitalize">
-                        {data?.message?.property}
+                        {post.post.property}
                       </p>
                     </div>
 
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 xs:mt-3">
                       <div
                         className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
                   cursor-pointer"
@@ -115,8 +113,8 @@ export default async function HomeDetailsPage({
                         <p className="text-sm text-gray-800">Share</p>
                       </div>
                       <SavedButton
-                        id={data.message?.id}
-                        isSaved={data?.message?.isSaved}
+                        id={post.post.id}
+                        isSaved={post.post.isSaved}
                         session={session}
                         token={token}
                       />
@@ -127,13 +125,13 @@ export default async function HomeDetailsPage({
                 <main className="py-5 space-y-3 ">
                   <div className="flex justify-between flex-col md:flex-row space-y-3 md:space-y-0">
                     <div>
-                      <p className="text-3xl lg:text-4xl max-w-lg font-semibold">
-                        {data?.message?.title}
+                      <p className="xs:text-2xl text-3xl lg:text-4xl max-w-lg font-semibold">
+                        {post.post.title}
                       </p>
                     </div>
                     <div className="inline-flex gap-3">
-                      <p className="text-3xl font-semibold">
-                        {convertToCurrency(data?.message?.price)}
+                      <p className="xs:text-xl text-3xl font-semibold">
+                        {convertToCurrency(post.post.price)}
                       </p>
                     </div>
                   </div>
@@ -143,17 +141,17 @@ export default async function HomeDetailsPage({
                       <BadgeDollarSign
                         size={16}
                         className={`${clsx({
-                          "text-green-500": data?.message?.type === "buy",
+                          "text-green-500": post.post.type === "buy",
                         })} text-orange-500 `}
                       />
                       <p className="capitalize text-sm px-1">
-                        {data?.message?.type}
+                        {post.post.type}
                       </p>
                     </div>
                     <div className="h-1 w-1 bg-gray-500 rounded-full" />
                     <div className="flex gap-1 items-center">
                       <MapPin size={16} />
-                      <p className="text-sm px-1">{data?.message?.city}</p>
+                      <p className="text-sm px-1">{post.post.city}</p>
                     </div>
                   </div>
 
@@ -161,7 +159,7 @@ export default async function HomeDetailsPage({
                     <div className="flex gap-2 items-center">
                       <div>
                         <Image
-                          src={data?.message?.user?.avatar}
+                          src={post.post.user?.avatar}
                           alt="host user profile picture"
                           height={500}
                           width={500}
@@ -172,7 +170,7 @@ export default async function HomeDetailsPage({
                         <p className="text-gray-500">
                           Posted By{" "}
                           <span className="text-black font-semibold hover:underline cursor-pointer">
-                            {data?.message?.user?.username}
+                            {post.post.user?.username}
                           </span>
                         </p>
                       </div>
@@ -182,27 +180,27 @@ export default async function HomeDetailsPage({
                   <div className="w-full h-[1px] bg-slate-100" />
 
                   <div className="py-4">
-                    <div className="flex gap-3 md:gap-10 items-center justify-center md:justify-normal">
+                    <div className="flex gap-3 md:gap-10 xs:text-sm items-center xs:justify-normal justify-center md:justify-normal">
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
-                        <Bed size={20} className="text-gray-600" />
+                        <Bed size={20} className="text-gray-600 xs:hidden block" />
                         <p className="">
-                          {data?.message?.bedroom} <span className="">Bed</span>
+                          {post.post.bedroom} <span className="">Bed</span>
                         </p>
                       </div>
 
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
-                        <Bath size={20} className="text-gray-600" />
+                        <Bath size={20} className="text-gray-600 xs:hidden block" />
                         <p className="">
-                          {data?.message?.bathroom}{" "}
+                          {post.post.bathroom}{" "}
                           <span className="">Bathroom</span>
                         </p>
                       </div>
 
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
-                        <Ruler size={20} className="text-gray-600" />
+                        <Ruler size={20} className="text-gray-600 xs:hidden block" />
                         <p className="">
-                          {data?.message?.unitArea
-                            ? data?.message?.unitArea.toLocaleString()
+                          {post.post.unitArea
+                            ? post.post.unitArea.toLocaleString()
                             : "1,243"}{" "}
                           <span className="">Sqft.</span>
                         </p>
@@ -213,33 +211,33 @@ export default async function HomeDetailsPage({
                   <div className="w-full h-[1px] bg-slate-200" />
 
                   <div className="py-3 rounded-md w-full">
-                    <QRCodeGenerator imageName={data?.message?.title} />
+                    <QRCodeGenerator imageName={post.post.title} />
                   </div>
                 </main>
               </div>
 
-              <div className="border border-slate-200 bg-white rounded-2xl md:p-7">
+              <div className="border border-slate-200 bg-white rounded-2xl p-3 md:p-7">
                 <header className="py-2">
-                  <h2 className="text-3xl font-semibold">Description</h2>
+                  <h2 className="text-3xl font-semibold px-3">Description</h2>
                 </header>
                 <div className="w-20 h-[1px] bg-slate-100 mt-5" />
 
                 <div className="mt-8">
-                  <p className="py-4">{data?.message?.description}</p>
+                  <p className="py-4 px-3">{post.post.description}</p>
                 </div>
               </div>
 
               <div className="border border-slate-200 bg-white rounded-2xl p-7">
                 <header className="py-2">
                   <h2 className="text-3xl font-semibold">Location</h2>
-                  <p className="py-3 text-slate-500">{data?.message?.city}</p>
+                  <p className="py-3 text-slate-500">{post.post.city}</p>
                 </header>
                 <div className="w-20 h-[1px] bg-slate-100 mt-4" />
 
                 <div className="rounded-2xl overflow-hidden relative z-10 max-h-[400px] inset-0 mt-10">
                   <DynamicLocationMap
-                    lat={data?.message.latitude}
-                    lng={data?.message.longitude}
+                    lat={post.post.latitude}
+                    lng={post.post.longitude}
                   />
                 </div>
               </div>
@@ -257,7 +255,7 @@ export default async function HomeDetailsPage({
                 <div className="w-full">
                   <Button className="w-full rounded-2xl text-left inline-flex gap-3 bg-white lg:bg-transparent text-brand-primary border border-blue-700 hover:bg-blue-100">
                     <MessageCircle size={16} />
-                    Chat {data?.message?.user && data?.message?.user?.username}
+                    Chat {post.post.user && post.post.user?.username}
                   </Button>
                 </div>
               </div>
