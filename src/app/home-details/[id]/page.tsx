@@ -7,6 +7,8 @@ import {
   BadgeDollarSign,
   Bath,
   Bed,
+  Building,
+  Cog,
   Heart,
   Images,
   Mail,
@@ -14,6 +16,7 @@ import {
   MessageCircle,
   Ruler,
   Share,
+  Sofa,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
@@ -30,6 +33,7 @@ import clsx from "clsx";
 import LocationMap from "@/components/LocationMap";
 import dynamic from "next/dynamic";
 import PhotoGrid from "@/components/PhotoGrid";
+import { Amenities, AmenitiesHeader } from "@/components/ui/amenities";
 
 export async function generateMetadata({
   params,
@@ -55,8 +59,11 @@ export default async function HomeDetailsPage({
 
   const session = await getUserSession();
   const token = cookies().get("token")?.value;
-  const post = data.message
+  const post = data.message;
 
+  console.log(post.amenities);
+
+  const amenities = post.amenities;
 
   return (
     <>
@@ -80,9 +87,8 @@ export default async function HomeDetailsPage({
                 </Button>
               </header>
               <div className="overflow-hidden max-h-screen relative z-30">
-                <PhotoGrid data={post.post}/>
+                <PhotoGrid data={post.post} />
               </div>
-             
             </section>
           </div>
         </div>
@@ -99,9 +105,7 @@ export default async function HomeDetailsPage({
                       className="rounded-2xl px-8 h-6 class-name bg-blue-100 text-center
                   inline-flex items-center justify-center"
                     >
-                      <p className="text-sm capitalize">
-                        {post.post.property}
-                      </p>
+                      <p className="text-sm capitalize">{post.post.property}</p>
                     </div>
 
                     <div className="flex gap-3 xs:mt-3">
@@ -182,14 +186,20 @@ export default async function HomeDetailsPage({
                   <div className="py-4">
                     <div className="flex gap-3 md:gap-10 xs:text-sm items-center xs:justify-normal justify-center md:justify-normal">
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
-                        <Bed size={20} className="text-gray-600 xs:hidden block" />
+                        <Bed
+                          size={20}
+                          className="text-gray-600 xs:hidden block"
+                        />
                         <p className="">
                           {post.post.bedroom} <span className="">Bed</span>
                         </p>
                       </div>
 
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
-                        <Bath size={20} className="text-gray-600 xs:hidden block" />
+                        <Bath
+                          size={20}
+                          className="text-gray-600 xs:hidden block"
+                        />
                         <p className="">
                           {post.post.bathroom}{" "}
                           <span className="">Bathroom</span>
@@ -197,7 +207,10 @@ export default async function HomeDetailsPage({
                       </div>
 
                       <div className="flex items-center gap-1 md:gap-3 text-gray-800">
-                        <Ruler size={20} className="text-gray-600 xs:hidden block" />
+                        <Ruler
+                          size={20}
+                          className="text-gray-600 xs:hidden block"
+                        />
                         <p className="">
                           {post.post.unitArea
                             ? post.post.unitArea.toLocaleString()
@@ -239,6 +252,90 @@ export default async function HomeDetailsPage({
                     lat={post.post.latitude}
                     lng={post.post.longitude}
                   />
+                </div>
+              </div>
+
+              <div className="border border-slate-200 bg-white rounded-2xl p-7">
+                <header className="py-2">
+                  <h2 className="text-3xl font-semibold">Amenities</h2>
+                  <p className="py-3 text-slate-500">
+                    About the property amenities
+                  </p>
+                </header>
+                <div className="w-20 h-[1px] bg-slate-100 mt-4" />
+
+                <div className="">
+                <div className="space-y-4 ">
+                  <div className="interior">
+                    <AmenitiesHeader icon={<Sofa />} header="Interior" />
+                    <div className="grid grid-cols-2 gap-2 w-full">
+                      <Amenities
+                      amenities={amenities.roomDetails.appliances}
+                      category="Appliance:"
+                    />
+                    <Amenities
+                      amenities={amenities.roomDetails.floorCovering}
+                      category="Floor:"
+                    />
+                    <Amenities
+                      amenities={amenities.roomDetails.indoorFeatures}
+                      category="Indoor:"
+                    />
+                    <Amenities
+                      amenities={amenities.roomDetails.rooms}
+                      category="Rooms:"
+                    />
+                    </div>
+                  </div>
+
+                  <div className="interior">
+                    <AmenitiesHeader icon={<Building />} header="Building details" />
+                    <div className="grid grid-cols-2 gap-2 w-full">
+                      <Amenities
+                      amenities={amenities.buildingDetails.buildingAmenities}
+                      category="Amenities:"
+                    />
+                    <Amenities
+                      amenities={amenities.buildingDetails.exterior}
+                      category="Exterior:"
+                    />
+                    <Amenities
+                      amenities={amenities.buildingDetails.outdoorAmenities}
+                      category="Outdoor:"
+                    />
+                    <Amenities
+                      amenities={amenities.buildingDetails.parking}
+                      category="Parking:"
+                    />
+                    <Amenities
+                      amenities={amenities.buildingDetails.roof}
+                      category="Roof:"
+                    />
+                    <Amenities
+                      amenities={amenities.buildingDetails.view}
+                      category="View:"
+                    />
+                    </div>
+                  </div>
+
+                  <div className="interior">
+                    <AmenitiesHeader icon={<Cog />} header="Utilities" />
+                    <div className="grid grid-cols-2 gap-2 w-full">
+                      <Amenities
+                      amenities={amenities.utilitiesDetails.coolingType}
+                      category="Cooling Type:"
+                    />
+                    <Amenities
+                      amenities={amenities.utilitiesDetails.heatingFuel}
+                      category="Heating Fuel:"
+                    />
+                    <Amenities
+                      amenities={amenities.utilitiesDetails.heatingType}
+                      category="Heating Type"
+                    />
+                    </div>
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
