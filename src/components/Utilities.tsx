@@ -3,6 +3,7 @@
 import {
   ChangeEvent,
   FormEvent,
+  startTransition,
   useEffect,
   useOptimistic,
   useState,
@@ -64,10 +65,6 @@ interface SavedButtonProps {
   token: string | undefined;
 }
 
-interface SavePostStatus {
-  success: boolean;
-  message: string;
-}
 export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
   const { toast } = useToast();
 
@@ -87,7 +84,10 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
     }
 
     const newSavedState = !optimisticState;
-    addOptimistic(newSavedState);
+    
+    startTransition(() => {
+      addOptimistic(newSavedState)
+    })
 
     const handleSubmit = async () => {
       try {
