@@ -57,7 +57,6 @@ export type TPost = {
     username: string;
     avatar: string;
   };
-  isSaved: boolean;
 };
 
 export interface Post {
@@ -117,6 +116,6 @@ export type TPostAmenities = {
   message: {
     post: TPost;
     amenities: TAmenities;
-    
+    isSaved: boolean;
   };
 };

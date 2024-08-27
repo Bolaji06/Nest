@@ -34,6 +34,7 @@ import LocationMap from "@/components/LocationMap";
 import dynamic from "next/dynamic";
 import PhotoGrid from "@/components/PhotoGrid";
 import { Amenities, AmenitiesHeader } from "@/components/ui/amenities";
+import { Suspense } from "react";
 
 export async function generateMetadata({
   params,
@@ -60,8 +61,6 @@ export default async function HomeDetailsPage({
   const session = await getUserSession();
   const token = cookies().get("token")?.value;
   const post = data.message;
-
-  console.log(post.amenities);
 
   const amenities = post.amenities;
 
@@ -116,9 +115,10 @@ export default async function HomeDetailsPage({
                         <Share size={18} />
                         <p className="text-sm text-gray-800">Share</p>
                       </div>
+
                       <SavedButton
                         id={post.post.id}
-                        isSaved={post.post.isSaved}
+                        isSaved={post.isSaved}
                         session={session}
                         token={token}
                       />
@@ -265,77 +265,82 @@ export default async function HomeDetailsPage({
                 <div className="w-20 h-[1px] bg-slate-100 mt-4" />
 
                 <div className="">
-                <div className="space-y-4 ">
-                  <div className="interior">
-                    <AmenitiesHeader icon={<Sofa />} header="Interior" />
-                    <div className="grid grid-cols-2 gap-2 w-full">
-                      <Amenities
-                      amenities={amenities.roomDetails.appliances}
-                      category="Appliance:"
-                    />
-                    <Amenities
-                      amenities={amenities.roomDetails.floorCovering}
-                      category="Floor:"
-                    />
-                    <Amenities
-                      amenities={amenities.roomDetails.indoorFeatures}
-                      category="Indoor:"
-                    />
-                    <Amenities
-                      amenities={amenities.roomDetails.rooms}
-                      category="Rooms:"
-                    />
+                  <div className="space-y-4 ">
+                    <div className="interior">
+                      <AmenitiesHeader icon={<Sofa />} header="Interior" />
+                      <div className="grid grid-cols-2 gap-2 w-full">
+                        <Amenities
+                          amenities={amenities.roomDetails.appliances}
+                          category="Appliance:"
+                        />
+                        <Amenities
+                          amenities={amenities.roomDetails.floorCovering}
+                          category="Floor:"
+                        />
+                        <Amenities
+                          amenities={amenities.roomDetails.indoorFeatures}
+                          category="Indoor:"
+                        />
+                        <Amenities
+                          amenities={amenities.roomDetails.rooms}
+                          category="Rooms:"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="interior">
-                    <AmenitiesHeader icon={<Building />} header="Building details" />
-                    <div className="grid grid-cols-2 gap-2 w-full">
-                      <Amenities
-                      amenities={amenities.buildingDetails.buildingAmenities}
-                      category="Amenities:"
-                    />
-                    <Amenities
-                      amenities={amenities.buildingDetails.exterior}
-                      category="Exterior:"
-                    />
-                    <Amenities
-                      amenities={amenities.buildingDetails.outdoorAmenities}
-                      category="Outdoor:"
-                    />
-                    <Amenities
-                      amenities={amenities.buildingDetails.parking}
-                      category="Parking:"
-                    />
-                    <Amenities
-                      amenities={amenities.buildingDetails.roof}
-                      category="Roof:"
-                    />
-                    <Amenities
-                      amenities={amenities.buildingDetails.view}
-                      category="View:"
-                    />
+                    <div className="interior">
+                      <AmenitiesHeader
+                        icon={<Building />}
+                        header="Building details"
+                      />
+                      <div className="grid grid-cols-2 gap-2 w-full">
+                        <Amenities
+                          amenities={
+                            amenities.buildingDetails.buildingAmenities
+                          }
+                          category="Amenities:"
+                        />
+                        <Amenities
+                          amenities={amenities.buildingDetails.exterior}
+                          category="Exterior:"
+                        />
+                        <Amenities
+                          amenities={amenities.buildingDetails.outdoorAmenities}
+                          category="Outdoor:"
+                        />
+                        <Amenities
+                          amenities={amenities.buildingDetails.parking}
+                          category="Parking:"
+                        />
+                        <Amenities
+                          amenities={amenities.buildingDetails.roof}
+                          category="Roof:"
+                        />
+                        <Amenities
+                          amenities={amenities.buildingDetails.view}
+                          category="View:"
+                        />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="interior">
-                    <AmenitiesHeader icon={<Cog />} header="Utilities" />
-                    <div className="grid grid-cols-2 gap-2 w-full">
-                      <Amenities
-                      amenities={amenities.utilitiesDetails.coolingType}
-                      category="Cooling Type:"
-                    />
-                    <Amenities
-                      amenities={amenities.utilitiesDetails.heatingFuel}
-                      category="Heating Fuel:"
-                    />
-                    <Amenities
-                      amenities={amenities.utilitiesDetails.heatingType}
-                      category="Heating Type"
-                    />
+                    <div className="interior">
+                      <AmenitiesHeader icon={<Cog />} header="Utilities" />
+                      <div className="grid grid-cols-2 gap-2 w-full">
+                        <Amenities
+                          amenities={amenities.utilitiesDetails.coolingType}
+                          category="Cooling Type:"
+                        />
+                        <Amenities
+                          amenities={amenities.utilitiesDetails.heatingFuel}
+                          category="Heating Fuel:"
+                        />
+                        <Amenities
+                          amenities={amenities.utilitiesDetails.heatingType}
+                          category="Heating Type"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
                 </div>
               </div>
             </div>
