@@ -61,7 +61,7 @@ export default async function SearchPage({
           <FilterChips />
         </div>
       
-        <section className={`flex ${clsx({"justify-center items-center bg-slate-200": !data?.message?.length})} overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32`}>
+        <section className={`flex ${clsx({"justify-center items-center bg-slate-50": !data?.message?.length})} overflow-hidden lg:h-screen gap-1 pt-16 md:pt-32`}>
           <section
             className={`${clsx({
               "basis-full shadow-none": !data?.message?.length,
