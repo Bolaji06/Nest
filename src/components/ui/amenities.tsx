@@ -13,14 +13,14 @@ export function Amenities({ amenities, category }: AmenitiesProps) {
       <main>
         <section>
           <ul className="mt-1">
-            <li className="flex py-1 gap-1">
+            <li className="flex xs:flex-col gap-1 py-1 xs:text-base">
               <p className="font-medium">{category}</p>
               {amenities.map((item, index) => {
                 const isLastItem = index === amenities.length - 1;
                 return (
-                  <p key={index} className="capitalize">
+                  <p key={index} className="capitalize inline-flex">
                     {item}
-                    {!isLastItem && ", "}
+                    {!isLastItem && <p className="xs:hidden">{", "}</p>}
                   </p>
                 );
               })}

@@ -2,7 +2,13 @@
 
 import { revalidateTag } from "next/cache";
 
-const API_GET_POST = `http://localhost:7000/api/save-post`;
+let API_GET_POST = '';
+
+if (process.env.NODE_ENV === 'production'){
+  API_GET_POST = `${process.env.NEXT_PUBLIC_API_PROD_SAVE_POST}`;
+}else if (process.env.NODE_ENV === 'development'){
+  API_GET_POST = `${process.env.NEXT_PUBLIC_API_DEV_SAVE_POST}`
+}
 
 export async function addSavePost(id: string, token: string) {
   
