@@ -5,6 +5,8 @@ const USER_TYPE = ["renter", "rentee", "home_buyer", "home_seller", "other"] as 
 
 const numberSchema = z.coerce.number({ required_error: 'This field is required' }).min(3, { message: 'Value is too short'})
 
+const amenitiesList = z.array(z.string());
+
 export const loginSchema = z.object({
     email: z.string().min(0, { message: 'Email cannot be empty' }).email({ message: 'enter a valid email address'}).trim(),
     password: z.string({ required_error: 'password is required' }).min(4, { message: 'password must contain at least (4) character'}).max(15, { message: 'Password too long' }).trim(),
@@ -66,7 +68,36 @@ export const postSchema = z.object({
     property: z.enum(["apartment", "house", "condo", "land"]),
 
     description: z.string().min(3, { message: 'Too short' }),
+
+    amenities: z.object({
+        roomDetails: z.object({
+            appliance: amenitiesList,
+            basement: z.enum(["finished", "unfinished", "partially_finished", "none"]),
+            floorCovering: amenitiesList,
+            rooms: amenitiesList,
+            indoorFeatures: amenitiesList,
+        }),
+        utilitiesDetails: z.object({
+            heatingType: amenitiesList,
+            coolingType: amenitiesList,
+            heatingFuel: amenitiesList,
+        }),
+        buildingDetails: z.object({
+            buildingAmenities: amenitiesList,
+            architecturalStyle: z.string(),
+            exterior: amenitiesList,
+            numUnit: z.number(),
+            numFloor: z.number(),
+            outdoorAmenities: amenitiesList,
+            parking: amenitiesList,
+            parkingSpace: z.number(),
+            view: amenitiesList,
+            roof: amenitiesList
+        })
+    })
 });
+
+
 
 export type loginSchemaType = z.infer<typeof loginSchema>;
 export type registerSchemaType = z.infer<typeof registerSchema>;
