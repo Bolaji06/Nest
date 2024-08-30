@@ -97,8 +97,15 @@ export const postSchema = z.object({
     })
 });
 
+export const sendEmailForm = z.object({
+    to: z.string({required_error: 'Email is required'}).email({ message: 'Invalid email' }),
+    from: z.string({required_error: 'Email is required'}).email({ message: 'Invalid email' }),
+    message: z.string({required_error: 'Fill out the message' }),
+})
+
 
 
 export type loginSchemaType = z.infer<typeof loginSchema>;
 export type registerSchemaType = z.infer<typeof registerSchema>;
 export type postSchemaType = z.infer<typeof postSchema>;
+export type sendEmailFormType = z.infer<typeof sendEmailForm>;

@@ -6,7 +6,7 @@ import QRCode from "qrcode.react";
 import { Download } from "lucide-react";
 import { Button } from "./button";
 
-export default function QRCodeGenerator({ imageName }: {imageName: string}) {
+export default function QRCodeGenerator({ imageName, className }: { imageName: string, className?: string }) {
   const [listingLink, setListingLink] = useState("");
 
   const qrCodeRef = useRef<HTMLDivElement>(null);
@@ -35,14 +35,15 @@ export default function QRCodeGenerator({ imageName }: {imageName: string}) {
   return (
     <>
       <main>
-        <div className="flex xs:flex-col flex-row gap-2 w-full">
-          <div ref={qrCodeRef} className="w-full">
+        <div className={`flex xs:flex-col flex-row gap-2 w-full ${className}`}>
+          <div ref={qrCodeRef} className={`w-full ${className}`}>
             <QRCode
               value={listingLink}
               renderAs="canvas"
               title="QR Code"
-              className="w-[300px]"
-              width={"300px"}
+              className="w-full"
+              width={100}
+              size={210}
             />
           </div>
           <Button

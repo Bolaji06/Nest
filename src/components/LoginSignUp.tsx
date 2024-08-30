@@ -62,7 +62,7 @@ export default function LoginSignUp({
 
   return (
     <>
-      <main className="overflow-y-hidden">
+      <main className="h-screen overflow-y-hidden">
         <div
           className="absolute z-40 inset-0 bg-black/65"
           onClick={closeSignPortal}

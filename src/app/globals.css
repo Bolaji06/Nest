@@ -129,3 +129,27 @@ input[type=number] {
 .hide-scroll {  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* width */
+.bar::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 20px;
+}
+
+/* Track */
+.bar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+/* Handle */
+.bar::-webkit-scrollbar-thumb {
+  background: #706f6f;
+  border-radius: 20px;
+}
+
+/* Handle on hover */
+.bar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+

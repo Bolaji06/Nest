@@ -174,6 +174,7 @@ export default function NavBar({ className, isMobileNav }: NavBarProps) {
         </div>
       </nav>
 
+      
       {openAuthOutlet &&
         createPortal(
           <DynamicAuthOutlet
@@ -182,7 +183,10 @@ export default function NavBar({ className, isMobileNav }: NavBarProps) {
             loginAction={signInAction}
           />,
           document.body
-        )}
+        ) }
+        {
+       //openAuthOutlet ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'auto'
+      }
     </>
   );
 }
