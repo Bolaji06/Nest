@@ -29,7 +29,6 @@ import {
   Modal,
   SavedButton,
   ShareButton,
-  ShareUI,
 } from "@/components/Utilities";
 import { cookies } from "next/headers";
 import QRCodeGenerator from "@/components/ui/qrcode";

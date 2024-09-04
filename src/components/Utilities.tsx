@@ -43,8 +43,9 @@ import {
 import Image from "next/image";
 import QRCodeGenerator from "./ui/qrcode";
 
-import { sendEmail } from '../actions/emailAction'
+import { sendEmail } from "../actions/emailAction";
 import { sendEmailFormType } from "@/utils/validation";
+import { FormButton } from "./FormButton";
 
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
@@ -442,18 +443,28 @@ export function ShareButton({ data }: IShareButton) {
 
   const [state, action, isPending] = useFormState(sendEmail, {});
 
-  console.log(isPending)
+  const { toast } = useToast();
 
+  console.log(state);
 
   function handleToggleEmail() {
-   setToggleEmail(true);
-   setToggleQR(false);
+    setToggleEmail(true);
+    setToggleQR(false);
   }
 
   function handleToggleQR() {
-   setToggleEmail(false);
-   setToggleQR(true);
+    setToggleEmail(false);
+    setToggleQR(true);
   }
+
+  useEffect(() => {
+    if (state.success) {
+      toast({
+        title: "Email sent!",
+        description: "Listing shared successfully",
+      });
+    }
+  }, [state.success]);
 
   return (
     <>
@@ -493,92 +504,95 @@ export function ShareButton({ data }: IShareButton) {
             </div>
           </DialogHeader>
           <DialogHeader className="flex flex-row justify-between items-center w-full mt-3">
-            <div onClick={handleToggleEmail} className={`cursor-pointer ${clsx({'border-b-4': toggleEmail})} rounded-tl-2xl border-b-blue-500 pb-2`}>
+            <div
+              onClick={handleToggleEmail}
+              className={`cursor-pointer ${clsx({
+                "border-b-4": toggleEmail,
+              })} rounded-tl-2xl border-b-blue-500 pb-2`}
+            >
               <DialogTitle className="font-medium">Email</DialogTitle>
             </div>
 
-            <div onClick={handleToggleQR} className={`cursor-pointer ${clsx({'border-b-4': toggleQR})} border-b-blue-500 pb-2`}>
+            <div
+              onClick={handleToggleQR}
+              className={`cursor-pointer ${clsx({
+                "border-b-4": toggleQR,
+              })} border-b-blue-500 pb-2`}
+            >
               <DialogTitle className="font-medium">QR Code</DialogTitle>
             </div>
           </DialogHeader>
 
-          { toggleEmail && <div>
-            <form action={action} className="space-y-3">
-              <div>
-                <label htmlFor="to" className="text-sm">To:</label>
-                <Input id="to" className="" placeholder="Receiver email" name="to"/>
-              </div>
+          {toggleEmail && (
+            <div>
+              <form action={action} className="space-y-3">
+                <div>
+                  <label htmlFor="to" className="text-sm">
+                    To:
+                  </label>
+                  <Input
+                    id="to"
+                    className=""
+                    placeholder="Receiver email"
+                    name="to"
+                    autoFocus={true}
+                    
+                  />
+                  {state.field === "to" && <p className="text-xs text-red-500">{state.status}</p>}
+                </div>
 
-              <div>
-                <label htmlFor="user" className="text-sm">Your Email:</label>
-                <Input
-                  id="user"
-                  className=""
-                  placeholder="Your email"
-                  name="from"
-                  defaultValue={data.message.post.user.username}
+                <div>
+                  <label htmlFor="user" className="text-sm">
+                    Your Email:
+                  </label>
+                  <Input
+                    id="user"
+                    className=""
+                    placeholder="Your email"
+                    name="from"
+                    defaultValue={data.message.post.user.username}
+                  />
+                  {state.field === "from" && <p className="text-xs text-red-500">{state.status}</p>}
+                </div>
+
+                <input
+                  name="postId"
+                  defaultValue={data.message.post.id}
+                  readOnly
+                  aria-readonly
+                  hidden
+                  aria-hidden
                 />
-              </div>
 
-              <div className="w-full">
-                <label id="message" className="text-sm">Message</label>
-                <textarea
-                  id="message"
-                  defaultValue={"Check out "+ data.message.post.title + " on Nest"}
-                  name="message"
-                  className="w-full text-sm border p-2 focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
-                />
-              </div>
-              <Button
-                type="submit"
-                className="bg-brand-primary w-full hover:bg-blue-600"
-                disabled={isPending}
-              >
-                Send
-              </Button>
-            </form>
-          </div>}
+                <div className="w-full">
+                  <label id="message" className="text-sm">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    defaultValue={
+                      "Check out " + data.message.post.title + " on Nest"
+                    }
+                    name="message"
+                    className="w-full text-sm border p-2 focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
+                  />
+                  {state.field === "message" && <p className="text-xs text-red-500">{state.message}</p>}
+                </div>
+                <FormButton text="Send" />
+              </form>
+            </div>
+          )}
 
-          { toggleQR && <div>
-              <QRCodeGenerator imageName={data.message.post.title} className="flex gap-4 mt-1 flex-col justify-center items-center"/>
-            </div>}
+          {toggleQR && (
+            <div>
+              <QRCodeGenerator
+                imageName={data.message.post.title}
+                className="flex gap-4 mt-1 flex-col justify-center items-center"
+              />
+            </div>
+          )}
         </DialogContent>
       </Dialog>
-    </>
-  );
-}
-
-export function ShareUI() {
-  return (
-    <>
-      <section className="">
-        {/* <div>
-          <div className="absolute inset-0 z-40 bg-black/70"/>
-          <header className="w-full sm:w-[350px] rounded-md absolute top-6 lg:top-10 z-50 left-1/2 -translate-x-1/2 bg-white">
-            <div className="">
-              <h2 className="text-lg">Email</h2>
-            </div>
-            <div>
-              <h2 className="text-lg">QR Code</h2>
-            </div>
-          </header>
-
-          <div className="email-form"></div>
-          <div className="qr-code"></div>
-        </div> */}
-
-        <Dialog>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-      </section>
     </>
   );
 }

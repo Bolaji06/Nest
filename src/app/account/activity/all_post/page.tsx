@@ -18,8 +18,6 @@ export default async function AllPost() {
   return (
     <>
       <main>
-        <header className="text-2xl font-semibold py-2">All Post</header>
-
         <section className="grid-container gap-3 ">
           {response?.message.map((post: TPost) => {
             return (

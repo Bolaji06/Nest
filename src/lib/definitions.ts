@@ -119,3 +119,4 @@ export type TPostAmenities = {
     isSaved: boolean;
   };
 };
+

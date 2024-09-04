@@ -101,6 +101,7 @@ export const sendEmailForm = z.object({
     to: z.string({required_error: 'Email is required'}).email({ message: 'Invalid email' }),
     from: z.string({required_error: 'Email is required'}).email({ message: 'Invalid email' }),
     message: z.string({required_error: 'Fill out the message' }),
+    postId: z.string(),
 })
 
 

@@ -12,6 +12,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { changeUserAvatar } from "@/actions/userActions";
 import { uploadAvatarToFirebase } from "@/lib/firebaseStorage";
+import { Button } from "./ui/button";
 
 let USER_ENDPOINT = "";
 
@@ -24,7 +25,8 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
   const pathname = usePathname();
   const [inputAvatar, setInputAvatar] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
-  const [isChangeAvatarLoading, setIsChangeAvatarLoading] = useState<boolean>(false);
+  const [isChangeAvatarLoading, setIsChangeAvatarLoading] =
+    useState<boolean>(false);
 
   function handleAvatarChange(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -37,16 +39,18 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
         setInputAvatar(null);
         setImageError("image file exceeds 2MB");
       } else {
-          uploadAvatarToFirebase(imageFile).then((fileUrl) => {
-            if (fileUrl){
+        uploadAvatarToFirebase(imageFile)
+          .then((fileUrl) => {
+            if (fileUrl) {
               setInputAvatar(fileUrl);
             }
-          
-          setImageError(null)
-        }).catch((err) => {
-          setInputAvatar(null);
-          setImageError('Failed to upload avatar')
-        })
+
+            setImageError(null);
+          })
+          .catch((err) => {
+            setInputAvatar(null);
+            setImageError("Failed to upload avatar");
+          });
       }
     }
   }
@@ -60,8 +64,8 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
           return apiData;
         } catch (err) {
           console.log(err);
-        }finally{
-          setIsChangeAvatarLoading(false)
+        } finally {
+          setIsChangeAvatarLoading(false);
         }
       }
     }
@@ -70,10 +74,10 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
 
   return (
     <>
-      <div>
+      <div className="">
         <div
           className="flex justify-center text-center items-center flex-col gap-3 w-full
-                border-b border-slate-200 py-4"
+                 py-4"
         >
           {/* Profile Image and Name  */}
           <div className="relative">
@@ -93,7 +97,11 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
               className="absolute bottom-2 -right-2 bg-slate-200 w-10 rounded-full aspect-square
             flex justify-center items-center cursor-pointer"
             >
-             {isChangeAvatarLoading ? <Loader2 size={16} className="text-blue-600 animate-spin"/> : <Pencil size={18} color="black" />}
+              {isChangeAvatarLoading ? (
+                <Loader2 size={16} className="text-blue-600 animate-spin" />
+              ) : (
+                <Pencil size={18} color="black" />
+              )}
               <Input
                 onChange={handleAvatarChange}
                 accept="image/*"
@@ -113,9 +121,13 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
             <p className="text-center font-bold">{data?.username}</p>
             <p className="text-sm capitalize">{data.userType}</p>
           </div>
+
+          <div className="">
+            <Button className="bg-transparent text-brand-primary hover:bg-transparent underline">Edit</Button>
+          </div>
         </div>
 
-        <div>
+        {/* <div>
           <ul>
             {profileSideLink.map((item) => {
               return (
@@ -140,7 +152,7 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
               );
             })}
           </ul>
-        </div>
+        </div> */}
       </div>
     </>
   );

@@ -1,15 +1,9 @@
-// import facebook from '../../public/facebook.svg'
-// import twitter from '../../public/twitter.svg'
-// import pintrest from '../../public/pintrest.svg'
 
 import {
   Facebook,
   Twitter,
   Instagram,
-  UserRound,
-  BrickWall,
-  Heart,
-  SearchIcon,
+ 
 } from "lucide-react";
 
 export const navLinks = [
@@ -51,24 +45,18 @@ export const socialLinks = [
 
 export const profileSideLink = [
   {
-    name: "Profile",
-    link: "/account",
-    icon: UserRound,
-  },
-  {
     name: "Posts",
-    link: "/account/all_post",
-    icon: BrickWall,
+    link: "/account/activity/all_post",
+    
   },
   {
     name: "Saved Post",
-    link: "/account/saved_post",
-    icon: Heart,
+    link: "/account/activity/saved_post",
+    
   },
   {
     name: "Saved Search",
-    link: "/account/saved_search",
-    icon: SearchIcon,
+    link: "/account/activity/saved_search",
   },
 ];
 

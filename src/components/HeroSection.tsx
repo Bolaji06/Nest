@@ -4,26 +4,24 @@ import Image from "next/image";
 import heroImage from "../../public/hero.jpg";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { ChangeEvent, FormEvent, Suspense, useState } from "react";
+import { ChangeEvent, FormEvent, Suspense, useEffect, useState } from "react";
 import { SearchIcon } from "lucide-react";
 import ForgotPassword from "@/components/ForgotPassword";
 import { useSearchParams } from "next/navigation";
 import ResetPassword from "./ResetPassword";
 import { createPortal } from "react-dom";
-import SearchBox from "./ui/SearchBox";
 import dynamic from "next/dynamic";
 
 const DynamicSearchBar = dynamic(() => import("./ui/SearchBox"), {
   ssr: false,
 });
 export default function HeroSection() {
- 
   const resetToken = useSearchParams().get("reset");
+
 
   return (
     <>
       <main className="py-4 rounded-lg relative top-4 h-[440px]">
-        {/* <ForgotPassword /> */}
         <Image
           src={heroImage}
           alt="hero image of new home owners of family of three standing with home agent"
@@ -39,13 +37,13 @@ export default function HeroSection() {
             </h1>
           </div>
 
-        <div className="mt-4 relative">
-          <DynamicSearchBar
-            searchFilter={false}
-            placeholder="Search title"
-            className="pr-12 py-8 text-lg"/>
-        </div>
-          
+          <div className="mt-4 relative">
+            <DynamicSearchBar
+              searchFilter={false}
+              placeholder="Search title"
+              className="pr-12 py-8 text-lg"
+            />
+          </div>
         </div>
       </main>
 

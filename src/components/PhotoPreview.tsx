@@ -86,8 +86,8 @@ export default function PhotoPreview({
             <div className="flex gap-3 md:gap-10 items-center justify-center md:justify-normal">
               <div className="flex items-center gap-1 md:gap-3 text-gray-800">
                 <Bed size={20} className="text-gray-50" />
-                <p className="">
-                  {data.bedroom} <span className="text-gray-50">Bed</span>
+                <p className="text-gray-50">
+                  {data.bedroom} <span>Bed</span>
                 </p>
               </div>
 
