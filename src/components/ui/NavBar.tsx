@@ -76,7 +76,7 @@ export default function NavBar({ className, isMobileNav }: NavBarProps) {
 
   return (
     <>
-      <nav className={`bg-white fixed w-full py-3 px-6 z-40 ${className}`}>
+      <nav className={`bg-white fixed w-full py-3 px-6 z-40 ${className} bg-white/70 backdrop-blur-sm border-b border-slate-200 z-30`}>
         <div className="">
           <div className="flex justify-between items-center">
             <Link href={"/"}>
@@ -174,6 +174,7 @@ export default function NavBar({ className, isMobileNav }: NavBarProps) {
         </div>
       </nav>
 
+      
       {openAuthOutlet &&
         createPortal(
           <DynamicAuthOutlet
@@ -182,7 +183,10 @@ export default function NavBar({ className, isMobileNav }: NavBarProps) {
             loginAction={signInAction}
           />,
           document.body
-        )}
+        ) }
+        {
+       //openAuthOutlet ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'auto'
+      }
     </>
   );
 }

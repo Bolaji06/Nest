@@ -66,7 +66,6 @@ export default function ProfileComponent({ data }: IUserProfileData) {
     // }
   }, [updateState]);
 
-  console.log(updateState);
 
   return (
     <>

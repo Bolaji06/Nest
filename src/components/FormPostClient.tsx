@@ -2,7 +2,24 @@
 
 import Link from "next/link";
 import { Input } from "./ui/input";
-import { propertyType } from "@/utils/links";
+import {
+  appliance,
+  architecturalStyle,
+  basement,
+  buildingAmenities,
+  coolingType,
+  exterior,
+  floorCovering,
+  heatingFuel,
+  heatingType,
+  indoorFeatures,
+  outdoorAmenities,
+  parking,
+  propertyType,
+  roof,
+  rooms,
+  view,
+} from "@/utils/links";
 import { postSchema, postSchemaType } from "@/utils/validation";
 import {
   ChangeEvent,
@@ -16,7 +33,7 @@ import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 import { ZodError } from "zod";
 import { Button } from "./ui/button";
-import { ImageUp, LoaderCircle } from "lucide-react";
+import { ChevronDown, ImageUp, LoaderCircle } from "lucide-react";
 import clsx from "clsx";
 import { useToast } from "./ui/use-toast";
 import { redirect } from "next/navigation";
@@ -26,6 +43,7 @@ import Select from "./ui/select";
 import dynamic from "next/dynamic";
 import TextEditor from "@/components/TextEditor";
 import { revalidateTag } from "next/cache";
+import { AmenitiesInput, AmenitiesInputHeader } from "./ui/amenitiesInput";
 
 type TCookie = {
   cookieData: string | undefined;
@@ -36,6 +54,14 @@ type TInputError = {
 };
 interface IPostData {
   success: boolean;
+}
+
+let API_ENDPOINT = "";
+
+if (process.env.NODE_ENV === "production") {
+  API_ENDPOINT = `${process.env.NEXT_PUBLIC_API_PROD_POST}`;
+} else if (process.env.NODE_ENV === "development") {
+  API_ENDPOINT = `${process.env.NEXT_PUBLIC_API_DEV_POST}`;
 }
 
 const toolbarOptions = [
@@ -61,7 +87,32 @@ export default function FormPostClient({ cookieData }: TCookie) {
     property: "house",
     type: "buy",
     unitArea: 0,
-    //images: [""],
+    amenities: {
+      roomDetails: {
+        appliance: [],
+        basement: "none",
+        floorCovering: [],
+        indoorFeatures: [],
+        rooms: [],
+      },
+      buildingDetails: {
+        architecturalStyle: "",
+        buildingAmenities: [],
+        exterior: [],
+        numFloor: 0,
+        numUnit: 0,
+        outdoorAmenities: [],
+        parking: [],
+        parkingSpace: 0,
+        roof: [],
+        view: [],
+      },
+      utilitiesDetails: {
+        coolingType: [],
+        heatingFuel: [],
+        heatingType: [],
+      },
+    },
   });
   const [inputError, setInputError] = useState<TInputError>({
     message: "",
@@ -80,6 +131,22 @@ export default function FormPostClient({ cookieData }: TCookie) {
   const [loading, setLoading] = useState<boolean>(false);
   const [postImageUrls, setPostImageUrls] = useState<string[]>([]);
   const [isFormFilled, setIsFormFilled] = useState<boolean>(true);
+
+  const [toggleRoomDetails, setToggleRoomDetails] = useState<boolean>(false);
+  const [toggleBuildingDetails, setToggleBuildingDetails] =
+    useState<boolean>(false);
+  const [toggleUtilitiesDetails, setToggleUtilitiesDetails] =
+    useState<boolean>(false);
+
+  function handleToggleRoomDetails() {
+    setToggleRoomDetails(!toggleRoomDetails);
+  }
+  function handleToggleBuildingDetails() {
+    setToggleBuildingDetails(!toggleBuildingDetails);
+  }
+  function handleToggleUtilityDetails() {
+    setToggleUtilitiesDetails(!toggleUtilitiesDetails);
+  }
 
   const { toast } = useToast();
 
@@ -110,13 +177,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
 
   async function handleOnSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const API_ENDPOINT = "http://localhost:7000/api/post";
 
     let imageUrls: string[] = [];
 
     try {
       setLoading(true);
-      console.log("Loading...");
       const parseSchema = postSchema.parse(listingForm);
       if (!cookieData) {
         return;
@@ -152,12 +217,9 @@ export default function FormPostClient({ cookieData }: TCookie) {
         });
         //@ts-ignore
         setInputError(inputError[0]);
-        console.log(inputError);
-        console.log("zod error here...");
         return inputError[0];
       } else if (err instanceof Error) {
-        console.log("server error...");
-        console.log(err);
+        return err;
       }
     } finally {
       setLoading(false);
@@ -270,9 +332,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
             </div>
 
             <div className="space-y-1">
-              <label htmlFor="size">
-                Property Size
-              </label>
+              <label htmlFor="size">Property Size</label>
               <Input
                 onChange={handleFormChange}
                 value={listingForm.unitArea}
@@ -388,6 +448,122 @@ export default function FormPostClient({ cookieData }: TCookie) {
               <p className="text-sm text-red-500">{inputError.message}</p>
             )}
           </div>
+
+          <div className="py-6 relative mt-6">
+            <div className="absolute w-full h-[1px] bg-slate-200" />
+            <h2 className="bg-white text-base absolute top-[12px] left-1/2 -translate-x-1/2">
+              Amenities
+            </h2>
+          </div>
+
+          <div onClick={handleToggleRoomDetails}>
+            <AmenitiesInputHeader
+              isActive={toggleRoomDetails}
+              title="Room Details"
+            />
+          </div>
+          {toggleRoomDetails && (
+            <div>
+              <AmenitiesInput title="Rooms" list={rooms} type="checkbox" />
+              <AmenitiesInput
+                title="Floor Covering"
+                list={floorCovering}
+                type="checkbox"
+              />
+
+              <AmenitiesInput
+                title="Appliance"
+                list={appliance}
+                type="checkbox"
+              />
+
+              <AmenitiesInput title="Basement" list={basement} type="radio" />
+
+              <AmenitiesInput
+                title="Indoor Features"
+                list={indoorFeatures}
+                type="checkbox"
+              />
+            </div>
+          )}
+
+          <div onClick={handleToggleBuildingDetails}>
+            <AmenitiesInputHeader
+              isActive={toggleBuildingDetails}
+              title="Building Details"
+            />
+          </div>
+          {toggleBuildingDetails && (
+            <div>
+              <AmenitiesInput
+                title="Building Amenities"
+                list={buildingAmenities}
+                type="checkbox"
+              />
+
+              <div>
+                <AmenitiesInput
+                  title="architectural Style"
+                  list={architecturalStyle}
+                  type="radio"
+                />
+                {/* Num of units / floor here */}
+              </div>
+
+              <AmenitiesInput
+                title="Exterior"
+                list={exterior}
+                type="checkbox"
+              />
+
+              <AmenitiesInput
+                title="Exterior"
+                list={exterior}
+                type="checkbox"
+              />
+              <AmenitiesInput
+                title="Outdoor amenities"
+                list={outdoorAmenities}
+                type="checkbox"
+              />
+              <div>
+                <AmenitiesInput
+                  title="Parking"
+                  list={parking}
+                  type="checkbox"
+                />
+                {/* Num of parking space here */}
+              </div>
+              <AmenitiesInput title="Roof" list={roof} type="checkbox" />
+              <AmenitiesInput title="View" list={view} type="checkbox" />
+            </div>
+          )}
+
+          <div onClick={handleToggleUtilityDetails}>
+            <AmenitiesInputHeader
+              title="Utilities"
+              isActive={toggleUtilitiesDetails}
+            />
+          </div>
+          {toggleUtilitiesDetails && (
+            <div>
+              <AmenitiesInput
+                title="Cooling Type"
+                list={coolingType}
+                type="checkbox"
+              />
+              <AmenitiesInput
+                title="Heating Type"
+                list={heatingType}
+                type="checkbox"
+              />
+              <AmenitiesInput
+                title="Heating Fuel"
+                list={heatingFuel}
+                type="checkbox"
+              />
+            </div>
+          )}
 
           <div className="w-full lg:max-w-28">
             <Button

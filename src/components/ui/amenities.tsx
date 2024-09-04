@@ -12,20 +12,20 @@ export function Amenities({ amenities, category }: AmenitiesProps) {
     <>
       <main>
         <section>
-          <ul className="mt-1">
-            <li className="flex xs:flex-col gap-1 py-1 xs:text-base">
-              <p className="font-medium">{category}</p>
+          <div className="mt-1">
+            <div className="flex xs:flex-col gap-1 py-1 xs:text-base">
+              <h2 className="font-medium">{category}</h2>
               {amenities.map((item, index) => {
                 const isLastItem = index === amenities.length - 1;
                 return (
                   <p key={index} className="capitalize inline-flex">
                     {item}
-                    {!isLastItem && <p className="xs:hidden">{", "}</p>}
+                    {!isLastItem && <span className="xs:hidden">{", "}</span>}
                   </p>
                 );
               })}
-            </li>
-          </ul>
+            </div>
+          </div>
         </section>
       </main>
     </>

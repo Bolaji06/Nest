@@ -10,10 +10,12 @@ export default async function ProfileSideBar() {
   const data = await getUser(session?.id);
   const token = cookies().get("token")?.value;
 
+  //sm:w-[200px] md:w-[300px]
+
   return (
     <>
      
-      <aside className="w-full sm:w-[200px] md:w-[300px] border-r  h-screen fixed pt-20">
+      <aside className="w-full border rounded-3xl pt-2 sticky top-20">
        <ClientProfileSideBar
         data={data}
         />

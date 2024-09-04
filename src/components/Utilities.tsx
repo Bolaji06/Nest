@@ -9,16 +9,18 @@ import {
   useState,
 } from "react";
 import { Button } from "./ui/button";
-import { ISessionData, TPostResult } from "@/lib/definitions";
+import { ISessionData, TPostAmenities, TPostResult } from "@/lib/definitions";
 import { Heart, X } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
 import { addSavePost, removeSavedPost } from "@/lib/post";
 import { boolean } from "zod";
-import { formatNumber } from "@/lib/utils";
+import { convertToCurrency, formatNumber } from "@/lib/utils";
 import clsx from "clsx";
 
-import { Filter, Map, SortAsc } from "lucide-react";
+import { createPortal } from "react-dom";
+
+import { Filter, Map, SortAsc, Share } from "lucide-react";
 import { Input } from "./ui/input";
 
 import { propertyType } from "@/utils/links";
@@ -29,6 +31,21 @@ import MapComponent from "./MapComponent";
 
 import { Post } from "@/lib/definitions";
 import dynamic from "next/dynamic";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import Image from "next/image";
+import QRCodeGenerator from "./ui/qrcode";
+
+import { sendEmail } from "../actions/emailAction";
+import { sendEmailFormType } from "@/utils/validation";
+import { FormButton } from "./FormButton";
 
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
@@ -84,10 +101,10 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
     }
 
     const newSavedState = !optimisticState;
-    
+
     startTransition(() => {
-      addOptimistic(newSavedState)
-    })
+      addOptimistic(newSavedState);
+    });
 
     const handleSubmit = async () => {
       try {
@@ -118,7 +135,7 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
       <div>
         <Button
           onClick={handleClick}
-           className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
+          className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
                   cursor-pointer"
         >
           <Heart
@@ -126,7 +143,9 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
             fill={optimisticState ? "orange" : "transparent"}
             stroke="orange"
           />
-         <p className="text-gray-800 text-sm font-normal">{optimisticState ? "Saved" : "Save"}</p> 
+          <p className="text-gray-800 text-sm font-normal">
+            {optimisticState ? "Saved" : "Save"}
+          </p>
         </Button>
       </div>
     </>
@@ -396,9 +415,11 @@ export function MapFilterSmallComponent({ data, className }: TMapProps) {
 
         {toggleMap && (
           <>
-            <div className="fixed top-20 right-2 z-50 p-2 bg-slate-100 rounded-full"
-            onClick={handleToggleMap}>
-              <X size={16}/>
+            <div
+              className="fixed top-20 right-2 z-50 p-2 bg-slate-100 rounded-full"
+              onClick={handleToggleMap}
+            >
+              <X size={16} />
             </div>
             <div className="absolute z-20 w-full">
               <DynamicMapSM
@@ -409,6 +430,169 @@ export function MapFilterSmallComponent({ data, className }: TMapProps) {
           </>
         )}
       </section>
+    </>
+  );
+}
+
+interface IShareButton {
+  data: TPostAmenities;
+}
+export function ShareButton({ data }: IShareButton) {
+  const [toggleEmail, setToggleEmail] = useState<boolean>(true);
+  const [toggleQR, setToggleQR] = useState<boolean>(false);
+
+  const [state, action, isPending] = useFormState(sendEmail, {});
+
+  const { toast } = useToast();
+
+  console.log(state);
+
+  function handleToggleEmail() {
+    setToggleEmail(true);
+    setToggleQR(false);
+  }
+
+  function handleToggleQR() {
+    setToggleEmail(false);
+    setToggleQR(true);
+  }
+
+  useEffect(() => {
+    if (state.success) {
+      toast({
+        title: "Email sent!",
+        description: "Listing shared successfully",
+      });
+    }
+  }, [state.success]);
+
+  return (
+    <>
+      <Dialog>
+        <DialogTrigger
+          className="rounded-2xl px-5 py-2 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
+                  cursor-pointer"
+        >
+          <Share size={18} />
+          <p className="text-sm text-gray-800">Share</p>
+        </DialogTrigger>
+        <DialogContent className="h-full overflow-auto bar">
+          <h3 className="text-2xl font-bold">Share</h3>
+          <DialogHeader>
+            <div className="flex gap-3">
+              <Image
+                src={data.message.post.images[0]}
+                width={500}
+                height={500}
+                alt={data.message.post.title}
+                className="w-40 aspect-video rounded-2xl"
+              />
+              <div>
+                <p className="font-semibold text-xl">
+                  {convertToCurrency(data.message.post.price)}
+                </p>
+                <p className="text-sm">{data.message.post.city}</p>
+                <p className="text-sm">
+                  {data.message.post.bedroom}
+                  <span className="font-bold px-2">Beds</span>
+                </p>
+                <p className="text-sm">
+                  {data.message.post.bathroom}
+                  <span className="font-bold px-2">Bath</span>
+                </p>
+              </div>
+            </div>
+          </DialogHeader>
+          <DialogHeader className="flex flex-row justify-between items-center w-full mt-3">
+            <div
+              onClick={handleToggleEmail}
+              className={`cursor-pointer ${clsx({
+                "border-b-4": toggleEmail,
+              })} rounded-tl-2xl border-b-blue-500 pb-2`}
+            >
+              <DialogTitle className="font-medium">Email</DialogTitle>
+            </div>
+
+            <div
+              onClick={handleToggleQR}
+              className={`cursor-pointer ${clsx({
+                "border-b-4": toggleQR,
+              })} border-b-blue-500 pb-2`}
+            >
+              <DialogTitle className="font-medium">QR Code</DialogTitle>
+            </div>
+          </DialogHeader>
+
+          {toggleEmail && (
+            <div>
+              <form action={action} className="space-y-3">
+                <div>
+                  <label htmlFor="to" className="text-sm">
+                    To:
+                  </label>
+                  <Input
+                    id="to"
+                    className=""
+                    placeholder="Receiver email"
+                    name="to"
+                    autoFocus={true}
+                    
+                  />
+                  {state.field === "to" && <p className="text-xs text-red-500">{state.status}</p>}
+                </div>
+
+                <div>
+                  <label htmlFor="user" className="text-sm">
+                    Your Email:
+                  </label>
+                  <Input
+                    id="user"
+                    className=""
+                    placeholder="Your email"
+                    name="from"
+                    defaultValue={data.message.post.user.username}
+                  />
+                  {state.field === "from" && <p className="text-xs text-red-500">{state.status}</p>}
+                </div>
+
+                <input
+                  name="postId"
+                  defaultValue={data.message.post.id}
+                  readOnly
+                  aria-readonly
+                  hidden
+                  aria-hidden
+                />
+
+                <div className="w-full">
+                  <label id="message" className="text-sm">
+                    Message
+                  </label>
+                  <textarea
+                    id="message"
+                    defaultValue={
+                      "Check out " + data.message.post.title + " on Nest"
+                    }
+                    name="message"
+                    className="w-full text-sm border p-2 focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
+                  />
+                  {state.field === "message" && <p className="text-xs text-red-500">{state.message}</p>}
+                </div>
+                <FormButton text="Send" />
+              </form>
+            </div>
+          )}
+
+          {toggleQR && (
+            <div>
+              <QRCodeGenerator
+                imageName={data.message.post.title}
+                className="flex gap-4 mt-1 flex-col justify-center items-center"
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

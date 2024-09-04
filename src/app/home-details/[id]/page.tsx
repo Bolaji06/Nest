@@ -25,7 +25,11 @@ import { convertToCurrency } from "@/lib/utils";
 import { getUserSession } from "@/lib/getSession";
 import LoginSignUp from "@/components/LoginSignUp";
 import NavBar from "@/components/ui/NavBar";
-import { Modal, SavedButton } from "@/components/Utilities";
+import {
+  Modal,
+  SavedButton,
+  ShareButton,
+} from "@/components/Utilities";
 import { cookies } from "next/headers";
 import QRCodeGenerator from "@/components/ui/qrcode";
 import { Metadata } from "next";
@@ -108,13 +112,8 @@ export default async function HomeDetailsPage({
                     </div>
 
                     <div className="flex gap-3 xs:mt-3">
-                      <div
-                        className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
-                  cursor-pointer"
-                      >
-                        <Share size={18} />
-                        <p className="text-sm text-gray-800">Share</p>
-                      </div>
+                      <ShareButton 
+                      data={data}/>
 
                       <SavedButton
                         id={post.post.id}

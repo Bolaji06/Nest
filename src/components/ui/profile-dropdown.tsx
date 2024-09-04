@@ -47,7 +47,7 @@ export default function ProfileDropDown({
         <footer className="py-2">
             <div className="flex justify-between items-center">
                 <Button asChild className="hover:bg-transparent text-brand-primary bg-transparent flex items-center gap-2">
-                    <Link href={`/account`}
+                    <Link href={`/account/activity/all_post`}
                     className="hover:underline text-lg">
                         Profile
                         <MoveRight />
