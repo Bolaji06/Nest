@@ -10,14 +10,14 @@ export default  function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <main className="">
-        <NavBar2 className="bg-white/70 backdrop-blur-sm border-b border-slate-200 z-30" />
+        <NavBar2 />
 
         <div className="px-3">
-          <div className="flex gap-8 lg:gap-2">
-            <div className="basis-[40%] w-full hidden md:block mt-24">
+          <div className="flex md:flex-row gap-3 lg:gap-2 flex-col">
+            <div className="lg:basis-[40%] w-full md:w-[70%] md:block mt-24">
               <ProfileSideBar />
             </div>
-            <div className="relative basis-full top-24 px-6 py-6 border rounded-3xl mb-20">
+            <div className="relative basis-full md:top-24 px-6 py-6 border rounded-3xl mb-20">
               <header className="">
                 <ActivityComponent />
               </header>
@@ -33,7 +33,7 @@ export default  function Layout({ children }: { children: React.ReactNode }) {
             type="button"
             className="h-14 w-14 flex flex-col justify-center items-center gap-2 hover:bg-orange-400 bg-brand-secondary rounded-full"
           >
-            <Link href={"/account/form_post"}>
+            <Link href={"/form-post"}>
               <CirclePlus />
               <p className="text-xs lg:hidden">Post</p>
             </Link>

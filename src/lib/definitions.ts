@@ -14,6 +14,11 @@ export interface IUserProfileData {
     createdAt: string;
     password: string;
     userType: string;
+    firstName: string;
+    lastName: string;
+    about: string;
+    phone: string;
+    location: string;
   };
 }
 export enum EType {

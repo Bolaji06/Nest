@@ -5,6 +5,7 @@ import { getUser, getUsers } from "@/actions/userActions";
 import ProfileComponent from "@/components/ProfileComponent";
 import { Button } from "@/components/ui/button";
 import { getUserSession } from "@/lib/getSession";
+import ActivityLinks from "./ui/actitvityLinks";
 
 export default async function ActivityComponent() {
   const session = await getUserSession();
@@ -39,20 +40,7 @@ export default async function ActivityComponent() {
 
         <div className="w-14 h-[1px] bg-slate-100 mt-5" />
 
-        <nav className="mt-5 py-3 ">
-          <ul className="flex gap-3">
-            {profileSideLink.map((link) => {
-              return (
-                <li
-                  key={link.link}
-                  className="px-4 py-2 text-sm font-normal rounded-3xl text-white bg-green-900"
-                >
-                  <Link href={link.link}>{link.name}</Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+        <ActivityLinks />
       </section>
     </>
   );

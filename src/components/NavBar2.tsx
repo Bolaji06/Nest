@@ -38,7 +38,7 @@ export default function NavBar2({ className }: { className?: string }) {
   return (
     <>
       <nav
-        className={`bg-white w-full py-4 px-6 z-40 border-b border-slate-300 fixed ${className}`}
+        className={`bg-white w-full py-4 px-6 z-40 fixed bg-white/70 backdrop-blur-sm border-b border-slate-200 z-30${className}`}
       >
         <div className="">
           <div className="flex justify-between items-center">
