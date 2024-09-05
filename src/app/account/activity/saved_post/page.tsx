@@ -8,6 +8,7 @@ import { ISavedPost } from "@/lib/definitions";
 import { getAllSavedPost, getPost } from "@/utils/data"
 import { Metadata } from "next"
 import Link from "next/link";
+import ActivityComponent from "@/components/ActivityComponent";
 
 export const metadata: Metadata = {
     title: "Saved Post | Nest.com"
@@ -26,6 +27,9 @@ export default async function SavedPost(){
     return (
         <>
             <main>
+            <header className="">
+                <ActivityComponent />
+              </header>
             <section className="grid-container gap-3 ">
           {savedList.map((post: TPostAmenities) => {
             return (

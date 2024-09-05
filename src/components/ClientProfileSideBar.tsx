@@ -148,7 +148,12 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
           </div>
 
           <div className="">
-            <Button className="bg-transparent text-brand-primary hover:bg-transparent underline">Edit</Button>
+            <Button asChild className="bg-transparent text-brand-primary hover:bg-transparent underline">
+                <Link
+                href={'/account/update-profile'}>
+                  Edit
+                </Link>
+            </Button>
           </div>
         </div>
 

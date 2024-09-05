@@ -4,9 +4,9 @@ import { cookies } from "next/headers";
 
 let API_GET_POST = "";
 
-if (process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === "production") {
   API_GET_POST = `${process.env.NEXT_PUBLIC_API_PROD_POST}`;
-}else if (process.env.NODE_ENV === 'development'){
+} else if (process.env.NODE_ENV === "development") {
   API_GET_POST = `${process.env.NEXT_PUBLIC_API_DEV_POST}`;
 }
 
@@ -19,7 +19,7 @@ export async function getSearch(query: {}) {
   };
 
   const params = new URLSearchParams(query).toString();
-  
+
   const API_ENDPOINT = `${API_GET_POST}?${params}`;
   try {
     const response = await fetch(API_ENDPOINT, options);
@@ -39,7 +39,7 @@ export async function getAllPosts() {
       "Content-Type": "application/json",
     },
     cache: "no-store",
-    next: { tags: ["get_posts"] }
+    next: { tags: ["get_posts"] },
   };
   try {
     const response = await fetch(API_GET_POST, options);
@@ -62,7 +62,7 @@ export async function getPost(id: string) {
     headers: {
       Authorization: "Bearer " + token,
     },
-    next: { tags: ["get_post"] }
+    next: { tags: ["get_post"] },
   };
   try {
     const response = await fetch(`${API_GET_POST}/${id}`, options);
@@ -73,37 +73,38 @@ export async function getPost(id: string) {
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error)
-      return 'Failed to get post';
+      console.log(error);
+      return "Failed to get post";
     }
   }
 }
 
+let API_ENDPOINT_SAVED_POST = "";
 
-let API_ENDPOINT_SAVED_POST = "http://localhost:7000/api/save-post"
-export async function getAllSavedPost(){
+if (process.env.NODE_ENV === "production") {
+  API_ENDPOINT_SAVED_POST = `${process.env.NEXT_PUBLIC_API_PROD_SAVE_POST}`;
+} else if (process.env.NODE_ENV === "development") {
+  API_ENDPOINT_SAVED_POST = `${process.env.NEXT_PUBLIC_API_DEV_SAVE_POST}`;
+}
+export async function getAllSavedPost() {
   const tokenId = cookies().get("token")?.value;
   const options = {
     method: "GET",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + tokenId
-    }
-  }
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + tokenId,
+    },
+  };
 
-  try{
+  try {
     const response = await fetch(API_ENDPOINT_SAVED_POST, options);
     const data = await response.json();
 
     return data;
-
-  }catch(error){
-    if (error instanceof Error){
+  } catch (error) {
+    if (error instanceof Error) {
       console.log(error);
       return error;
     }
-
   }
-
 }
-
