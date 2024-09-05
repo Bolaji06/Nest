@@ -79,3 +79,31 @@ export async function getPost(id: string) {
   }
 }
 
+
+let API_ENDPOINT_SAVED_POST = "http://localhost:7000/api/save-post"
+export async function getAllSavedPost(){
+  const tokenId = cookies().get("token")?.value;
+  const options = {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + tokenId
+    }
+  }
+
+  try{
+    const response = await fetch(API_ENDPOINT_SAVED_POST, options);
+    const data = await response.json();
+
+    return data;
+
+  }catch(error){
+    if (error instanceof Error){
+      console.log(error);
+      return error;
+    }
+
+  }
+
+}
+
