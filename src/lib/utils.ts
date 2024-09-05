@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
+import dayjs from "dayjs"
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -33,4 +35,9 @@ export function formatNumber(price: number){
   }else {
     return price
   }
+}
+
+export function formatDate(timestamp: string){
+  const dateToString = dayjs(timestamp).format('MMMM YYYY');
+  return dateToString;
 }

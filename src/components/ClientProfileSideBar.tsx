@@ -15,6 +15,7 @@ import { uploadAvatarToFirebase } from "@/lib/firebaseStorage";
 import { Button } from "./ui/button";
 
 import dayjs from "dayjs";
+import { formatDate } from "@/lib/utils";
 
 
 let USER_ENDPOINT = "";
@@ -74,9 +75,6 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
     }
     uploadAvatar();
   }, [inputAvatar]);
-
-  const day = data.createdAt;
-  const joinedDate = dayjs(day).format("MMMM YYYY")
 
 
   return (
@@ -144,7 +142,7 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
             </div>
             <div className="inline-flex items-center gap-3 text-slate-400">
               <Calendar size={18}/>
-              <p className="text-slate-600">Joined {joinedDate}</p>
+              <p className="text-slate-600">Joined {formatDate(data.createdAt)}</p>
             </div>
 
           </div>

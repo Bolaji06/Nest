@@ -125,3 +125,15 @@ export type TPostAmenities = {
   };
 };
 
+export interface ISavedPost {
+  success: false;
+  message: [
+    {
+      id: string;
+      userId: string;
+      postId: string;
+      createdAt: string;
+    }
+  ]
+}
+
