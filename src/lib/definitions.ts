@@ -21,6 +21,21 @@ export interface IUserProfileData {
     location: string;
   };
 }
+
+export interface IUserProfile {
+  id: string;
+  username: string;
+  email: string;
+  avatar: string;
+  createdAt: string;
+  password: string;
+  userType: string;
+  firstName: string;
+  lastName: string;
+  about: string;
+  phone: string;
+  location: string;
+}
 export enum EType {
   buy,
   rent,

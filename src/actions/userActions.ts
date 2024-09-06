@@ -56,12 +56,8 @@ export async function getUser(id: string){
         }
     }
 }
-// update users
 
-interface IUpdateUser {
-    prevState: any;
-    formData: FormData;
-}
+// update users
 type FilteredFormData = {
     [key: string]: File | string; // or you can use FormDataEntryValue: from typescript lib.dom.d.ts
 };
@@ -103,10 +99,10 @@ export async function updateUser(prevState: any, formData: FormData){
             const zodError = err.errors.map((issues) => {
                 return issues
             })
+            console.log(zodError)
             return zodError[0];
         }
     }
-    redirect('/account')
 }
 
 export async function changeUserAvatar(id: string, fileUrl: string){

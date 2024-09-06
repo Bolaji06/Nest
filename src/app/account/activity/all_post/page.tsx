@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { unstable_noStore as noStore } from "next/cache";
 import Link from "next/link";
 import { Metadata } from "next";
+import ActivityComponent from "@/components/ActivityComponent";
 
 export const metadata: Metadata = {
   title: "User Posts | Nest.com",
@@ -18,6 +19,9 @@ export default async function AllPost() {
   return (
     <>
       <main>
+      <header className="">
+                <ActivityComponent />
+              </header>
         <section className="grid-container gap-3 ">
           {response?.message.map((post: TPost) => {
             return (

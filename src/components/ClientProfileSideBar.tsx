@@ -123,10 +123,10 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
           </div>
 
           <div>
-            <p className="text-center font-bold">{data?.username}</p>
+            <p className="text-center font-bold capitalize">{data?.username}</p>
             <p className="text-sm capitalize">{data.userType}</p>
             <p className="text-xs py-2 text-slate-400">{`${data.firstName} ${data.lastName}`}</p>
-            <p className="text-slate-500 py-3 leading-relaxed px-2">{data.about}</p>
+            <p className="text-slate-500 py-3 leading-relaxed px-2 first-letter:uppercase">{data.about}</p>
           </div>
 
           <div className="w-20 h-[1px] bg-slate-200"/>
@@ -134,7 +134,7 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
           <div className="mt-5 space-y-3 flex flex-col">
             <div className="inline-flex items-center gap-3 text-slate-400">
               <MapPin size={18}/>
-              <p className="text-slate-600">{data.location}</p>
+              <p className="text-slate-600 capitalize">{data.location}</p>
             </div>
             <div className="inline-flex items-center gap-3 text-slate-400">
               <Smartphone size={18}/>
@@ -148,7 +148,12 @@ export default function ClientProfileSideBar({ data }: IUserProfileData) {
           </div>
 
           <div className="">
-            <Button className="bg-transparent text-brand-primary hover:bg-transparent underline">Edit</Button>
+            <Button asChild className="bg-transparent text-brand-primary hover:bg-transparent underline">
+                <Link
+                href={'/account/update-profile'}>
+                  Edit
+                </Link>
+            </Button>
           </div>
         </div>
 

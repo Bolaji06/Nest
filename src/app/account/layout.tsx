@@ -18,9 +18,7 @@ export default  function Layout({ children }: { children: React.ReactNode }) {
               <ProfileSideBar />
             </div>
             <div className="relative basis-full md:top-24 px-6 py-6 border rounded-3xl mb-20">
-              <header className="">
-                <ActivityComponent />
-              </header>
+              
               {children}
             </div>
           </div>

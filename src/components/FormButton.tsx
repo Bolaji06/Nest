@@ -15,7 +15,7 @@ export function FormButton({ text, className, isDisabled }: { text: string, clas
           className={`font-medium ${clsx({
             "bg-slate-500 cursor-not-allowed": pending,
             "bg-slate-200 cursor-not-allowed": isDisabled,
-          })} bg-brand-primary w-full
+          })} bg-brand-primary
            text-white hover:bg-blue-700 flex justify-center items-center gap-3 ${className}`}
         >
           {pending && (

@@ -38,9 +38,12 @@ export const editUserProfileSchema = z.object({
         const fileSize = 2 * 1024 * 1024;
         return file.size <= fileSize;
     }, { message: 'File size must be less than 2MB'}).optional(),
-    password: z.string({ required_error: 'password is required' }).min(4, { message: 'password must contain at least (4) character'}).max(15, { message: 'Password too long' }).trim().optional(),
-    email: z.string().email({ message: 'enter a valid email address'}).trim().optional(),
+    firstName: z.string({ required_error: 'First name is required'}).min(3, { message: 'First name is too short' }).optional(),
+    lastName: z.string().min(3, { message: 'Last name is too short' }).optional(),
     userType: z.enum(USER_TYPE),
+    location: z.string({ required_error: 'Location is required' }).optional(),
+    phone: z.string().min(10, { message: 'Phone number is too short' }).optional(),
+    about: z.string().min(10, { message: 'About is too short' }).optional(),
 });
 
 export const postSchema = z.object({
