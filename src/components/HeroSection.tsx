@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 import ResetPassword from "./ResetPassword";
 import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
+import { Skeleton } from "./ui/skeleton";
 
 const DynamicSearchBar = dynamic(() => import("./ui/SearchBox"), {
   ssr: false,
@@ -38,11 +39,14 @@ export default function HeroSection() {
           </div>
 
           <div className="mt-4 relative">
-            <DynamicSearchBar
+            <Suspense fallback={<Skeleton className="w-full h-2 bg-slate-400"/>}>
+              <DynamicSearchBar
               searchFilter={false}
               placeholder="Search title"
               className="pr-12 py-8 text-lg"
             />
+            </Suspense>
+            
           </div>
         </div>
       </main>
