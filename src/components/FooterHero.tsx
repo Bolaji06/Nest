@@ -8,26 +8,8 @@ export default function FooterHero() {
   return (
     <>
       <footer className="mt-10 pt-10 bg-gray-100 px-4 md:px-10">
-        <header className="text-center border-b pb-3 border-slate-300">
-          <h2 className="font-bold py-3">About Nest Recommendation</h2>
-          <p className="py-y-2 max-w-4xl mx-auto">
-            Recommendations are based on your location and search activity, such
-            as the homes you&apos;ve viewed and saved and the filters
-            you&apos;ve used. We use this information to bring similar homes to
-            your attention, so you don&apos;t miss out.
-          </p>
-        </header>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full mx-auto py-8">
-          <div>
-            <h2 className="font-medium py-2">Real Estate Agents</h2>
-            <ul className="text-sm">
-              <li>Alaska Agents</li>
-              <li>Alaska Agents</li>
-              <li>Alaska Agents</li>
-              <li>Alaska Agents</li>
-            </ul>
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full mx-auto py-8">
 
           <div>
             <h2 className="font-medium py-2">Visit our Social</h2>
