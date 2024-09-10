@@ -66,6 +66,8 @@ export default async function HomeDetailsPage({
   const token = cookies().get("token")?.value;
   const post = data.message;
 
+ 
+
   const amenities = post.amenities;
 
   return (
@@ -90,7 +92,7 @@ export default async function HomeDetailsPage({
                 </Button>
               </header>
               <div className="overflow-hidden max-h-screen relative z-30">
-                <PhotoGrid data={post.post} />
+                <PhotoGrid data={post?.post} />
               </div>
             </section>
           </div>
@@ -108,7 +110,7 @@ export default async function HomeDetailsPage({
                       className="rounded-2xl px-8 h-6 class-name bg-blue-100 text-center
                   inline-flex items-center justify-center"
                     >
-                      <p className="text-sm capitalize">{post.post.property}</p>
+                      <p className="text-sm capitalize">{post.post?.property}</p>
                     </div>
 
                     <div className="flex gap-3 xs:mt-3">
@@ -344,7 +346,7 @@ export default async function HomeDetailsPage({
               </div>
             </div>
 
-            <div className="fixed z-30 bottom-0 right-3 lg:sticky lg:flex justify-center items-center lg:top-20 lg:basis-[30%] lg:shadow-lg lg:bg-white max-h-[200px] p-5 rounded-2xl">
+            <div className="fixed z-20 right-3 lg:sticky lg:flex justify-center items-center lg:top-20 lg:basis-[30%] lg:shadow-lg lg:bg-white max-h-[200px] p-5 rounded-2xl">
               <div className="flex w-full flex-col gap-4 justify-center items-center">
                 <div className="w-full">
                   <Button className="w-full text-left inline-flex gap-3 rounded-2xl bg-brand-primary">

@@ -7,7 +7,7 @@ import NestLogo from "../../public/nest-logo.png";
 export default function FooterHero() {
   return (
     <>
-      <footer className="mt-10 pt-10 bg-slate-100 px-4 md:px-10">
+      <footer className="mt-10 pt-10 bg-gray-100 px-4 md:px-10">
         <header className="text-center border-b pb-3 border-slate-300">
           <h2 className="font-bold py-3">About Nest Recommendation</h2>
           <p className="py-y-2 max-w-4xl mx-auto">

@@ -9,7 +9,7 @@ import Link from "next/link";
 export default function ExploreGrid() {
   return (
     <>
-      <main>
+      <main className="bg-gray-100">
         <div className="mt-10 py-4">
           <header>
             <h1 className="text-3xl md:text-4xl py-4 text-center font-bold text-brand-text">
