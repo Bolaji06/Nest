@@ -15,6 +15,7 @@ import {
   MapPin,
   MessageCircle,
   Ruler,
+  Send,
   Share,
   Sofa,
 } from "lucide-react";
@@ -25,11 +26,7 @@ import { convertToCurrency } from "@/lib/utils";
 import { getUserSession } from "@/lib/getSession";
 import LoginSignUp from "@/components/LoginSignUp";
 import NavBar from "@/components/ui/NavBar";
-import {
-  Modal,
-  SavedButton,
-  ShareButton,
-} from "@/components/Utilities";
+import { ChatButton, Modal, SavedButton, ShareButton } from "@/components/Utilities";
 import { cookies } from "next/headers";
 import QRCodeGenerator from "@/components/ui/qrcode";
 import { Metadata } from "next";
@@ -39,6 +36,7 @@ import dynamic from "next/dynamic";
 import PhotoGrid from "@/components/PhotoGrid";
 import { Amenities, AmenitiesHeader } from "@/components/ui/amenities";
 import { Suspense } from "react";
+import ChatComponent from "@/components/ChatComponent";
 
 export async function generateMetadata({
   params,
@@ -66,8 +64,6 @@ export default async function HomeDetailsPage({
   const token = cookies().get("token")?.value;
   const post = data.message;
 
- 
-
   const amenities = post.amenities;
 
   return (
@@ -91,7 +87,7 @@ export default async function HomeDetailsPage({
                   </Link>
                 </Button>
               </header>
-              <div className="overflow-hidden max-h-screen relative z-30">
+              <div className="overflow-hidden max-h-screen relative z-20">
                 <PhotoGrid data={post?.post} />
               </div>
             </section>
@@ -110,12 +106,13 @@ export default async function HomeDetailsPage({
                       className="rounded-2xl px-8 h-6 class-name bg-blue-100 text-center
                   inline-flex items-center justify-center"
                     >
-                      <p className="text-sm capitalize">{post.post?.property}</p>
+                      <p className="text-sm capitalize">
+                        {post.post?.property}
+                      </p>
                     </div>
 
                     <div className="flex gap-3 xs:mt-3">
-                      <ShareButton 
-                      data={data}/>
+                      <ShareButton data={data} />
 
                       <SavedButton
                         id={post.post.id}
@@ -355,17 +352,12 @@ export default async function HomeDetailsPage({
                   </Button>
                 </div>
 
-                <div className="w-full">
-                  <Button className="w-full rounded-2xl text-left inline-flex gap-3 bg-white lg:bg-transparent text-brand-primary border border-blue-700 hover:bg-blue-100">
-                    <MessageCircle size={16} />
-                    Chat {post.post.user && post.post.user?.username}
-                  </Button>
-                </div>
+                <ChatButton post={post.post}/>
               </div>
             </div>
           </div>
         </section>
-      </section>
+        </section>
     </>
   );
 }

@@ -9,7 +9,12 @@ import {
   useState,
 } from "react";
 import { Button } from "./ui/button";
-import { ISessionData, TPostAmenities, TPostResult } from "@/lib/definitions";
+import {
+  ISessionData,
+  TPost,
+  TPostAmenities,
+  TPostResult,
+} from "@/lib/definitions";
 import { Heart, X } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
@@ -20,7 +25,7 @@ import clsx from "clsx";
 
 import { createPortal } from "react-dom";
 
-import { Filter, Map, SortAsc, Share } from "lucide-react";
+import { Filter, Map, SortAsc, Share, MessageCircle } from "lucide-react";
 import { Input } from "./ui/input";
 
 import { propertyType } from "@/utils/links";
@@ -46,6 +51,7 @@ import QRCodeGenerator from "./ui/qrcode";
 import { sendEmail } from "../actions/emailAction";
 import { sendEmailFormType } from "@/utils/validation";
 import { FormButton } from "./FormButton";
+import ChatComponent from "./ChatComponent";
 
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
@@ -536,9 +542,10 @@ export function ShareButton({ data }: IShareButton) {
                     placeholder="Receiver email"
                     name="to"
                     autoFocus={true}
-                    
                   />
-                  {state.field === "to" && <p className="text-xs text-red-500">{state.status}</p>}
+                  {state.field === "to" && (
+                    <p className="text-xs text-red-500">{state.status}</p>
+                  )}
                 </div>
 
                 <div>
@@ -552,7 +559,9 @@ export function ShareButton({ data }: IShareButton) {
                     name="from"
                     defaultValue={data.message.post.user.username}
                   />
-                  {state.field === "from" && <p className="text-xs text-red-500">{state.status}</p>}
+                  {state.field === "from" && (
+                    <p className="text-xs text-red-500">{state.status}</p>
+                  )}
                 </div>
 
                 <input
@@ -576,7 +585,9 @@ export function ShareButton({ data }: IShareButton) {
                     name="message"
                     className="w-full text-sm border p-2 focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 rounded-md py-3"
                   />
-                  {state.field === "message" && <p className="text-xs text-red-500">{state.message}</p>}
+                  {state.field === "message" && (
+                    <p className="text-xs text-red-500">{state.message}</p>
+                  )}
                 </div>
                 <FormButton text="Send" />
               </form>
@@ -593,6 +604,30 @@ export function ShareButton({ data }: IShareButton) {
           )}
         </DialogContent>
       </Dialog>
+    </>
+  );
+}
+
+interface ChatButtonProps {
+  post: TPost;
+}
+export function ChatButton({ post }: ChatButtonProps) {
+  const[toggleChat, setToggleChat] = useState<boolean>(false);
+
+  function openChat(){
+    setToggleChat(true)
+  }
+
+
+  return (
+    <>
+      <div className="w-full">
+        <Button onClick={openChat} className="w-full rounded-2xl text-left inline-flex gap-3 bg-white lg:bg-transparent text-brand-primary border border-blue-700 hover:bg-blue-100">
+          <MessageCircle size={16} />
+          Chat {post.user && post.user?.username}
+        </Button>
+      </div>
+      { toggleChat && <ChatComponent post={post} setToggleChat={setToggleChat} toggleChat={toggleChat}/>}
     </>
   );
 }
