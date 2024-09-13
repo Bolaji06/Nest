@@ -627,7 +627,7 @@ export function ChatButton({ post }: ChatButtonProps) {
           Chat {post.user && post.user?.username}
         </Button>
       </div>
-      { toggleChat && <ChatComponent post={post} setToggleChat={setToggleChat}/>}
+      { toggleChat && <ChatComponent post={post} setToggleChat={setToggleChat} toggleChat={toggleChat}/>}
     </>
   );
 }
