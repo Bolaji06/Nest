@@ -45,15 +45,15 @@ export default function PostCard({ image, price, title, bathroom, bedroom, unitA
           <div className="flex items-center gap-3 text-sm font-medium">
             <div className="inline-flex items-center">
               <Bed className="text-slate-400" size={20} />
-              <p>{bedroom}</p>
+              <p className="px-1">{bedroom} <span>Bed</span></p>
             </div>
             <div className="inline-flex items-center">
               <Bath className="text-slate-400" size={20} />
-              <p>{bathroom}</p>
+              <p className="px-1">{bathroom} <span>Bath</span></p>
             </div>
             <div className="inline-flex items-center">
               <Ruler className="text-slate-400" size={20} />
-              <p>{unitArea} <span>sqft</span></p>
+              <p className="px-1">{unitArea} <span>sqft</span></p>
             </div>
           </div>
           <div className="">

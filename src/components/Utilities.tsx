@@ -610,24 +610,41 @@ export function ShareButton({ data }: IShareButton) {
 
 interface ChatButtonProps {
   post: TPost;
+  token: string | undefined;
 }
-export function ChatButton({ post }: ChatButtonProps) {
-  const[toggleChat, setToggleChat] = useState<boolean>(false);
+export function ChatButton({ post, token }: ChatButtonProps) {
+  const [toggleChat, setToggleChat] = useState<boolean>(false);
+  const { toast } = useToast();
 
-  function openChat(){
-    setToggleChat(true)
+  function openChat() {
+    if (!token) {
+      toast({
+        title: "Kindly sign in",
+        description: "You need to login to chat",
+      });
+    } else {
+      setToggleChat(true);
+    }
   }
-
 
   return (
     <>
       <div className="w-full">
-        <Button onClick={openChat} className="w-full rounded-2xl text-left inline-flex gap-3 bg-white lg:bg-transparent text-brand-primary border border-blue-700 hover:bg-blue-100">
+        <Button
+          onClick={openChat}
+          className="w-full rounded-2xl text-left inline-flex gap-3 bg-white lg:bg-transparent text-brand-primary border border-blue-700 hover:bg-blue-100"
+        >
           <MessageCircle size={16} />
           Chat {post.user && post.user?.username}
         </Button>
       </div>
-      { toggleChat && <ChatComponent post={post} setToggleChat={setToggleChat} toggleChat={toggleChat}/>}
+      {toggleChat && (
+        <ChatComponent
+          post={post}
+          setToggleChat={setToggleChat}
+          toggleChat={toggleChat}
+        />
+      )}
     </>
   );
 }
