@@ -352,7 +352,7 @@ export default async function HomeDetailsPage({
                   </Button>
                 </div>
 
-                <ChatButton post={post.post}/>
+                <ChatButton post={post.post} token={token}/>
               </div>
             </div>
           </div>
