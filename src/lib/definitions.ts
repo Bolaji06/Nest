@@ -3,6 +3,7 @@ export interface ISessionData {
   username: string;
   email: string;
   avatar: string;
+  status: string
   createdAt: string;
 }
 export interface IUserProfileData {
