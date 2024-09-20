@@ -34,7 +34,7 @@ export default function ChatComponent({
   status,
 }: IChatComponentProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [text, setText] = useState<string>("");
+  const [inputText, setInputText] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   function closeChat() {
@@ -42,43 +42,40 @@ export default function ChatComponent({
   }
 
   useEffect(() => {
+    // create a socket
+    const socket = new WebSocket('ws://localhost:7000');
+
     // create a connection
-    const socket = new WebSocket("ws://localhost:7000");
-    setWs(socket);
+    socket.onopen = (event) => {
+      console.log('Connection open');
+      setWs(socket);
+    }
 
-    // send message to the server after the connection
-    socket.onopen = () => {
-      socket.send(JSON.stringify({ type: "connect", userId }));
-    };
+    // receive a message
+    socket.onmessage = (message) => {
+      console.log(JSON.parse(message.data)); // receive the message data
+    }
 
-    // received message from the server
-    socket.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      setMessages((prevState) => [...prevState, message]);
-    };
-
-    socket.onerror = (error) => {
-      console.log(error);
-    };
-
-    // close socket connect when this component unmounts
+    // cleanup: close connection when unmount
     return () => {
       socket.close();
-    };
-  }, [toggleChat, userId]);
+    }
+  }, [toggleChat]);
 
-  function sendMessage() {
-    if (ws && text.trim()) {
-      const message = {
-        type: "message",
-        senderId: userId,
-        receiverId: post.userId,
-        text,
-      };
-      ws.send(JSON.stringify(message));
-      setText("");
+  const receiverId = post.userId;
+
+  function sendMessage(){
+    // send text message
+    if (ws && inputText && inputText.trim()){
+      ws.send(JSON.stringify({
+        userId,
+        receiverId,
+        text: inputText
+      }));
+      setInputText("");
     }
   }
+
 
   return (
     <>
@@ -155,9 +152,9 @@ export default function ChatComponent({
         <div className="px-3 max-h-full absolute bottom-0 w-full mb-3">
           <div className="flex gap-2 justify-between items-center px-4 w-full h-full rounded-3xl border bg-slate-100  border-slate-300 focus-within:outline focus-within:outline-blue-500">
             <textarea
-              value={text}
+              value={inputText}
               name="input"
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => setInputText(e.target.value)}
               className="w-full text-sm hide-scroll py-1 resize-none focus:border-none focus:outline-none  bg-transparent"
             ></textarea>
 
