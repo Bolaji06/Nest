@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import { Button } from "./ui/button";
-import { Check, CheckCheck, Send, X } from "lucide-react";
+import { Check, CheckCheck, Loader2, Send, X } from "lucide-react";
 import { TPost } from "@/lib/definitions";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import clsx from "clsx";
 import { formatDate, timeAgo } from "@/lib/utils";
+import { getUsersChat } from "@/utils/chat";
+import { revalidateTag } from "next/cache";
+import { Socket } from "dgram";
 
 interface IChatComponentProps {
   post: TPost;
@@ -26,6 +29,11 @@ interface ChatMessage {
   status: "SENT" | "DELIVERED" | "READ";
   createdAt: string;
 }
+
+interface APIMessage {
+  success: boolean;
+  messages: ChatMessage[];
+}
 export default function ChatComponent({
   post,
   setToggleChat,
@@ -36,46 +44,72 @@ export default function ChatComponent({
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputText, setInputText] = useState<string>("");
   const [ws, setWs] = useState<WebSocket | null>(null);
+  const [loadingChat, setLoadingChat] = useState<boolean>(false);
 
   function closeChat() {
     setToggleChat(false);
   }
-
-  useEffect(() => {
-    // create a socket
-    const socket = new WebSocket('ws://localhost:7000');
-
-    // create a connection
-    socket.onopen = (event) => {
-      console.log('Connection open');
-      setWs(socket);
-    }
-
-    // receive a message
-    socket.onmessage = (message) => {
-      console.log(JSON.parse(message.data)); // receive the message data
-    }
-
-    // cleanup: close connection when unmount
-    return () => {
-      socket.close();
-    }
-  }, [toggleChat]);
-
   const receiverId = post.userId;
 
-  function sendMessage(){
+  const getMessages = async () => {
+    setLoadingChat(false);
+    try {
+      setLoadingChat(true);
+      if (userId && receiverId) {
+        const messages = await getUsersChat(userId, receiverId);
+        if (!messages?.messages.length){
+          setMessages([])
+        }
+        setMessages((prevState) => [...prevState, ...messages?.messages]);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error);
+      }
+    } finally {
+      setLoadingChat(false);
+    }
+  };
+
+  useEffect(() => {
+    const socket = new WebSocket("ws://localhost:7000");
+    setWs(socket);
+
+    // create/open a connection
+    socket.onopen = async () => {
+      console.log("connection open...");
+      // get all previous messages from database
+      await getMessages();
+    };
+
+    // receive message from the server
+    socket.onmessage = (message) => {
+      console.log(message.data);
+      const parseMessage = JSON.parse(message.data);
+      console.log(parseMessage);
+      setMessages((prevState) => [...prevState, parseMessage]);
+    };
+
+    return () => {
+      socket.close();
+    };
+  }, [toggleChat]);
+
+  function sendMessage() {
     // send text message
-    if (ws && inputText && inputText.trim()){
-      ws.send(JSON.stringify({
-        userId,
-        receiverId,
-        text: inputText
-      }));
+    if (ws && inputText && inputText.trim()) {
+      ws.send(
+        JSON.stringify({
+          userId,
+          receiverId,
+          text: inputText,
+        })
+      );
       setInputText("");
     }
   }
 
+  //console.log(messages);
 
   return (
     <>
@@ -112,7 +146,14 @@ export default function ChatComponent({
         </header>
 
         <div className="mt-3 pb-10 px-3 py-1 relative max-h-80 overflow-y-auto">
-          {messages.map((message, index) => {
+          {loadingChat ? (
+            <div className="flex justify-center items-center">
+              <Loader2 className="animate-spin text-slate-400" />
+            </div>
+          ) : (
+            ""
+          )}
+          {!loadingChat && messages.length ? messages?.map((message, index) => {
             return (
               <div
                 key={index}
@@ -121,7 +162,7 @@ export default function ChatComponent({
                 })} py-2 px-3 mb-3 text-sm rounded-2xl bg-sky-300/20 max-w-56`}
               >
                 <div>
-                  <p>{message?.text}</p>
+                  <p>{message.text}</p>
                 </div>
 
                 <div className="flex justify-between items-center pt-1">
@@ -146,7 +187,7 @@ export default function ChatComponent({
                 </div>
               </div>
             );
-          })}
+          }): <p className="text-center text-sm text-gray-500">No message yet</p>}
         </div>
 
         <div className="px-3 max-h-full absolute bottom-0 w-full mb-3">

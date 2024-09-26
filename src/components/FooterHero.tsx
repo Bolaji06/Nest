@@ -8,9 +8,7 @@ export default function FooterHero() {
   return (
     <>
       <footer className="mt-10 pt-10 bg-gray-100 px-4 md:px-10">
-
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full mx-auto py-8">
-
           <div>
             <h2 className="font-medium py-2">Visit our Social</h2>
             <ul>
@@ -33,15 +31,19 @@ export default function FooterHero() {
           <div>
             <header className="font-medium">Contact</header>
             <ul className="py-2">
-                <li>
-                <Link href={"mailto:bolajibolajoko0306@gmail.com"} className="text-xs lg:text-base text-brand-primary">bolajibolajoko0306@gmail.clom</Link>
-                </li>
+              <li className="text-xs">
+                <Link
+                  href={"mailto:bolajibolajoko0306@gmail.com"}
+                  className="text-xs lg:text-base text-brand-primary"
+                >
+                  bolajibolajoko0306@gmail.com
+                </Link>
+              </li>
             </ul>
-
           </div>
 
           <div>
-            <Image src={NestLogo} alt="nest logo" className="w-32"/>
+            <Image src={NestLogo} alt="nest logo" className="w-32" />
           </div>
         </div>
 
@@ -69,25 +71,36 @@ export default function FooterHero() {
 
             <p>
               About Nest Real Estate Solutions, Inc. At Nest Real Estate
-              Solutions, Inc., we&apos;re revolutionizing the way people find their
-              homes. Founded with the vision to make real estate transactions
-              seamless and transparent, we leverage cutting-edge technology to
-              connect buyers, sellers, and renters with their ideal properties.
-              Our platform, Nest, offers an intuitive and user-friendly
-              interface, ensuring that users can effortlessly navigate through
-              extensive property listings, detailed neighborhood insights, and
-              personalized recommendations. Our commitment to excellence is
-              reflected in our team of experienced real estate professionals,
-              tech innovators, and customer service experts who work tirelessly
-              to provide unparalleled support and guidance. We believe that
-              finding a home is more than just a transaction—it&apos;s a journey.
-              That&apos;s why we are dedicated to creating a trusted, efficient, and
-              enjoyable experience for every user. At Nest, we prioritize
-              innovation, trust, and customer satisfaction. Whether you&apos;re a
-              first-time homebuyer, a seasoned investor, or looking for a
-              rental, Nest is here to help you every step of the way. Join us
-              and discover a new era in real estate. For more information, visit
-              <Link href={'/'} className="text-brand-primary underline"> www.nestrealestate.com</Link> or contact us at <Link href={"mailto:bolajibolajoko0306@gmail.com"} className="text-brand-primary">bolajibolajoko0306@gmail.clom</Link>
+              Solutions, Inc., we&apos;re revolutionizing the way people find
+              their homes. Founded with the vision to make real estate
+              transactions seamless and transparent, we leverage cutting-edge
+              technology to connect buyers, sellers, and renters with their
+              ideal properties. Our platform, Nest, offers an intuitive and
+              user-friendly interface, ensuring that users can effortlessly
+              navigate through extensive property listings, detailed
+              neighborhood insights, and personalized recommendations. Our
+              commitment to excellence is reflected in our team of experienced
+              real estate professionals, tech innovators, and customer service
+              experts who work tirelessly to provide unparalleled support and
+              guidance. We believe that finding a home is more than just a
+              transaction—it&apos;s a journey. That&apos;s why we are dedicated
+              to creating a trusted, efficient, and enjoyable experience for
+              every user. At Nest, we prioritize innovation, trust, and customer
+              satisfaction. Whether you&apos;re a first-time homebuyer, a
+              seasoned investor, or looking for a rental, Nest is here to help
+              you every step of the way. Join us and discover a new era in real
+              estate. For more information, visit
+              <Link href={"/"} className="text-brand-primary underline">
+                {" "}
+                www.nestrealestate.com
+              </Link>{" "}
+              or contact us at{" "}
+              <Link
+                href={"mailto:bolajibolajoko0306@gmail.com"}
+                className="text-brand-primary"
+              >
+                bolajibolajoko0306@gmail.clom
+              </Link>
             </p>
           </div>
         </div>
