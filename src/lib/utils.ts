@@ -41,3 +41,34 @@ export function formatDate(timestamp: string){
   const dateToString = dayjs(timestamp).format('MMMM YYYY');
   return dateToString;
 }
+
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+// Extend dayjs with the relativeTime plugin
+dayjs.extend(relativeTime);
+
+export function timeAgo(timestamp: string): string {
+  const now = dayjs();
+  const past = dayjs(timestamp);
+  
+  const diffInSeconds = now.diff(past, 'second');
+  const diffInMinutes = now.diff(past, 'minute');
+  const diffInHours = now.diff(past, 'hour');
+  const diffInDays = now.diff(past, 'day');
+  const diffInMonths = now.diff(past, 'month');
+  const diffInYears = now.diff(past, 'year');
+
+  if (diffInYears > 0) {
+    return `${diffInYears} year${diffInYears > 1 ? 's' : ''} ago`;
+  } else if (diffInMonths > 0) {
+    return `${diffInMonths} month${diffInMonths > 1 ? 's' : ''} ago`;
+  } else if (diffInDays > 0) {
+    return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+  } else if (diffInHours > 0) {
+    return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+  } else if (diffInMinutes > 0) {
+    return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+  } else {
+    return `${diffInSeconds} second${diffInSeconds !== 1 ? 's' : ''} ago`;
+  }
+}

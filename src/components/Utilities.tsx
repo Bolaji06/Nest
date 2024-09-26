@@ -611,8 +611,10 @@ export function ShareButton({ data }: IShareButton) {
 interface ChatButtonProps {
   post: TPost;
   token: string | undefined;
+  userId: string | undefined
+  status: string | undefined
 }
-export function ChatButton({ post, token }: ChatButtonProps) {
+export function ChatButton({ post, token, userId, status }: ChatButtonProps) {
   const [toggleChat, setToggleChat] = useState<boolean>(false);
   const { toast } = useToast();
 
@@ -643,6 +645,8 @@ export function ChatButton({ post, token }: ChatButtonProps) {
           post={post}
           setToggleChat={setToggleChat}
           toggleChat={toggleChat}
+          userId={userId}
+          status={status}
         />
       )}
     </>

@@ -64,6 +64,9 @@ export default async function HomeDetailsPage({
   const token = cookies().get("token")?.value;
   const post = data.message;
 
+//console.log(session)
+
+
   const amenities = post.amenities;
 
   return (
@@ -352,7 +355,7 @@ export default async function HomeDetailsPage({
                   </Button>
                 </div>
 
-                <ChatButton post={post.post} token={token}/>
+                <ChatButton post={post.post} token={token} userId={session?.id} status={session?.status}/>
               </div>
             </div>
           </div>

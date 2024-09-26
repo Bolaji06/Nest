@@ -108,3 +108,25 @@ export async function getAllSavedPost() {
     }
   }
 }
+
+const USER_POST_ENDPOINT = "http://localhost:7000/api/post/user";
+export async function getUserPost(id: string) {
+  const tokenId = cookies().get("token")?.value;
+  const option = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + tokenId,
+    },
+  };
+
+  try {
+    const response = await fetch(`${USER_POST_ENDPOINT}/${id}`, option);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.log(error);
+    }
+  }
+}
