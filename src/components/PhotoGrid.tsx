@@ -21,7 +21,7 @@ export default function PhotoGrid({ data }: TPhotoGridProps) {
 
   return (
     <>
-      <section className="relative">
+      <section className="relative  ">
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-1">
           <div
             className="w-full md:w-[400px] md:aspect-square  md:col-span-2 md:row-span-3
@@ -81,7 +81,7 @@ export default function PhotoGrid({ data }: TPhotoGridProps) {
         </div>
         {togglePreview &&
           createPortal(
-            <div className="h-screen overflow-y-hidden">
+            <div className="h-screen overflow-hidden">
               <PhotoPreview
                 data={data}
                 handleTogglePreview={handleTogglePreview}

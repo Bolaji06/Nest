@@ -31,7 +31,7 @@ export default async function SavedPost(){
                 <ActivityComponent />
               </header>
             <section className="grid-container gap-3 ">
-          {savedList.map((post: TPostAmenities) => {
+          { savedList.length ? savedList.map((post: TPostAmenities) => {
             return (
               <Suspense key={post.message.post.id} fallback={<PostCardSkeleton />}>
                 <Link href={`/home-details/${post.message.post.id}`}>
@@ -46,7 +46,7 @@ export default async function SavedPost(){
                 </Link>
               </Suspense>
             );
-          })}
+          }): <p className="text-slate-400 text-2xl text-center">No saved post</p>}
         </section>
             </main>
         </>
