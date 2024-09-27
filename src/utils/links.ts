@@ -54,10 +54,10 @@ export const profileSideLink = [
     link: "/account/activity/saved_post",
     
   },
-  {
-    name: "Saved Search",
-    link: "/account/activity/saved_search",
-  },
+  // {
+  //   name: "Saved Search",
+  //   link: "/account/activity/saved_search",
+  // },
 ];
 
 enum UserType {
