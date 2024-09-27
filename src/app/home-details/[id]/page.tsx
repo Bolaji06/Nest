@@ -346,7 +346,7 @@ export default async function HomeDetailsPage({
               </div>
             </div>
 
-            <div className="fixed z-20 right-3 lg:sticky lg:flex justify-center items-center lg:top-20 lg:basis-[30%] lg:shadow-lg lg:bg-white max-h-[200px] p-5 rounded-2xl">
+            <div className="hidden fixed z-20 right-3 lg:sticky lg:flex justify-center items-center lg:top-20 lg:basis-[30%] lg:shadow-lg lg:bg-white max-h-[200px] p-5 rounded-2xl">
               <div className="flex w-full flex-col gap-4 justify-center items-center">
                 <div className="w-full">
                   <Button className="w-full text-left inline-flex gap-3 rounded-2xl bg-brand-primary">
