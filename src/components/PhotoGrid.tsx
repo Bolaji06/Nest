@@ -81,10 +81,12 @@ export default function PhotoGrid({ data }: TPhotoGridProps) {
         </div>
         {togglePreview &&
           createPortal(
-            <PhotoPreview
-              data={data}
-              handleTogglePreview={handleTogglePreview}
-            />,
+            <div className="h-screen overflow-y-hidden">
+              <PhotoPreview
+                data={data}
+                handleTogglePreview={handleTogglePreview}
+              />
+            </div>,
             document.body
           )}
       </section>

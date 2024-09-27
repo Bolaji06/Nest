@@ -83,7 +83,7 @@ export default function PhotoPreview({
               </h2>
             </div>
 
-            <div className="flex gap-3 md:gap-10 items-center justify-center md:justify-normal">
+            <div className="hidden md:flex gap-3 md:gap-10 items-center justify-center md:justify-normal">
               <div className="flex items-center gap-1 md:gap-3 text-gray-800">
                 <Bed size={20} className="text-gray-50" />
                 <p className="text-gray-50">
@@ -123,9 +123,9 @@ export default function PhotoPreview({
             </Button>
           </div>
 
-          <main className="w-full flex justify-center items-center">
+          <main className="w-full flex justify-center items-center mt-10 md:mt-0">
             <section className="flex w-[700px] justify-center align-middle items-center">
-              <div className="w-full">
+              <div className="lg:w-full px-6 md:px-0">
                 <Image
                   src={data.images[currentIndex]}
                   width={500}
@@ -138,7 +138,7 @@ export default function PhotoPreview({
           </main>
         </div>
 
-        <div className="absolute top-28 overflow-hidden w-20 max-h-[400px] z-50 right-14">
+        <div className="hidden lg:block absolute top-28 overflow-hidden w-20 max-h-[400px] z-50 right-14">
           {/* <div className="absolute blur bg-black/90 w-full h-10 rounded-t-xl -top-2"/> */}
           <div
             className="overflow-y-auto max-h-[400px] space-y-2 w-full hide-scroll"
