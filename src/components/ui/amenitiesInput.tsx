@@ -1,21 +1,23 @@
-import { forwardRef } from "react";
+import { ChangeEvent, forwardRef } from "react";
 import { Input } from "./input";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface IAmenitiesInputHeaderProps {
-    isActive: boolean,
-    title: string,
+  isActive: boolean;
+  title: string;
 }
-export function AmenitiesInputHeader({ isActive, title }: IAmenitiesInputHeaderProps) {
+export function AmenitiesInputHeader({
+  isActive,
+  title,
+}: IAmenitiesInputHeaderProps) {
   return (
     <div className="amenities_container">
       <div className="room_details">
         <header className="flex justify-between items-center gap-2 py-2 bg-slate-50 text-brand-primary text-sm cursor-pointer">
           <h2 className="uppercase">{title}</h2>
-          {!isActive ? <ChevronDown />: <ChevronUp /> }
+          {!isActive ? <ChevronDown /> : <ChevronUp />}
         </header>
-       
       </div>
     </div>
   );
@@ -25,8 +27,19 @@ interface IAmenitiesInputProps {
   title: string;
   list: string[];
   type: string;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  name?: string;
+  checked?: boolean;
 }
-export function AmenitiesInput({ list, type, title }: IAmenitiesInputProps) {
+
+export function AmenitiesInput({
+  list,
+  type,
+  title,
+  onChange,
+  name,
+  checked
+}: IAmenitiesInputProps) {
   return (
     <>
       <div className="">
@@ -36,7 +49,15 @@ export function AmenitiesInput({ list, type, title }: IAmenitiesInputProps) {
             return (
               <div key={index} className="flex items-center gap-3">
                 <label htmlFor={item}>{item}</label>
-                <Input type={type} id={item} className="w-3 aspect-square" />
+                <Input
+                  type={type}
+                  id={item}
+                  className="w-3 aspect-square"
+                  onChange={onChange}
+                  name={name}
+                  value={item}
+                  checked={checked}
+                />
               </div>
             );
           })}

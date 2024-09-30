@@ -54,10 +54,6 @@ export const profileSideLink = [
     link: "/account/activity/saved_post",
     
   },
-  // {
-  //   name: "Saved Search",
-  //   link: "/account/activity/saved_search",
-  // },
 ];
 
 enum UserType {
@@ -147,7 +143,7 @@ export const floorCovering = [
 ];
 
 export const rooms = [
-  "Breakfast nook",
+  "Breakfast room",
   "Dinning room",
   "Family room",
   "Laundry",

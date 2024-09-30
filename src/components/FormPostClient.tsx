@@ -44,6 +44,7 @@ import dynamic from "next/dynamic";
 import TextEditor from "@/components/TextEditor";
 import { revalidateTag } from "next/cache";
 import { AmenitiesInput, AmenitiesInputHeader } from "./ui/amenitiesInput";
+import { AmenityKeys, Category } from "@/lib/definitions";
 
 type TCookie = {
   cookieData: string | undefined;
@@ -63,15 +64,6 @@ if (process.env.NODE_ENV === "production") {
 } else if (process.env.NODE_ENV === "development") {
   API_ENDPOINT = `${process.env.NEXT_PUBLIC_API_DEV_POST}`;
 }
-
-const toolbarOptions = [
-  [{ header: "1" }, { header: "2" }, { header: "3" }, { font: [] }],
-  [{ list: "ordered" }, { list: "bullet" }],
-  [{ indent: "-1" }, { indent: "+1" }],
-  [{ align: [] }],
-  ["bold", "italic", "underline", "strike"],
-  ["clean"],
-];
 
 export default function FormPostClient({ cookieData }: TCookie) {
   const [listingForm, setListingForm] = useState<postSchemaType>({
@@ -119,14 +111,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
     path: [],
   });
 
-  const modules = {
-    toolbar: toolbarOptions,
-  };
-
-  //  const ReactQuill = useMemo(() => {
-  //   return dynamic(import("@/components/TextEditor"), { ssr: false })
-  //  }, [])
-
   const [postData, setPostData] = useState<IPostData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [postImageUrls, setPostImageUrls] = useState<string[]>([]);
@@ -150,19 +134,10 @@ export default function FormPostClient({ cookieData }: TCookie) {
 
   const { toast } = useToast();
 
-  function handleQuillChange(value: string) {
-    setListingForm((curState) => {
-      return {
-        ...curState,
-        description: value,
-      };
-    });
-  }
-
   function handleFormChange(
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     setListingForm((curState) => {
       return {
         ...curState,
@@ -171,6 +146,36 @@ export default function FormPostClient({ cookieData }: TCookie) {
     });
     setIsFormFilled(Object.values(listingForm).some((field) => field === ""));
   }
+
+  function handleCheckboxChange(
+    e: ChangeEvent<HTMLInputElement>,
+    category: Category,
+    key: AmenityKeys
+  ) {
+    const { value, checked } = e.target;
+    setListingForm((prevState) => {
+      const updatedCategory = prevState.amenities[category][key] as string[];
+
+      const updatedValue = checked
+        ? [...updatedCategory, value]
+        : updatedCategory.filter((item) => item !== value);
+
+      return {
+        ...prevState,
+        amenities: {
+          ...prevState.amenities,
+          [category]: {
+            ...prevState.amenities[
+              category as keyof typeof prevState.amenities
+            ],
+            [key]: updatedValue,
+          },
+        },
+      };
+    });
+  }
+
+  console.log(listingForm.amenities.roomDetails);
 
   // using a function in from a child component
   const uploadFilesRef = useRef<UploadFilesHandle>(null);
@@ -235,6 +240,8 @@ export default function FormPostClient({ cookieData }: TCookie) {
       redirect("/account/all_post");
     }
   }, [postData?.success]);
+
+  //console.log(listingForm.amenities.roomDetails.rooms);
 
   return (
     <>
@@ -435,19 +442,20 @@ export default function FormPostClient({ cookieData }: TCookie) {
           />
 
           <div>
-            <ReactQuill
-              theme="snow"
-              placeholder="Enter other amenities/utilities"
+            <textarea
+              name="description"
+              onChange={handleFormChange}
+              className="w-full h-20 p-4 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={listingForm.description}
-              onChange={handleQuillChange}
-              className="rounded-md text-base"
-              modules={modules}
+              placeholder="Enter listing description"
             />
 
             {inputError.path?.[0] === "description" && (
               <p className="text-sm text-red-500">{inputError.message}</p>
             )}
           </div>
+
+          {/*  This is the form amenities */}
 
           <div className="py-6 relative mt-6">
             <div className="absolute w-full h-[1px] bg-slate-200" />
@@ -456,6 +464,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
             </h2>
           </div>
 
+          {/* Room details */}
           <div onClick={handleToggleRoomDetails}>
             <AmenitiesInputHeader
               isActive={toggleRoomDetails}
@@ -464,11 +473,24 @@ export default function FormPostClient({ cookieData }: TCookie) {
           </div>
           {toggleRoomDetails && (
             <div>
-              <AmenitiesInput title="Rooms" list={rooms} type="checkbox" />
+              <AmenitiesInput
+                title="Rooms"
+                list={rooms}
+                type="checkbox"
+                name="rooms"
+                checked={listingForm.amenities.roomDetails.rooms.includes(
+                  "Breakfast room"
+                )}
+                onChange={(e) =>
+                  handleCheckboxChange(e, "roomDetails", "rooms")
+                }
+              />
               <AmenitiesInput
                 title="Floor Covering"
                 list={floorCovering}
                 type="checkbox"
+                onChange={handleFormChange}
+                name="floorCovering"
               />
 
               <AmenitiesInput
