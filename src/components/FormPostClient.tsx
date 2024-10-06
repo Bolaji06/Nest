@@ -514,6 +514,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   listingForm.amenities.roomDetails.rooms.includes(room)
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "roomDetails", "rooms", item)
                 }
               />
@@ -526,6 +527,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   listingForm.amenities.roomDetails.floorCovering.includes(room)
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "roomDetails", "floorCovering", item)
                 }
               />
@@ -539,6 +541,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   listingForm.amenities.roomDetails.appliance.includes(room)
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "roomDetails", "appliance", item)
                 }
               />
@@ -549,6 +552,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   name="basement"
                   id="basement"
                   onChange={(e) =>
+                    //@ts-ignore
                     handleAmenitiesChange(e, "roomDetails", "basement")
                   }
                   value={listingForm.amenities.roomDetails.basement}
@@ -567,6 +571,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   )
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "roomDetails", "indoorFeatures", item)
                 }
               />
@@ -592,9 +597,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   )
                 }
                 onChange={(e, item) =>
+                  
                   handleCheckboxChange(
                     e,
                     "buildingDetails",
+                    //@ts-ignore
                     "buildingAmenities",
                     item
                   )
@@ -611,6 +618,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                       handleAmenitiesChange(
                         e,
                         "buildingDetails",
+                        //@ts-ignore
                         "architecturalStyle"
                       )
                     }
@@ -627,6 +635,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                     value={listingForm.amenities.buildingDetails.numUnit}
                     placeholder="Number of building units"
                     onChange={(e) =>
+                      //@ts-ignore
                       handleAmenitiesChange(e, "buildingDetails", "numUnit")
                     }
                   />
@@ -638,6 +647,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                     value={listingForm.amenities.buildingDetails.numFloor}
                     placeholder="Number of building floors"
                     onChange={(e) =>
+                      //@ts-ignore
                       handleAmenitiesChange(e, "buildingDetails", "numFloor")
                     }
                   />
@@ -655,6 +665,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   listingForm.amenities.buildingDetails.exterior.includes(room)
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "buildingDetails", "exterior", item)
                 }
               />
@@ -673,6 +684,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   handleCheckboxChange(
                     e,
                     "buildingDetails",
+                    //@ts-ignore
                     "outdoorAmenities",
                     item
                   )
@@ -688,6 +700,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                     listingForm.amenities.buildingDetails.parking.includes(room)
                   }
                   onChange={(e, item) =>
+                    //@ts-ignore
                     handleCheckboxChange(e, "buildingDetails", "parking", item)
                   }
                 />
@@ -701,6 +714,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                       handleAmenitiesChange(
                         e,
                         "buildingDetails",
+                        //@ts-ignore
                         "parkingSpace"
                       )
                     }
@@ -717,6 +731,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   listingForm.amenities.buildingDetails.roof.includes(room)
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "buildingDetails", "roof", item)
                 }
               />
@@ -729,6 +744,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   listingForm.amenities.buildingDetails.view.includes(room)
                 }
                 onChange={(e, item) =>
+                  //@ts-ignore
                   handleCheckboxChange(e, "buildingDetails", "view", item)
                 }
               />
@@ -757,6 +773,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   handleCheckboxChange(
                     e,
                     "utilitiesDetails",
+                    //@ts-ignore
                     "coolingType",
                     item
                   )
@@ -776,6 +793,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   handleCheckboxChange(
                     e,
                     "utilitiesDetails",
+                    //@ts-ignore
                     "heatingType",
                     item
                   )
@@ -795,6 +813,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   handleCheckboxChange(
                     e,
                     "utilitiesDetails",
+                    //@ts-ignore
                     "heatingFuel",
                     item
                   )

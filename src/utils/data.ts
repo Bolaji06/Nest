@@ -16,7 +16,6 @@ export async function getSearch(query: {}) {
     headers: {
       "Content-Type": "application/json",
     },
-    cache: "no-store",
     next: { tags: ["get_search_posts"] },
   };
 
