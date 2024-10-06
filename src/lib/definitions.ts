@@ -153,3 +153,15 @@ export interface ISavedPost {
   ]
 }
 
+import { postSchemaType } from "@/utils/validation";
+
+export type Category = keyof postSchemaType['amenities']; // "roomDetails" | "buildingDetails" | "utilitiesDetails"
+
+export type RoomDetailsKeys = keyof postSchemaType['amenities']['roomDetails']; // "appliance" | "basement" | etc.
+export type BuildingDetailsKeys = keyof postSchemaType['amenities']['buildingDetails']; // "architecturalStyle" | "buildingAmenities" | etc.
+export type UtilitiesDetailsKeys = keyof postSchemaType['amenities']['utilitiesDetails']; // "coolingType" | "heatingFuel" | etc.
+
+// Union type for all possible keys
+export type AmenityKeys = RoomDetailsKeys | BuildingDetailsKeys | UtilitiesDetailsKeys;
+
+

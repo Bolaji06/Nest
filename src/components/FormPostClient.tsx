@@ -44,6 +44,7 @@ import dynamic from "next/dynamic";
 import TextEditor from "@/components/TextEditor";
 import { revalidateTag } from "next/cache";
 import { AmenitiesInput, AmenitiesInputHeader } from "./ui/amenitiesInput";
+import { AmenityKeys, Category } from "@/lib/definitions";
 
 type TCookie = {
   cookieData: string | undefined;
@@ -63,15 +64,6 @@ if (process.env.NODE_ENV === "production") {
 } else if (process.env.NODE_ENV === "development") {
   API_ENDPOINT = `${process.env.NEXT_PUBLIC_API_DEV_POST}`;
 }
-
-const toolbarOptions = [
-  [{ header: "1" }, { header: "2" }, { header: "3" }, { font: [] }],
-  [{ list: "ordered" }, { list: "bullet" }],
-  [{ indent: "-1" }, { indent: "+1" }],
-  [{ align: [] }],
-  ["bold", "italic", "underline", "strike"],
-  ["clean"],
-];
 
 export default function FormPostClient({ cookieData }: TCookie) {
   const [listingForm, setListingForm] = useState<postSchemaType>({
@@ -119,14 +111,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
     path: [],
   });
 
-  const modules = {
-    toolbar: toolbarOptions,
-  };
-
-  //  const ReactQuill = useMemo(() => {
-  //   return dynamic(import("@/components/TextEditor"), { ssr: false })
-  //  }, [])
-
   const [postData, setPostData] = useState<IPostData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [postImageUrls, setPostImageUrls] = useState<string[]>([]);
@@ -150,19 +134,10 @@ export default function FormPostClient({ cookieData }: TCookie) {
 
   const { toast } = useToast();
 
-  function handleQuillChange(value: string) {
-    setListingForm((curState) => {
-      return {
-        ...curState,
-        description: value,
-      };
-    });
-  }
-
   function handleFormChange(
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) {
-    const { name, value } = e.target;
+    const { name, value, type } = e.target;
     setListingForm((curState) => {
       return {
         ...curState,
@@ -170,6 +145,53 @@ export default function FormPostClient({ cookieData }: TCookie) {
       };
     });
     setIsFormFilled(Object.values(listingForm).some((field) => field === ""));
+  }
+
+  const handleAmenitiesChange = (
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+    section: keyof postSchemaType["amenities"],
+    field: keyof postSchemaType["amenities"][typeof section]
+  ) => {
+    const { value } = e.target;
+
+    setListingForm((prevState) => ({
+      ...prevState,
+      amenities: {
+        ...prevState.amenities,
+        [section]: {
+          ...prevState.amenities[section],
+          [field]: value, // Directly set the value for the select field
+        },
+      },
+    }));
+  };
+
+  function handleCheckboxChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+    category: keyof postSchemaType["amenities"],
+    field: keyof postSchemaType["amenities"][typeof category],
+    item: string // Individual item
+  ) {
+    const { checked } = event.target;
+
+    setListingForm((prevForm) => {
+      const updatedCategory = prevForm.amenities[category][field] as string[];
+
+      const updatedValues = checked
+        ? [...updatedCategory, item] // Add item if checked
+        : updatedCategory.filter((room) => room !== item); // Remove item if unchecked
+
+      return {
+        ...prevForm,
+        amenities: {
+          ...prevForm.amenities,
+          [category]: {
+            ...prevForm.amenities[category],
+            [field]: updatedValues,
+          },
+        },
+      };
+    });
   }
 
   // using a function in from a child component
@@ -186,6 +208,8 @@ export default function FormPostClient({ cookieData }: TCookie) {
       if (!cookieData) {
         return;
       }
+
+      console.log("parseSchema: " + parseSchema)
 
       // using the child function here:
       if (uploadFilesRef.current) {
@@ -206,7 +230,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
       const response = await fetch(API_ENDPOINT, options);
       const data = await response.json();
       setPostData(data);
-      revalidateTag("get_posts");
+      revalidateTag("get_search_posts");
     } catch (err) {
       if (err instanceof ZodError) {
         const inputError = err.errors.map((issues) => {
@@ -215,10 +239,12 @@ export default function FormPostClient({ cookieData }: TCookie) {
             path: issues.path,
           };
         });
+        
         //@ts-ignore
         setInputError(inputError[0]);
         return inputError[0];
       } else if (err instanceof Error) {
+        console.log(err)
         return err;
       }
     } finally {
@@ -226,15 +252,28 @@ export default function FormPostClient({ cookieData }: TCookie) {
     }
   }
 
+  console.log(inputError);
+
   useEffect(() => {
+    if (!cookieData){
+      toast({
+        title: 'Session expires',
+        description: 'Kindly login to your account'
+      })
+      redirect('/');
+    }
     if (postData?.success) {
       toast({
         title: "Success",
         description: "Post Sent successfully",
       });
-      redirect("/account/all_post");
+      redirect("/account/activity/all_post");
     }
-  }, [postData?.success]);
+  }, [postData?.success, cookieData]);
+
+  console.log(listingForm);
+
+  
 
   return (
     <>
@@ -435,19 +474,20 @@ export default function FormPostClient({ cookieData }: TCookie) {
           />
 
           <div>
-            <ReactQuill
-              theme="snow"
-              placeholder="Enter other amenities/utilities"
+            <textarea
+              name="description"
+              onChange={handleFormChange}
+              className="w-full h-20 p-4 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               value={listingForm.description}
-              onChange={handleQuillChange}
-              className="rounded-md text-base"
-              modules={modules}
+              placeholder="Enter listing description"
             />
 
             {inputError.path?.[0] === "description" && (
               <p className="text-sm text-red-500">{inputError.message}</p>
             )}
           </div>
+
+          {/*  This is the form amenities */}
 
           <div className="py-6 relative mt-6">
             <div className="absolute w-full h-[1px] bg-slate-200" />
@@ -456,6 +496,7 @@ export default function FormPostClient({ cookieData }: TCookie) {
             </h2>
           </div>
 
+          {/* Room details */}
           <div onClick={handleToggleRoomDetails}>
             <AmenitiesInputHeader
               isActive={toggleRoomDetails}
@@ -464,25 +505,70 @@ export default function FormPostClient({ cookieData }: TCookie) {
           </div>
           {toggleRoomDetails && (
             <div>
-              <AmenitiesInput title="Rooms" list={rooms} type="checkbox" />
+              <AmenitiesInput
+                title="Rooms"
+                list={rooms}
+                type="checkbox"
+                name="rooms"
+                checked={(room) =>
+                  listingForm.amenities.roomDetails.rooms.includes(room)
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "roomDetails", "rooms", item)
+                }
+              />
               <AmenitiesInput
                 title="Floor Covering"
                 list={floorCovering}
                 type="checkbox"
+                name="floorCovering"
+                checked={(room) =>
+                  listingForm.amenities.roomDetails.floorCovering.includes(room)
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "roomDetails", "floorCovering", item)
+                }
               />
 
               <AmenitiesInput
                 title="Appliance"
                 list={appliance}
                 type="checkbox"
+                name="indoorFeatures"
+                checked={(room) =>
+                  listingForm.amenities.roomDetails.appliance.includes(room)
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "roomDetails", "appliance", item)
+                }
               />
 
-              <AmenitiesInput title="Basement" list={basement} type="radio" />
+              <div className="py-3">
+                <label id="basement">Select basement condition</label>
+                <Select
+                  name="basement"
+                  id="basement"
+                  onChange={(e) =>
+                    handleAmenitiesChange(e, "roomDetails", "basement")
+                  }
+                  value={listingForm.amenities.roomDetails.basement}
+                  list={basement}
+                />
+              </div>
 
               <AmenitiesInput
                 title="Indoor Features"
                 list={indoorFeatures}
                 type="checkbox"
+                name="indoorFeatures"
+                checked={(room) =>
+                  listingForm.amenities.roomDetails.indoorFeatures.includes(
+                    room
+                  )
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "roomDetails", "indoorFeatures", item)
+                }
               />
             </div>
           )}
@@ -499,14 +585,64 @@ export default function FormPostClient({ cookieData }: TCookie) {
                 title="Building Amenities"
                 list={buildingAmenities}
                 type="checkbox"
+                name="buildingAmenities"
+                checked={(room) =>
+                  listingForm.amenities.buildingDetails.buildingAmenities.includes(
+                    room
+                  )
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(
+                    e,
+                    "buildingDetails",
+                    "buildingAmenities",
+                    item
+                  )
+                }
               />
 
-              <div>
-                <AmenitiesInput
-                  title="architectural Style"
-                  list={architecturalStyle}
-                  type="radio"
-                />
+              <div className="py-2 grid grid-cols-3 gap-3">
+                <div>
+                  <label id="architecturalStyle">Architectural style</label>
+                  <Select
+                    name="architecturalStyle"
+                    id="architecturalStyle"
+                    onChange={(e) =>
+                      handleAmenitiesChange(
+                        e,
+                        "buildingDetails",
+                        "architecturalStyle"
+                      )
+                    }
+                    value={
+                      listingForm.amenities.buildingDetails.architecturalStyle
+                    }
+                    list={architecturalStyle}
+                  />
+                </div>
+                <div>
+                  <label>Number of units</label>
+                  <Input
+                    name="numUnit"
+                    value={listingForm.amenities.buildingDetails.numUnit}
+                    placeholder="Number of building units"
+                    onChange={(e) =>
+                      handleAmenitiesChange(e, "buildingDetails", "numUnit")
+                    }
+                  />
+                </div>
+                <div>
+                  <label>Number of floors</label>
+                  <Input
+                    name="numFloor"
+                    value={listingForm.amenities.buildingDetails.numFloor}
+                    placeholder="Number of building floors"
+                    onChange={(e) =>
+                      handleAmenitiesChange(e, "buildingDetails", "numFloor")
+                    }
+                  />
+                </div>
+
                 {/* Num of units / floor here */}
               </div>
 
@@ -514,28 +650,88 @@ export default function FormPostClient({ cookieData }: TCookie) {
                 title="Exterior"
                 list={exterior}
                 type="checkbox"
+                name="exterior"
+                checked={(room) =>
+                  listingForm.amenities.buildingDetails.exterior.includes(room)
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "buildingDetails", "exterior", item)
+                }
               />
 
-              <AmenitiesInput
-                title="Exterior"
-                list={exterior}
-                type="checkbox"
-              />
               <AmenitiesInput
                 title="Outdoor amenities"
                 list={outdoorAmenities}
                 type="checkbox"
+                name="outdoorAmenities"
+                checked={(room) =>
+                  listingForm.amenities.buildingDetails.outdoorAmenities.includes(
+                    room
+                  )
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(
+                    e,
+                    "buildingDetails",
+                    "outdoorAmenities",
+                    item
+                  )
+                }
               />
               <div>
                 <AmenitiesInput
                   title="Parking"
                   list={parking}
                   type="checkbox"
+                  name="parking"
+                  checked={(room) =>
+                    listingForm.amenities.buildingDetails.parking.includes(room)
+                  }
+                  onChange={(e, item) =>
+                    handleCheckboxChange(e, "buildingDetails", "parking", item)
+                  }
                 />
+                <div className="py-3">
+                  <label>Number of parking space</label>
+                  <Input
+                    name="parkingSpace"
+                    value={listingForm.amenities.buildingDetails.parkingSpace}
+                    placeholder="Number of building units"
+                    onChange={(e) =>
+                      handleAmenitiesChange(
+                        e,
+                        "buildingDetails",
+                        "parkingSpace"
+                      )
+                    }
+                  />
+                </div>
                 {/* Num of parking space here */}
               </div>
-              <AmenitiesInput title="Roof" list={roof} type="checkbox" />
-              <AmenitiesInput title="View" list={view} type="checkbox" />
+              <AmenitiesInput
+                title="Roof"
+                list={roof}
+                type="checkbox"
+                name="roof"
+                checked={(room) =>
+                  listingForm.amenities.buildingDetails.roof.includes(room)
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "buildingDetails", "roof", item)
+                }
+              />
+              <AmenitiesInput
+                title="View"
+                list={view}
+                type="checkbox"
+                name="View"
+                checked={(room) =>
+                  listingForm.amenities.buildingDetails.view.includes(room)
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(e, "buildingDetails", "view", item)
+                }
+              />
             </div>
           )}
 
@@ -551,16 +747,58 @@ export default function FormPostClient({ cookieData }: TCookie) {
                 title="Cooling Type"
                 list={coolingType}
                 type="checkbox"
+                name="coolingType"
+                checked={(room) =>
+                  listingForm.amenities.utilitiesDetails.coolingType.includes(
+                    room
+                  )
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(
+                    e,
+                    "utilitiesDetails",
+                    "coolingType",
+                    item
+                  )
+                }
               />
               <AmenitiesInput
                 title="Heating Type"
                 list={heatingType}
                 type="checkbox"
+                name="heatingType"
+                checked={(room) =>
+                  listingForm.amenities.utilitiesDetails.heatingType.includes(
+                    room
+                  )
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(
+                    e,
+                    "utilitiesDetails",
+                    "heatingType",
+                    item
+                  )
+                }
               />
               <AmenitiesInput
                 title="Heating Fuel"
                 list={heatingFuel}
                 type="checkbox"
+                name="heatingFuel"
+                checked={(room) =>
+                  listingForm.amenities.utilitiesDetails.heatingFuel.includes(
+                    room
+                  )
+                }
+                onChange={(e, item) =>
+                  handleCheckboxChange(
+                    e,
+                    "utilitiesDetails",
+                    "heatingFuel",
+                    item
+                  )
+                }
               />
             </div>
           )}

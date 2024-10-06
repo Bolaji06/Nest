@@ -451,8 +451,6 @@ export function ShareButton({ data }: IShareButton) {
 
   const { toast } = useToast();
 
-  console.log(state);
-
   function handleToggleEmail() {
     setToggleEmail(true);
     setToggleQR(false);
