@@ -269,7 +269,7 @@ export default async function HomeDetailsPage({
                   <div className="space-y-4 ">
                     <div className="interior">
                       <AmenitiesHeader icon={<Sofa />} header="Interior" />
-                      <div className="grid md:grid-cols-2 gap-2 w-full">
+                      <div className="grid gap-2 w-full">
                         <Amenities
                           amenities={amenities.roomDetails.appliances}
                           category="Appliance:"
@@ -294,7 +294,7 @@ export default async function HomeDetailsPage({
                         icon={<Building />}
                         header="Building details"
                       />
-                      <div className="grid md:grid-cols-2 gap-2 w-full">
+                      <div className="grid gap-2 w-full">
                         <Amenities
                           amenities={
                             amenities.buildingDetails.buildingAmenities
@@ -326,7 +326,7 @@ export default async function HomeDetailsPage({
 
                     <div className="interior">
                       <AmenitiesHeader icon={<Cog />} header="Utilities" />
-                      <div className="grid md:grid-cols-2 gap-2 w-full">
+                      <div className="grid gap-2 w-full">
                         <Amenities
                           amenities={amenities.utilitiesDetails.coolingType}
                           category="Cooling Type:"

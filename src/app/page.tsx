@@ -58,6 +58,14 @@ export default async function Home() {
               );
             })}
           </section>
+          <div className="flex justify-center items-center mt-4">
+            <Link
+              href={"/search"}
+              className="underline p-3 text-sm text-center text-brand-primary font-semibold"
+            >
+              View all
+            </Link>
+          </div>
         </div>
         <FooterHero />
       </div>

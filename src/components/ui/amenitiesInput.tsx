@@ -2,6 +2,7 @@ import { ChangeEvent, forwardRef } from "react";
 import { Input } from "./input";
 
 import { ChevronDown, ChevronUp } from "lucide-react";
+import clsx from "clsx";
 
 interface IAmenitiesInputHeaderProps {
   isActive: boolean;
@@ -27,24 +28,29 @@ interface IAmenitiesInputProps {
   title: string;
   list: string[];
   type: string;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>, item?: string) => void;
   name?: string;
-  checked?: boolean;
+  checked?: (item: string) => boolean;
+  item?: string;
+  value?: string;
 }
+
+
 
 export function AmenitiesInput({
   list,
   type,
   title,
-  onChange,
+  onChange = () => {},
   name,
-  checked
+  checked,
+  value
 }: IAmenitiesInputProps) {
   return (
     <>
       <div className="">
         <h3 className="uppercase text-gray-400 text-sm">{title}</h3>
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4">
           {list.map((item, index) => {
             return (
               <div key={index} className="flex items-center gap-3">
@@ -52,11 +58,11 @@ export function AmenitiesInput({
                 <Input
                   type={type}
                   id={item}
-                  className="w-3 aspect-square"
-                  onChange={onChange}
+                  className={`w-3 aspect-square ${clsx({'cursor-pointer': type === 'checkbox'})}`}
+                  onChange={(e) => onChange?.(e, item)}
                   name={name}
-                  value={item}
-                  checked={checked}
+                  value={type === 'text' ? value : item}
+                  checked={type === 'checkbox' ? checked?.(item) : undefined}
                 />
               </div>
             );

@@ -89,11 +89,11 @@ export const postSchema = z.object({
             buildingAmenities: amenitiesList,
             architecturalStyle: z.string(),
             exterior: amenitiesList,
-            numUnit: z.number(),
-            numFloor: z.number(),
+            numUnit: z.coerce.number(),
+            numFloor: z.coerce.number(),
             outdoorAmenities: amenitiesList,
             parking: amenitiesList,
-            parkingSpace: z.number(),
+            parkingSpace: z.coerce.number(),
             view: amenitiesList,
             roof: amenitiesList
         })

@@ -124,10 +124,10 @@ export const appliance = [
 ];
 
 export const basement = [
-  "Finished",
-  "Unfinished",
-  "Partially finished",
-  "None",
+  "finished",
+  "unfinished",
+  "partially_finished",
+  "none",
 ];
 
 export const floorCovering = [
@@ -186,16 +186,17 @@ export const buildingAmenities = [
   "Disabled access",
 ];
 export const architecturalStyle = [
-  "Bungalow",
-  "Modern",
-  "Cape Cod",
-  "Contemporary",
-  "Ranch / Rambler",
-  "Colonial",
-  "French",
-  "Georgian",
-  "Loft",
-  "Other",
+  "bungalow",
+  "modern",
+  "cape_cod",
+  "contemporary",
+  "split_level",
+  "colonial",
+  "french",
+  "georgian",
+  "loft",
+  "other",
+  "tudor",
 ];
 
 export const exterior = [
@@ -257,7 +258,6 @@ export const view = [
 export const coolingType = [
   "Central",
   "Solar",
-  "Evaporative",
   "Wall",
   "Refrigeration",
   "Evaporative",
