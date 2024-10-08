@@ -8,11 +8,11 @@ import { getUserSession } from "@/lib/getSession";
 import { IUserProfile, IUserProfileData } from "@/lib/definitions";
 import { FormButton } from "@/components/FormButton";
 import UpdateUserForm from "@/components/UpdateUserForm";
+
 export default async function ProfileUpdatePage() {
   const session = await getUserSession();
   const id = session?.id as string;
   const user: IUserProfile = await getUser(id);
-
 
   return (
     <>
