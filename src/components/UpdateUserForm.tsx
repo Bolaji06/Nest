@@ -9,6 +9,7 @@ import { useFormState } from "react-dom";
 import { updateUser } from "@/actions/userActions";
 import { useEffect, useState } from "react";
 import { useToast } from "./ui/use-toast";
+import Link from "next/link";
 
 interface UpdateUserFormProps {
   user: IUserProfile;
@@ -28,18 +29,19 @@ export default function UpdateUserForm({ user }: UpdateUserFormProps) {
         description: "Profile updated successfully",
       });
     }
-  },[state?.success, updateAction]);
-
-  //setReset({});
-
-  console.log(state);
-
+  }, [state?.success, updateAction]);
 
   return (
     <>
       <section className="mt-4 py-3">
         <form action={updateAction} className="space-y-3">
-          <input type="text" defaultValue={user.id} name="userId" hidden aria-hidden />
+          <input
+            type="text"
+            defaultValue={user.id}
+            name="userId"
+            hidden
+            aria-hidden
+          />
           <div>
             <label htmlFor="firstName" className="text-sm mb-3 text-slate-400">
               First name
@@ -129,9 +131,10 @@ export default function UpdateUserForm({ user }: UpdateUserFormProps) {
             />
           </div>
           <div className="flex gap-4">
-            <FormButton text="Update" className="" />
-
-            <Button className="bg-red-500">Cancel</Button>
+            <FormButton text="Update" className="w-20" />
+            <Button className="bg-red-500" type="button" asChild>
+              <Link href={"/account/activity/all_post"}>Cancel</Link>
+            </Button>
           </div>
         </form>
       </section>
