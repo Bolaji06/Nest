@@ -132,6 +132,7 @@ export default async function HomeDetailsPage({
 
                       <EditPostButton
                        isPostOwner={isPostOwner}
+                       postId={post.post.id}
                       />
                     </div>
                   </div>
