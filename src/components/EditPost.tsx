@@ -27,7 +27,7 @@ interface IUpdateResponse {
 
 interface IFormError {
   message: string;
-  path: string[];
+  path: (string | number)[];
 }
 export default function EditPost({ post, tokenId }: EditPostProps) {
   const [formInput, setFormInput] = useState({
