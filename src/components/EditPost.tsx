@@ -14,7 +14,7 @@ import UpdateUserForm from "./UpdateUserForm";
 import { useToast } from "./ui/use-toast";
 import { revalidateTag } from "next/cache";
 import { updatePostSchema } from "@/utils/validation";
-import { ZodError } from "zod";
+import InputError from "./InputError";
 
 interface EditPostProps {
   post: TPostAmenities;
@@ -23,6 +23,11 @@ interface EditPostProps {
 interface IUpdateResponse {
   success: boolean;
   message: string;
+}
+
+interface IFormError {
+  message: string;
+  path: string[];
 }
 export default function EditPost({ post, tokenId }: EditPostProps) {
   const [formInput, setFormInput] = useState({
@@ -36,7 +41,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
     null
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formError, setFormError] = useState<any | null>(null);
+  const [formError, setFormError] = useState<IFormError[] | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -72,11 +77,24 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
   function onSubmitUpdatePost(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    const parseSchema = updatePostSchema.safeParse(formInput);
+
+    if (!parseSchema.success){
+      const validateError = parseSchema.error.errors.map((issues) => {
+        return {
+          message: issues.message,
+          path: issues.path,
+        }
+      })
+      setFormError(validateError);
+      return;
+    }
+
     async function handleUpdatePost() {
       setIsLoading(false);
       try {
         setIsLoading(true);
-        const res = await updatePost(formInput, post.message.post.id);
+        const res = await updatePost(parseSchema.data, post.message.post.id);
         setUpdateResponse(res);
       } catch (error) {
         
@@ -87,7 +105,8 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
     }
     handleUpdatePost();
   }
-  console.log(formError?.Error);
+  console.log(formError);
+  console.log(updateResponse)
 
   return (
     <>
@@ -125,6 +144,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
                 onChange={handleFormChange}
                 name="title"
               />
+              {formError && formError[0]?.path[0] === 'title' && <InputError message={formError[0]?.message}/>}
             </div>
 
             <div>
@@ -134,6 +154,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
                 onChange={handleFormChange}
                 name="price"
               />
+              {formError && formError[0]?.path[0] === 'price' && <InputError message={formError[0]?.message}/>}
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -144,6 +165,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
                   onChange={handleFormChange}
                   name="bedroom"
                 />
+                {formError && formError[0]?.path[0] === 'bedroom' && <InputError message={formError[0]?.message}/>}
               </div>
               <div>
                 <label className="text-sm">Bathroom</label>
@@ -152,6 +174,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
                   onChange={handleFormChange}
                   name="bathroom"
                 />
+                {formError && formError[0]?.path[0] === 'bathroom' && <InputError message={formError[0]?.message}/>}
               </div>
             </div>
 
@@ -164,6 +187,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
                 className="w-full h-20 p-4 resize-none rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 ring-offset-blue-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 placeholder="Enter listing description"
               />
+              { formError && formError[0]?.path[0] === 'description' && <InputError message={formError[0]?.message}/>}
             </div>
             <Button
               type="submit"

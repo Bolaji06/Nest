@@ -3,7 +3,7 @@ import { userType } from "./links";
 
 const USER_TYPE = ["renter", "rentee", "home_buyer", "home_seller", "other"] as const;
 
-const numberSchema = z.coerce.number({ required_error: 'This field is required' }).min(3, { message: 'Value is too short'})
+const numberSchema = z.coerce.number({ required_error: 'This field is required' }).min(1, { message: 'Value is too small'})
 
 const amenitiesList = z.array(z.string());
 
@@ -49,7 +49,7 @@ export const editUserProfileSchema = z.object({
 export const postSchema = z.object({
     // title/price details
     title: z.string().min(2, { message: 'Title is too short' }),
-    price: z.coerce.number(),
+    price: numberSchema,
 
     // location details
     address: z.string().min(3, { message: 'Address is too short' }),

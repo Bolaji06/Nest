@@ -3,6 +3,7 @@
 import { updatePostSchema } from "@/utils/validation";
 import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
+import path, { parse } from "path";
 import { ZodError } from "zod";
 
 let API_GET_POST = "";
@@ -45,15 +46,13 @@ export async function updatePost(data: any, postId: string) {
   const apiUrl = "http://localhost:7000/api/post";
   const tokenId = cookies().get("token")?.value;
 
-  const parseSchema = updatePostSchema.parse(data);
-
   const options = {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + tokenId,
     },
-    body: JSON.stringify(parseSchema),
+    body: JSON.stringify(data),
   };
 
   try {
@@ -62,15 +61,6 @@ export async function updatePost(data: any, postId: string) {
     revalidateTag("all_posts");
     return data;
   } catch (error) {
-    if (error instanceof ZodError) {
-      const validateError = error.errors.map((issue) => {
-        return {
-          message: issue.message,
-          path: issue.path,
-        };
-      });
-      console.log(validateError);
-      return validateError;
-    }
+    console.log(error);
   }
 }
