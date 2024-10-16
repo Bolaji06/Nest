@@ -97,8 +97,7 @@ export default function EditPost({ post, tokenId }: EditPostProps) {
         const res = await updatePost(parseSchema.data, post.message.post.id);
         setUpdateResponse(res);
       } catch (error) {
-        
-        setFormError(error)
+       return { error: 'Something went wrong!'}
       } finally {
         setIsLoading(false);
       }
