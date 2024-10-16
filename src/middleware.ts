@@ -11,5 +11,5 @@ export function middleware(request: NextRequest){
 export const config = {
     matcher: ["/account", "/account/activity/all_post", 
         "/account/activity/saved_post", "/account/form_post",
-         "/account/activity/saved_search"]
+         "/account/activity/saved_search", "/edit-post"]
 }

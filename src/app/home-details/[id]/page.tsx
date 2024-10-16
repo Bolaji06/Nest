@@ -26,7 +26,13 @@ import { convertToCurrency } from "@/lib/utils";
 import { getUserSession } from "@/lib/getSession";
 import LoginSignUp from "@/components/LoginSignUp";
 import NavBar from "@/components/ui/NavBar";
-import { ChatButton, Modal, SavedButton, ShareButton } from "@/components/Utilities";
+import {
+  ChatButton,
+  EditPostButton,
+  Modal,
+  SavedButton,
+  ShareButton,
+} from "@/components/Utilities";
 import { cookies } from "next/headers";
 import QRCodeGenerator from "@/components/ui/qrcode";
 import { Metadata } from "next";
@@ -37,6 +43,7 @@ import PhotoGrid from "@/components/PhotoGrid";
 import { Amenities, AmenitiesHeader } from "@/components/ui/amenities";
 import { Suspense } from "react";
 import ChatComponent from "@/components/ChatComponent";
+import { boolean } from "zod";
 
 export async function generateMetadata({
   params,
@@ -64,8 +71,7 @@ export default async function HomeDetailsPage({
   const token = cookies().get("token")?.value;
   const post = data.message;
 
-//console.log(session)
-
+  const isPostOwner = session?.id === post.post.userId;
 
   const amenities = post.amenities;
 
@@ -114,7 +120,7 @@ export default async function HomeDetailsPage({
                       </p>
                     </div>
 
-                    <div className="flex gap-3 xs:mt-3">
+                    <div className="flex gap-2 xs:mt-3">
                       <ShareButton data={data} />
 
                       <SavedButton
@@ -122,6 +128,11 @@ export default async function HomeDetailsPage({
                         isSaved={post.isSaved}
                         session={session}
                         token={token}
+                      />
+
+                      <EditPostButton
+                       isPostOwner={isPostOwner}
+                       postId={post.post.id}
                       />
                     </div>
                   </div>
@@ -175,7 +186,7 @@ export default async function HomeDetailsPage({
                         <p className="text-gray-500">
                           Posted By{" "}
                           <span className="text-black font-semibold hover:underline cursor-pointer">
-                            {post.post.user?.username}
+                            {isPostOwner ? "You" : post.post.user?.username}
                           </span>
                         </p>
                       </div>
@@ -355,12 +366,17 @@ export default async function HomeDetailsPage({
                   </Button>
                 </div>
 
-                <ChatButton post={post.post} token={token} userId={session?.id} status={session?.status}/>
+                <ChatButton
+                  post={post.post}
+                  token={token}
+                  userId={session?.id}
+                  status={session?.status}
+                />
               </div>
             </div>
           </div>
         </section>
-        </section>
+      </section>
     </>
   );
 }

@@ -15,7 +15,7 @@ import {
   TPostAmenities,
   TPostResult,
 } from "@/lib/definitions";
-import { Heart, X } from "lucide-react";
+import { FilePenLine, Heart, X } from "lucide-react";
 import { useToast } from "./ui/use-toast";
 import { useFormState } from "react-dom";
 import { addSavePost, removeSavedPost } from "@/lib/post";
@@ -52,6 +52,7 @@ import { sendEmail } from "../actions/emailAction";
 import { sendEmailFormType } from "@/utils/validation";
 import { FormButton } from "./FormButton";
 import ChatComponent from "./ChatComponent";
+import Link from "next/link";
 
 export function Modal() {
   const [closeModal, setCloseModal] = useState<boolean>(true);
@@ -154,6 +155,33 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
           </p>
         </Button>
       </div>
+    </>
+  );
+}
+
+interface EditPostButtonProps {
+  isPostOwner: boolean,
+  postId: string;
+}
+export function EditPostButton({ isPostOwner, postId }: EditPostButtonProps) {
+  
+
+  return (
+    <>
+      {isPostOwner && (
+        <div>
+          <Button
+            asChild
+            className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
+                  cursor-pointer"
+          >
+            <Link href={`/edit-post/${postId}`}>
+              <FilePenLine className="text-red-500" size={18} />
+              <p className="text-gray-800 text-sm font-normal">Edit</p>
+            </Link>
+          </Button>
+        </div>
+      )}
     </>
   );
 }
@@ -609,8 +637,8 @@ export function ShareButton({ data }: IShareButton) {
 interface ChatButtonProps {
   post: TPost;
   token: string | undefined;
-  userId: string | undefined
-  status: string | undefined
+  userId: string | undefined;
+  status: string | undefined;
 }
 export function ChatButton({ post, token, userId, status }: ChatButtonProps) {
   const [toggleChat, setToggleChat] = useState<boolean>(false);

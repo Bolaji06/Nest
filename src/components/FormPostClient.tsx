@@ -209,8 +209,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
         return;
       }
 
-      console.log("parseSchema: " + parseSchema)
-
       // using the child function here:
       if (uploadFilesRef.current) {
         imageUrls = await uploadFilesRef.current.uploadImage();
@@ -239,12 +237,11 @@ export default function FormPostClient({ cookieData }: TCookie) {
             path: issues.path,
           };
         });
-        
+
         //@ts-ignore
         setInputError(inputError[0]);
         return inputError[0];
       } else if (err instanceof Error) {
-        console.log(err)
         return err;
       }
     } finally {
@@ -252,15 +249,13 @@ export default function FormPostClient({ cookieData }: TCookie) {
     }
   }
 
-  console.log(inputError);
-
   useEffect(() => {
-    if (!cookieData){
+    if (!cookieData) {
       toast({
-        title: 'Session expires',
-        description: 'Kindly login to your account'
-      })
-      redirect('/');
+        title: "Session expires",
+        description: "Kindly login to your account",
+      });
+      redirect("/");
     }
     if (postData?.success) {
       toast({
@@ -270,10 +265,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
       redirect("/account/activity/all_post");
     }
   }, [postData?.success, cookieData]);
-
-  console.log(listingForm);
-
-  
 
   return (
     <>
@@ -597,7 +588,6 @@ export default function FormPostClient({ cookieData }: TCookie) {
                   )
                 }
                 onChange={(e, item) =>
-                  
                   handleCheckboxChange(
                     e,
                     "buildingDetails",
