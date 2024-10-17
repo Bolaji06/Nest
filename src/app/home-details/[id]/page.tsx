@@ -53,7 +53,7 @@ export async function generateMetadata({
   const data: TPostResult = await getPost(params.id);
 
   return {
-    title: data.message.title,
+    title: data?.message?.title,
   };
 }
 
@@ -71,7 +71,7 @@ export default async function HomeDetailsPage({
   const token = cookies().get("token")?.value;
   const post = data.message;
 
-  const isPostOwner = session?.id === post.post.userId;
+  const isPostOwner = session?.id === post?.post?.userId;
 
   const amenities = post.amenities;
 
@@ -130,10 +130,7 @@ export default async function HomeDetailsPage({
                         token={token}
                       />
 
-                      <EditPostButton
-                       isPostOwner={isPostOwner}
-                       postId={post.post.id}
-                      />
+                      {isPostOwner && <EditPostButton postId={post.post.id} />}
                     </div>
                   </div>
                 </header>

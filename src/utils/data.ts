@@ -56,7 +56,6 @@ export async function getAllPosts() {
 export async function getPost(id: string) {
   const token = cookies().get("token")?.value || "";
 
-  //console.log(token)
 
   const options = {
     method: "GET",
