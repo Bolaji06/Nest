@@ -160,28 +160,23 @@ export function SavedButton({ id, isSaved, session, token }: SavedButtonProps) {
 }
 
 interface EditPostButtonProps {
-  isPostOwner: boolean,
   postId: string;
 }
-export function EditPostButton({ isPostOwner, postId }: EditPostButtonProps) {
-  
-
+export function EditPostButton({ postId }: EditPostButtonProps) {
   return (
     <>
-      {isPostOwner && (
-        <div>
-          <Button
-            asChild
-            className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
+      <div>
+        <Button
+          asChild
+          className="rounded-2xl px-5 py-1 class-name bg-white inline-flex items-center gap-1 hover:bg-slate-100
                   cursor-pointer"
-          >
-            <Link href={`/edit-post/${postId}`}>
-              <FilePenLine className="text-red-500" size={18} />
-              <p className="text-gray-800 text-sm font-normal">Edit</p>
-            </Link>
-          </Button>
-        </div>
-      )}
+        >
+          <Link href={`/edit-post/${postId}`}>
+            <FilePenLine className="text-red-500" size={18} />
+            <p className="text-gray-800 text-sm font-normal">Edit</p>
+          </Link>
+        </Button>
+      </div>
     </>
   );
 }
