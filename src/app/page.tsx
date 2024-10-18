@@ -10,11 +10,13 @@ import { Suspense } from "react";
 import { getUserSession } from "@/lib/getSession";
 import { getAllPosts } from "@/utils/data";
 import Link from "next/link";
-import { PostCardSkeleton } from "@/components/AppSkeleton";
+import { PostCardSkeleton } from "@/components/Loader/PostCardSkeleton";
 import PostCard from "@/components/ui/PostCard";
 import { TPost } from "@/lib/definitions";
 
 export default async function Home() {
+  
+  
   const response = await getAllPosts();
 
   const firstTen = response?.message?.slice(1, 9);
