@@ -2,7 +2,8 @@ import PostCard from "@/components/ui/PostCard";
 
 import { getSearch } from "@/utils/data";
 import { Suspense } from "react";
-import { MapSkeleton, PostCardSkeleton } from "@/components/AppSkeleton";
+
+import { PostCardSkeleton, MapSkeleton } from "@/components/Loader/LoadersSkeleton";
 import { TPost, TPostResult } from "@/lib/definitions";
 
 import Link from "next/link";
@@ -42,7 +43,6 @@ export default async function SearchPage({
 }: {
   searchParams: { [key: string]: string };
 }) {
-
   const data = await getSearch(searchParams);
 
   return (

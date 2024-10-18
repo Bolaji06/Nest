@@ -1,6 +1,4 @@
 import { TAmenities, TPostAmenities } from "@/lib/definitions";
-import { Sofa } from "lucide-react";
-import { headers } from "next/headers";
 import React from "react";
 
 type AmenitiesProps = {
