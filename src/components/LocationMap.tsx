@@ -5,11 +5,7 @@ import { MapContainer, TileLayer, Popup } from "react-leaflet";
 import { Marker } from "@adamscybot/react-leaflet-component-marker";
 
 import "leaflet/dist/leaflet.css";
-import { Post } from "@/lib/definitions";
-import PostCard from "./ui/PostCard";
-import Link from "next/link";
-import { divIcon, Map } from "leaflet";
-import { MarkerIcon } from "./Utilities";
+
 
 import L from "leaflet";
 import { useEffect } from "react";

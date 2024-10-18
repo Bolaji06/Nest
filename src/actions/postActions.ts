@@ -43,7 +43,6 @@ export async function editSave(formData: FormData, id: string) {
 }
 
 export async function updatePost(data: any, postId: string) {
-  const apiUrl = "http://localhost:7000/api/post";
   const tokenId = cookies().get("token")?.value;
 
   const options = {
@@ -56,7 +55,7 @@ export async function updatePost(data: any, postId: string) {
   };
 
   try {
-    const response = await fetch(`${apiUrl}/${postId}`, options);
+    const response = await fetch(`${API_GET_POST}/${postId}`, options);
     const data = await response.json();
     revalidateTag("all_posts");
     return data;

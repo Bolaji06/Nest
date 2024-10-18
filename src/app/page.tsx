@@ -2,15 +2,12 @@ import ExploreGrid from "@/components/ExploreGrid";
 import FooterHero from "@/components/FooterHero";
 
 import HeroSection from "@/components/HeroSection";
-import LoginSignUp from "@/components/LoginSignUp";
-import Outlet from "@/components/AuthOutlet";
+
 import NavBar from "@/components/ui/NavBar";
-import Image from "next/image";
 import { Suspense } from "react";
-import { getUserSession } from "@/lib/getSession";
 import { getAllPosts } from "@/utils/data";
 import Link from "next/link";
-import { PostCardSkeleton } from "@/components/AppSkeleton";
+import { PostCardSkeleton } from "@/components/Loader/LoadersSkeleton";
 import PostCard from "@/components/ui/PostCard";
 import { TPost } from "@/lib/definitions";
 

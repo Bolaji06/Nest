@@ -1,4 +1,4 @@
-import { PostCardSkeleton } from "@/components/AppSkeleton";
+import { PostCardSkeleton } from "@/components/Loader/LoadersSkeleton";
 import PostCard from "@/components/ui/PostCard";
 import { TPost } from "@/lib/definitions";
 import { getAllPosts, getUserPost } from "@/utils/data";
@@ -15,10 +15,9 @@ export const metadata: Metadata = {
 };
 export default async function AllPost() {
   const session = await getUserSession();
-  const tokenId = session?.id as string 
+  const tokenId = session?.id as string;
   const data = await getUserPost(tokenId);
 
-  
   return (
     <>
       <main>
@@ -26,24 +25,28 @@ export default async function AllPost() {
           <ActivityComponent />
         </header>
         <section className="grid-container gap-3 ">
-          {data?.userPosts?.length ? data?.userPosts?.map((post: TPost) => {
-            return (
-              <Suspense key={post.id} fallback={<PostCardSkeleton />}>
-                <Link href={`/home-details/${post.id}`}>
-                  <PostCard
-                    image={post.images[0]}
-                    title={post.title}
-                    bathroom={post.bathroom}
-                    bedroom={post.bedroom}
-                    price={post.price}
-                    unitArea={
-                      post.unitArea ? post.unitArea.toLocaleString() : 1232
-                    }
-                  />
-                </Link>
-              </Suspense>
-            );
-          }): <p className="text-slate-400 text-center text-2xl">No post yet!</p>}
+          {data?.userPosts?.length ? (
+            data?.userPosts?.map((post: TPost) => {
+              return (
+                <Suspense key={post.id} fallback={<PostCardSkeleton />}>
+                  <Link href={`/home-details/${post.id}`}>
+                    <PostCard
+                      image={post.images[0]}
+                      title={post.title}
+                      bathroom={post.bathroom}
+                      bedroom={post.bedroom}
+                      price={post.price}
+                      unitArea={
+                        post.unitArea ? post.unitArea.toLocaleString() : 1232
+                      }
+                    />
+                  </Link>
+                </Suspense>
+              );
+            })
+          ) : (
+            <p className="text-slate-400 text-center text-2xl">No post yet!</p>
+          )}
         </section>
       </main>
     </>

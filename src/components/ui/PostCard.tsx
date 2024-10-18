@@ -1,29 +1,37 @@
-"use client";
+//"use client";
 
 import { Bath, Bed, Ruler } from "lucide-react";
 import avatar from "../../../public/hero.jpg";
 import Image from "next/image";
 import { convertToCurrency } from "@/lib/utils";
 
-import { motion } from "framer-motion"
+import { motion } from "framer-motion";
 
-interface IPostCardProps  {
-    id?: string;
-    image: string;
-    price: number;
-    title: string;
-    bathroom: number;
-    bedroom: number;
-    unitArea: number | string;
-    className?: string
+interface IPostCardProps {
+  id?: string;
+  image: string;
+  price: number;
+  title: string;
+  bathroom: number;
+  bedroom: number;
+  unitArea: number | string;
+  className?: string;
 }
-export default function PostCard({ image, price, title, bathroom, bedroom, unitArea, className }: IPostCardProps) {
+export default async function PostCard({
+  image,
+  price,
+  title,
+  bathroom,
+  bedroom,
+  unitArea,
+  className,
+}: IPostCardProps) {
+  await new Promise((resolve, reject) => {
+    setTimeout(resolve, 4000);
+  });
+
   return (
     <>
-     <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: .3 }}>
       <section
         className={`rounded-xl border shadow-sm group cursor-pointer
             hover:shadow-lg transition-shadow duration-400 ease-in-out md:max-w-[300px]} ${className}`}
@@ -45,24 +53,28 @@ export default function PostCard({ image, price, title, bathroom, bedroom, unitA
           <div className="flex items-center gap-3 text-sm font-medium">
             <div className="inline-flex items-center">
               <Bed className="text-slate-400" size={20} />
-              <p className="px-1">{bedroom} <span>Bed</span></p>
+              <p className="px-1">
+                {bedroom} <span>Bed</span>
+              </p>
             </div>
             <div className="inline-flex items-center">
               <Bath className="text-slate-400" size={20} />
-              <p className="px-1">{bathroom} <span>Bath</span></p>
+              <p className="px-1">
+                {bathroom} <span>Bath</span>
+              </p>
             </div>
             <div className="inline-flex items-center">
               <Ruler className="text-slate-400" size={20} />
-              <p className="px-1">{unitArea} <span>sqft</span></p>
+              <p className="px-1">
+                {unitArea} <span>sqft</span>
+              </p>
             </div>
           </div>
           <div className="">
             <p className="text-sm text-slate-800 truncate">{title}</p>
           </div>
-          
         </section>
       </section>
-      </motion.div>
     </>
   );
 }
