@@ -41,18 +41,71 @@ import dynamic from "next/dynamic";
 import PhotoGrid from "@/components/PhotoGrid";
 import { Amenities, AmenitiesHeader } from "@/components/ui/amenities";
 
-
 export async function generateMetadata({
   params,
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const data: TPostResult = await getPost(params.id);
+  const data: TPostAmenities = await getPost(params.id);
 
   return {
-    title: data?.message?.title,
-    description: data?.message?.address
-  };
+    title: `${data?.message.post.title}: $${convertToCurrency(
+      data.message.post?.price
+    )} `,
+
+    description: `${data?.message.post?.title} in ${data?.message.post?.address} is for sale
+    which has ${data?.message?.post?.bedroom} and ${data?.message?.post?.bathroom} sitting on 
+     ${data?.message?.post?.unitArea}sqft area with a sales price of ${data?.message?.post.price}`,
+
+     keywords: [
+      `${data?.message.post.title}`,
+      `Buy house ${data?.message?.post?.city}`,
+      `House listing in ${data?.message?.post?.city}`
+     ],
+
+    openGraph: {
+      title: `${data?.message?.post?.title}`,
+
+      description: `${data?.message.post?.title} in ${data?.message.post?.address} is for sale
+    which has ${data?.message?.post?.bedroom} and ${data?.message?.post?.bathroom} sitting on 
+     ${data?.message?.post?.unitArea}sqft area with a sales price of ${data?.message?.post.price}`,
+
+      type: "profile",
+      url: `https://nest-black-five.vercel.app/home-details/${data?.message?.post?.id}`,
+      images: [
+        {
+          url: `${data?.message?.post?.images[0]}`,
+          width: 1024,
+          height: 576,
+          alt: `${data?.message.post?.title}`,
+        },
+      ],
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      site: "Nest",
+      creator: "Nest - Real Estate Inc.",
+      title: `${data?.message?.post?.title}`,
+
+      description: `${data?.message.post?.title} in ${data?.message.post?.address} is for sale
+    which has ${data?.message?.post?.bedroom} and ${data?.message?.post?.bathroom} sitting on 
+     ${data?.message?.post?.unitArea}sqft area with a sales price of ${data?.message?.post.price}`,
+
+     images: [
+      {
+        url: `${data?.message?.post?.images[0]}`,
+        width: 1024,
+        height: 576,
+        alt: `${data?.message.post?.title}`,
+      },
+     ]
+    },
+    alternates: {
+      canonical: `https://nest-black-five.vercel.app/home-details/${data?.message?.post?.id}`
+    }
+  }
+  
 }
 
 const DynamicLocationMap = dynamic(() => import("@/components/LocationMap"), {

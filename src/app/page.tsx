@@ -10,6 +10,55 @@ import Link from "next/link";
 import { PostCardSkeleton } from "@/components/Loader/LoadersSkeleton";
 import PostCard from "@/components/ui/PostCard";
 import { TPost } from "@/lib/definitions";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Nest: Real Estate, Apartment for Sale, House for Sale, Homes for Rent Property for Sale',
+  description: 'Nest: Search house for sale, home for rent, listing for all homes, Marketplace for house sale and home for rent',
+  keywords: [
+    'Home',
+    'House',
+    'Buy',
+    'Rent',
+    'Renter',
+    'Real Estate',
+    'Property',
+    'Building homes',
+    'Building house',
+  ],
+  openGraph: {
+    url: 'https://nest-black-five.vercel.app',
+    type: 'website',
+    title: 'Real Estate, House, Homes, Buy house, Rent homes, Home building',
+    description: 'Nest: Marketplace for homes and houses, Buy house, Rent homes',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Nest: Real Estate'
+      }
+    ]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Buy house, Rent home, Marketplace for house | Nest - Real Estate",
+    description: 'Nest: Search house for sale, home for rent, listing for all homes, Marketplace for house sale and home for rent',
+    creator: 'bj.dev',
+    site: 'bj.dev',
+    images: [
+      {
+        url: '/opengraph-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Nest: Real Estate'
+      }
+    ]
+  },
+  alternates: {
+    canonical: 'https://nest-black-five.vercel.app'
+  }
+}
 
 export default async function Home() {
   const response = await getAllPosts();
