@@ -37,13 +37,10 @@ import { cookies } from "next/headers";
 import QRCodeGenerator from "@/components/ui/qrcode";
 import { Metadata } from "next";
 import clsx from "clsx";
-import LocationMap from "@/components/LocationMap";
 import dynamic from "next/dynamic";
 import PhotoGrid from "@/components/PhotoGrid";
 import { Amenities, AmenitiesHeader } from "@/components/ui/amenities";
-import { Suspense } from "react";
-import ChatComponent from "@/components/ChatComponent";
-import { boolean } from "zod";
+
 
 export async function generateMetadata({
   params,
@@ -54,6 +51,7 @@ export async function generateMetadata({
 
   return {
     title: data?.message?.title,
+    description: data?.message?.address
   };
 }
 
