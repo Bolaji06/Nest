@@ -109,7 +109,6 @@ export async function getAllSavedPost() {
   }
 }
 
-const USER_POST_ENDPOINT = "http://localhost:7000/api/post/user";
 export async function getUserPost(id: string) {
   const tokenId = cookies().get("token")?.value;
   const option = {
@@ -121,7 +120,7 @@ export async function getUserPost(id: string) {
   };
 
   try {
-    const response = await fetch(`${USER_POST_ENDPOINT}/${id}`, option);
+    const response = await fetch(`${API_GET_POST}/user/${id}`, option);
     const data = await response.json();
     return data;
   } catch (error) {
