@@ -9,7 +9,7 @@ import {
 export const navLinks = [
   {
     link: "Buy",
-    href: "/buy",
+    href: "/#buy",
   },
   {
     link: "Sell",
@@ -17,11 +17,7 @@ export const navLinks = [
   },
   {
     link: "Rent",
-    href: "/rent",
-  },
-  {
-    link: "Agents",
-    href: "/agents",
+    href: "/search",
   },
 ];
 

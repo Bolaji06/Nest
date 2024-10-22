@@ -84,7 +84,7 @@ export default async function Home() {
             </h2>
           </header>
 
-          <section className="grid-container gap-3 ">
+          <section className="grid-container gap-3 scroll-mt-20 scroll-smooth" id="buy">
             {firstTen?.map((post: TPost) => {
               return (
                 <Suspense key={post.id} fallback={<PostCardSkeleton />}>
