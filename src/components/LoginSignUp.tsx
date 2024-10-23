@@ -62,12 +62,12 @@ export default function LoginSignUp({
 
   return (
     <>
-      <main className="h-screen overflow-y-hidden">
+      <main className="h-screen w-screen overflow-hidden">
         <div
-          className="absolute z-40 inset-0 bg-black/65"
+          className="absolute z-40 overflow-hidden inset-0 bg-black/65"
           onClick={closeSignPortal}
         />
-        <div className="w-full sm:w-[350px] rounded-md absolute top-6 lg:top-10 z-50 left-1/2 -translate-x-1/2 bg-white">
+        <div className="w-full sm:w-[350px] rounded-md absolute top-6 lg:top-10 z-50 left-1/2 -translate-x-1/2 bg-white overflow-hidden">
           <div className="p-3">
             <header className="flex justify-between items-center">
               <Image src={logo} alt="Nest logo" width={80} />

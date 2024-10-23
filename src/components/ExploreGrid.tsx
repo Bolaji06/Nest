@@ -37,7 +37,7 @@ export default function ExploreGrid() {
                 </div>
                 <Button asChild className="text-center border border-brand-secondary hover:bg-brand-secondary hover:text-brand-text_light  bg-transparent text-brand-secondary hover ">
                     <Link
-                    href={'/buy'}>
+                    href={'/#buy'}>
                         Find a home
                     </Link>     
                 </Button>
@@ -64,8 +64,8 @@ export default function ExploreGrid() {
                 </div>
                 <Button asChild className="text-center border border-brand-secondary hover:bg-brand-secondary hover:text-brand-text_light  bg-transparent text-brand-secondary hover ">
                     <Link
-                    href={'/rent'}>
-                        Find a home
+                    href={'/search'}>
+                        Rent a home
                     </Link>     
                 </Button>
               </div>
@@ -91,7 +91,7 @@ export default function ExploreGrid() {
                 <Button asChild className="text-center border border-brand-secondary hover:bg-brand-secondary hover:text-brand-text_light  bg-transparent text-brand-secondary hover ">
                     <Link
                     href={'/sell'}>
-                        Find a home
+                        Sell your house
                     </Link>     
                 </Button>
               </div>
